@@ -232,35 +232,26 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
 
   <!-- ═══ HOME ═══ -->
   <div id="home" style="position: relative; min-height: calc(100vh - 80px);">
-    <!-- FULL SCREEN background: Mr Bean as Pirate Captain -->
-    <div style="position: fixed; inset: 0; z-index: 0;">
-      <img src="assets/mrbean-onepiece-captain.jpg" style="width: 100%; height: 100%; object-fit: cover;">
-      <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(10,15,40,0.9) 0%, rgba(10,15,40,0.4) 30%, rgba(10,15,40,0) 50%, rgba(10,15,40,0.2) 100%);"></div>
+    <!-- Two big character buttons -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; padding: 0 20px;">
+      <div class="grid-btn" onclick="goChat('bean')" style="flex-direction: row; gap: 14px; padding: 18px 24px; border-radius: 20px;">
+        <img src="assets/mrbean-avatar.jpg" style="width: 52px; height: 52px; border-radius: 14px; object-fit: cover; border: 3px solid #FF9933;">
+        <div style="text-align: left;"><div style="font-size: 18px; font-weight: 900; color: #FF9933;">💬 Mr Bean</div><div style="font-size: 11px; color: #8899cc;">Your mate</div></div>
+      </div>
+      <div class="grid-btn" onclick="goChat('jarvis')" style="flex-direction: row; gap: 14px; padding: 18px 24px; border-radius: 20px;">
+        <img src="assets/jarvis-avatar.jpg" style="width: 52px; height: 52px; border-radius: 14px; object-fit: cover; border: 3px solid #55AAFF;">
+        <div style="text-align: left;"><div style="font-size: 18px; font-weight: 900; color: #55AAFF;">🤖 Jarvis</div><div style="font-size: 11px; color: #8899cc;">Your mentor</div></div>
+      </div>
     </div>
 
-    <!-- Buttons at the bottom -->
-    <div style="position: fixed; bottom: 0; left: 0; right: 0; z-index: 10; padding: 24px 40px; background: linear-gradient(0deg, rgba(10,15,40,0.95) 0%, rgba(10,15,40,0.7) 60%, transparent 100%);">
-      <!-- Two big character buttons -->
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; max-width: 700px; margin-left: auto; margin-right: auto;">
-        <div class="grid-btn" onclick="goChat('bean')" style="flex-direction: row; gap: 14px; padding: 18px 24px; border-radius: 20px; background: rgba(30,48,104,0.9); backdrop-filter: blur(12px);">
-          <img src="assets/mrbean-avatar.jpg" style="width: 52px; height: 52px; border-radius: 14px; object-fit: cover; border: 3px solid #FF9933;">
-          <div style="text-align: left;"><div style="font-size: 18px; font-weight: 900; color: #FF9933;">💬 Mr Bean</div><div style="font-size: 11px; color: #8899cc;">Your mate</div></div>
-        </div>
-        <div class="grid-btn" onclick="goChat('jarvis')" style="flex-direction: row; gap: 14px; padding: 18px 24px; border-radius: 20px; background: rgba(30,48,104,0.9); backdrop-filter: blur(12px);">
-          <img src="assets/jarvis-avatar.jpg" style="width: 52px; height: 52px; border-radius: 14px; object-fit: cover; border: 3px solid #55AAFF;">
-          <div style="text-align: left;"><div style="font-size: 18px; font-weight: 900; color: #55AAFF;">🤖 Jarvis</div><div style="font-size: 11px; color: #8899cc;">Your mentor</div></div>
-        </div>
-      </div>
-
-      <!-- 6 action buttons -->
-      <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; max-width: 700px; margin: 0 auto;">
-        <div class="grid-btn" onclick="goView('games')" style="background: rgba(30,48,104,0.85); backdrop-filter: blur(10px);"><div class="ico">⚡</div><div class="lbl">Games</div></div>
-        <div class="grid-btn" onclick="goView('tasks')" style="background: rgba(30,48,104,0.85); backdrop-filter: blur(10px);"><div class="ico">✅</div><div class="lbl">Tasks</div></div>
-        <div class="grid-btn" onclick="goView('schedule')" style="background: rgba(30,48,104,0.85); backdrop-filter: blur(10px);"><div class="ico">📅</div><div class="lbl">Today</div></div>
-        <div class="grid-btn" onclick="goView('brain')" style="background: rgba(30,48,104,0.85); backdrop-filter: blur(10px);"><div class="ico">🧠</div><div class="lbl">Brain</div></div>
-        <div class="grid-btn" onclick="goView('dump')" style="background: rgba(30,48,104,0.85); backdrop-filter: blur(10px);"><div class="ico">💭</div><div class="lbl">Dump</div></div>
-        <div class="grid-btn" onclick="goView('xp')" style="background: rgba(30,48,104,0.85); backdrop-filter: blur(10px);"><div class="ico">🎮</div><div class="lbl">Level</div></div>
-      </div>
+    <!-- 6 action buttons -->
+    <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; padding: 0 20px;">
+      <div class="grid-btn" onclick="goView('games')"><div class="ico">⚡</div><div class="lbl">Games</div></div>
+      <div class="grid-btn" onclick="goView('tasks')"><div class="ico">✅</div><div class="lbl">Tasks</div></div>
+      <div class="grid-btn" onclick="goView('schedule')"><div class="ico">📅</div><div class="lbl">Today</div></div>
+      <div class="grid-btn" onclick="goView('brain')"><div class="ico">🧠</div><div class="lbl">Brain</div></div>
+      <div class="grid-btn" onclick="goView('dump')"><div class="ico">💭</div><div class="lbl">Dump</div></div>
+      <div class="grid-btn" onclick="goView('xp')"><div class="ico">🎮</div><div class="lbl">Level</div></div>
     </div>
   </div>
 
