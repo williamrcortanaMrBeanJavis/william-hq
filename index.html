@@ -677,6 +677,7 @@ body.discreet .sos-modal p { color: #666; }
     <button class="sidebar-btn" data-view="brain"><span class="icon">🧠</span> Brain Mode</button>
     <button class="sidebar-btn" data-view="dump"><span class="icon">💭</span> Brain Dump</button>
     <button class="sidebar-btn" data-view="xp"><span class="icon">🎮</span> My Level</button>
+    <button class="sidebar-btn" data-view="challenge"><span class="icon">⚡</span> Challenges</button>
   </div>
 
   <!-- ═══════ MAIN AREA ═══════ -->
@@ -809,6 +810,40 @@ body.discreet .sos-modal p { color: #666; }
         </div>
         <div style="text-align: center; color: var(--muted); font-size: 12px; margin-top: 20px; padding: 16px; border: 1px dashed var(--border); border-radius: 12px;">
           Times will be confirmed by Simon. This is a template.
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ CHALLENGES VIEW ═══════ -->
+    <div class="view" id="view-challenge">
+      <div style="padding: 20px; overflow-y: auto; height: 100%;">
+        <div style="font-size: 18px; font-weight: 800; margin-bottom: 4px;">⚡ Daily Challenges</div>
+        <div style="font-size: 13px; color: var(--muted); margin-bottom: 20px;">Train your brain. Level up. Become Pirate King.</div>
+
+        <!-- Today's Challenges -->
+        <div id="challengeCards"></div>
+
+        <!-- Stats -->
+        <div style="background: var(--card); border: 2px solid var(--border); border-radius: 16px; padding: 16px; margin-top: 16px;">
+          <div style="font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 1px; margin-bottom: 8px;">YOUR BRAIN STATS</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div style="text-align: center; padding: 12px; background: var(--bg); border-radius: 10px;">
+              <div style="font-size: 20px; font-weight: 900; color: var(--cyan);" id="statChallenges">0</div>
+              <div style="font-size: 10px; color: var(--muted);">Challenges Done</div>
+            </div>
+            <div style="text-align: center; padding: 12px; background: var(--bg); border-radius: 10px;">
+              <div style="font-size: 20px; font-weight: 900; color: var(--green);" id="statAccuracy">-%</div>
+              <div style="font-size: 10px; color: var(--muted);">Accuracy</div>
+            </div>
+            <div style="text-align: center; padding: 12px; background: var(--bg); border-radius: 10px;">
+              <div style="font-size: 20px; font-weight: 900; color: var(--bean-orange);" id="statStreak">0</div>
+              <div style="font-size: 10px; color: var(--muted);">Day Streak</div>
+            </div>
+            <div style="text-align: center; padding: 12px; background: var(--bg); border-radius: 10px;">
+              <div style="font-size: 20px; font-weight: 900; color: var(--jarvis-blue);" id="statBest">-</div>
+              <div style="font-size: 10px; color: var(--muted);">Best Category</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1543,6 +1578,212 @@ setTimeout(autoRecordCheck, 2000);
 // Show current week
 const weekEl = document.getElementById('recWeek');
 if (weekEl) weekEl.textContent = 'Week ' + getCurrentWeek();
+
+// ═══════ DAILY CHALLENGES ═══════
+const CHALLENGE_TYPES = {
+  pattern: {
+    icon: '🧩', name: 'Pattern',
+    generate: (lvl) => {
+      const patterns = [
+        { q: 'What comes next? ⭐🌙⭐🌙⭐...', a: '🌙', options: ['⭐','🌙','☀️','🌟'] },
+        { q: 'What comes next? 🔵🔵🔴🔵🔵🔴...', a: '🔵', options: ['🔴','🔵','🟢','🟡'] },
+        { q: 'What comes next? 1, 2, 4, 8, ...', a: '16', options: ['10','12','16','20'] },
+        { q: 'What comes next? A, C, E, G, ...', a: 'I', options: ['H','I','J','K'] },
+        { q: 'What comes next? ▲■▲■■▲■■■...', a: '▲', options: ['▲','■','●','◆'] },
+        { q: '2, 6, 12, 20, ...', a: '30', options: ['24','28','30','32'] },
+        { q: '🐈🐕🐈🐕🐈🐕🐈...', a: '🐕', options: ['🐈','🐕','🐇','🐹'] },
+        { q: '3, 6, 9, 12, ...', a: '15', options: ['13','14','15','16'] },
+      ];
+      return patterns[Math.floor(Math.random() * patterns.length)];
+    }, xp: 25
+  },
+  memory: {
+    icon: '🔢', name: 'Memory',
+    generate: (lvl) => {
+      const items = ['🍎','🍊','🍌','🍓','🍇','🍉','🍒','🥝','🍑','🍐'];
+      const count = Math.min(2 + Math.floor(lvl / 3), 5);
+      const selected = [];
+      for (let i = 0; i < count; i++) {
+        selected.push(items[Math.floor(Math.random() * items.length)]);
+      }
+      return { q: 'Remember these in order (they will disappear):', sequence: selected, xp: 15 + count * 5 };
+    }, xp: 20
+  },
+  speed: {
+    icon: '⚡', name: 'Speed Round',
+    generate: (lvl) => {
+      const challenges = [
+        { q: 'How many 🔵? 🔵🔴🔵🔵🔴🔵', a: '4', options: ['3','4','5','6'] },
+        { q: 'Which is different? 🐶🐶🐱🐶🐶', a: '🐱', options: ['🐶','🐱','None','All'] },
+        { q: '7 + 8 = ?', a: '15', options: ['13','14','15','16'] },
+        { q: '12 - 5 = ?', a: '7', options: ['6','7','8','5'] },
+        { q: 'How many sides on a hexagon?', a: '6', options: ['5','6','7','8'] },
+        { q: 'Biggest? 0.5, 0.25, 0.75, 0.1', a: '0.75', options: ['0.5','0.25','0.75','0.1'] },
+        { q: 'How many ⭐? ⭐🌙⭐⭐🌙⭐🌙⭐', a: '5', options: ['4','5','6','3'] },
+      ];
+      return challenges[Math.floor(Math.random() * challenges.length)];
+    }, xp: 10
+  },
+  logic: {
+    icon: '🧠', name: 'Logic',
+    generate: (lvl) => {
+      const puzzles = [
+        { q: 'If all cats are animals, and Teddy is a cat, is Teddy an animal?', a: 'Yes', options: ['Yes','No','Maybe','Teddy is a bear'] },
+        { q: 'I have 3 apples. I give away 1 and eat 1. How many left?', a: '1', options: ['0','1','2','3'] },
+        { q: 'Tom is taller than Sam. Sam is taller than Jo. Who is shortest?', a: 'Jo', options: ['Tom','Sam','Jo','Same height'] },
+        { q: 'If it takes 5 machines 5 minutes to make 5 widgets, how long for 100 machines to make 100?', a: '5 minutes', options: ['5 minutes','100 minutes','50 minutes','1 minute'] },
+        { q: 'A farmer has 17 sheep. All but 9 run away. How many are left?', a: '9', options: ['8','9','17','0'] },
+        { q: 'What has keys but no locks, space but no room?', a: 'Keyboard', options: ['House','Keyboard','Car','Map'] },
+      ];
+      return puzzles[Math.floor(Math.random() * puzzles.length)];
+    }, xp: 30
+  },
+  cooking: {
+    icon: '🍳', name: 'Cooking Maths',
+    generate: (lvl) => {
+      const problems = [
+        { q: 'Recipe needs 2 cups flour for 4 people. How much for 8 people?', a: '4 cups', options: ['2 cups','3 cups','4 cups','6 cups'] },
+        { q: 'Karaage fries at 180°C for 8 min. You put it in at 4:15. When done?', a: '4:23', options: ['4:20','4:23','4:25','4:30'] },
+        { q: 'Rice needs 1.5x water to rice. You have 2 cups rice. How much water?', a: '3 cups', options: ['2 cups','2.5 cups','3 cups','4 cups'] },
+        { q: 'Mash needs 4 potatoes per person. Cooking for 3 people. How many potatoes?', a: '12', options: ['8','10','12','16'] },
+        { q: 'Meat pie takes 25 min. You need it ready at 6:00pm. Latest start time?', a: '5:35pm', options: ['5:25pm','5:30pm','5:35pm','5:45pm'] },
+      ];
+      return problems[Math.floor(Math.random() * problems.length)];
+    }, xp: 20
+  }
+};
+
+let challengeState = JSON.parse(localStorage.getItem('challengeState') || JSON.stringify({
+  completed: 0, correct: 0, streak: 0, todayDone: [], todayDate: ''
+}));
+
+function renderChallenges() {
+  const el = document.getElementById('challengeCards');
+  if (!el) return;
+  
+  const today = new Date().toISOString().slice(0, 10);
+  if (challengeState.todayDate !== today) {
+    challengeState.todayDone = [];
+    challengeState.todayDate = today;
+  }
+  
+  const dayOfWeek = new Date().getDay();
+  // Rotate challenge types by day
+  const daySchedule = {
+    1: ['pattern','memory','cooking'],     // Mon
+    2: ['speed','logic','pattern'],         // Tue
+    3: ['pattern','memory','logic'],        // Wed
+    4: ['speed','cooking','logic'],         // Thu
+    5: ['pattern','speed','memory'],        // Fri
+    6: ['cooking','logic','pattern'],       // Sat
+    0: ['logic','cooking','speed'],         // Sun
+  };
+  
+  const todayTypes = daySchedule[dayOfWeek] || ['pattern','speed','logic'];
+  
+  el.innerHTML = todayTypes.map((type, i) => {
+    const ct = CHALLENGE_TYPES[type];
+    const done = challengeState.todayDone.includes(type);
+    return `
+      <div style="background: var(--card); border: 2px solid ${done ? 'var(--green)' : 'var(--border)'}; border-radius: 16px; padding: 20px; margin-bottom: 12px; ${done ? 'opacity: 0.6;' : ''}">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+          <div style="font-size: 16px; font-weight: 700;">${ct.icon} ${ct.name} Challenge</div>
+          <div style="font-size: 12px; color: ${done ? 'var(--green)' : 'var(--cyan)'}; font-weight: 700;">${done ? '✅ Done' : '+' + ct.xp + ' XP'}</div>
+        </div>
+        ${done ? '<div style="color: var(--green); font-size: 13px;">Completed! Come back tomorrow for a new one.</div>' : 
+          `<button onclick="startChallenge('${type}')" style="width: 100%; padding: 12px; border-radius: 12px; border: 2px solid var(--cyan); background: rgba(0,200,200,0.1); color: var(--cyan); font-weight: 700; font-size: 14px; cursor: pointer; font-family: 'Inter';">⚡ Start Challenge</button>`
+        }
+      </div>
+    `;
+  }).join('');
+  
+  // Stats
+  const sc = document.getElementById('statChallenges');
+  const sa = document.getElementById('statAccuracy');
+  const ss = document.getElementById('statStreak');
+  if (sc) sc.textContent = challengeState.completed;
+  if (sa) sa.textContent = challengeState.completed > 0 ? Math.round(challengeState.correct / challengeState.completed * 100) + '%' : '-%';
+  if (ss) ss.textContent = challengeState.streak;
+}
+
+function startChallenge(type) {
+  const ct = CHALLENGE_TYPES[type];
+  const lvl = getLevel(playerData.xp).level;
+  const challenge = ct.generate(lvl);
+  
+  const el = document.getElementById('challengeCards');
+  
+  if (challenge.sequence) {
+    // Memory challenge — show then hide
+    el.innerHTML = `
+      <div style="background: var(--card); border: 2px solid var(--cyan); border-radius: 16px; padding: 24px; text-align: center;">
+        <div style="font-size: 14px; color: var(--muted); margin-bottom: 16px;">${challenge.q}</div>
+        <div style="font-size: 48px; letter-spacing: 16px; margin-bottom: 20px;" id="memDisplay">${challenge.sequence.join(' ')}</div>
+        <div style="font-size: 13px; color: var(--cyan);">Memorise the order...</div>
+      </div>
+    `;
+    setTimeout(() => {
+      el.innerHTML = `
+        <div style="background: var(--card); border: 2px solid var(--cyan); border-radius: 16px; padding: 24px; text-align: center;">
+          <div style="font-size: 16px; font-weight: 700; margin-bottom: 16px;">What was the order?</div>
+          <div style="font-size: 13px; color: var(--muted); margin-bottom: 16px;">Type them separated by spaces</div>
+          <input type="text" id="memAnswer" placeholder="e.g. 🍎 🍌 🍓" style="width: 100%; padding: 12px; border-radius: 10px; border: 2px solid var(--border); background: var(--bg); color: var(--text); font-size: 18px; text-align: center; font-family: 'Inter';" onkeydown="if(event.key==='Enter')checkMemory('${challenge.sequence.join(',')}','${type}')">
+          <button onclick="checkMemory('${challenge.sequence.join(',')}','${type}')" style="margin-top: 12px; padding: 12px 32px; border-radius: 12px; border: none; background: var(--cyan); color: #000; font-weight: 700; cursor: pointer; font-family: 'Inter';">Check</button>
+        </div>
+      `;
+    }, 3000 + challenge.sequence.length * 500); // More items = more time to memorise
+  } else {
+    // Multiple choice
+    const shuffled = [...challenge.options].sort(() => Math.random() - 0.5);
+    el.innerHTML = `
+      <div style="background: var(--card); border: 2px solid var(--cyan); border-radius: 16px; padding: 24px;">
+        <div style="font-size: 16px; font-weight: 700; margin-bottom: 16px;">${ct.icon} ${challenge.q}</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          ${shuffled.map(opt => `
+            <button onclick="checkAnswer('${opt}','${challenge.a}','${type}',${ct.xp})" style="padding: 14px; border-radius: 12px; border: 2px solid var(--border); background: var(--bg); color: var(--text); font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'Inter'; transition: all 0.15s;" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)'">${opt}</button>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+}
+
+function checkAnswer(selected, correct, type, xp) {
+  const isCorrect = selected === correct;
+  challengeState.completed++;
+  if (isCorrect) {
+    challengeState.correct++;
+    challengeState.streak++;
+    challengeState.todayDone.push(type);
+    addXP(xp, CHALLENGE_TYPES[type].icon + ' ' + CHALLENGE_TYPES[type].name + ' challenge');
+  } else {
+    challengeState.streak = 0;
+  }
+  localStorage.setItem('challengeState', JSON.stringify(challengeState));
+  
+  const el = document.getElementById('challengeCards');
+  el.innerHTML = `
+    <div style="background: var(--card); border: 2px solid ${isCorrect ? 'var(--green)' : 'var(--red)'}; border-radius: 16px; padding: 24px; text-align: center;">
+      <div style="font-size: 48px; margin-bottom: 12px;">${isCorrect ? '🎉' : '🤔'}</div>
+      <div style="font-size: 20px; font-weight: 800; color: ${isCorrect ? 'var(--green)' : 'var(--red)'};">${isCorrect ? 'CORRECT! +' + xp + ' XP' : 'Not quite!'}</div>
+      ${!isCorrect ? '<div style="font-size: 14px; color: var(--muted); margin-top: 8px;">Answer was: ' + correct + '</div>' : ''}
+      ${isCorrect && challengeState.streak >= 3 ? '<div style="font-size: 14px; color: var(--bean-orange); margin-top: 8px;">🔥 ' + challengeState.streak + ' streak!</div>' : ''}
+    </div>
+  `;
+  
+  setTimeout(renderChallenges, 2000);
+}
+
+function checkMemory(correctStr, type) {
+  const correct = correctStr.split(',');
+  const answer = document.getElementById('memAnswer').value.trim();
+  // Simple check — see if they got the sequence
+  const isCorrect = answer.includes(correct[0]) && answer.includes(correct[correct.length - 1]);
+  checkAnswer(isCorrect ? correct.join('') : 'wrong', correct.join(''), type, 20);
+}
+
+// Render on load
+setTimeout(renderChallenges, 100);
 
 // ═══════ LEVELLING / XP SYSTEM ═══════
 const LEVELS = [
