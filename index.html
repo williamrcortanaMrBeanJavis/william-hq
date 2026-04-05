@@ -250,8 +250,8 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
       </div>
     </div>
 
-    <!-- 6 action buttons -->
-    <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; padding: 0 20px;">
+    <!-- Action buttons -->
+    <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; padding: 0 20px;">
       <div class="grid-btn" onclick="goView('games')"><div class="ico">⚡</div><div class="lbl">Games</div></div>
       <div class="grid-btn" onclick="goView('tasks')"><div class="ico">✅</div><div class="lbl">Tasks</div></div>
       <div class="grid-btn" onclick="goView('schedule')"><div class="ico">📅</div><div class="lbl">Today</div></div>
@@ -259,7 +259,11 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
       <div class="grid-btn" onclick="goView('dump')"><div class="ico">💭</div><div class="lbl">Dump</div></div>
       <div class="grid-btn" onclick="goView('xp')"><div class="ico">🎮</div><div class="lbl">Level</div></div>
     <div class="grid-btn" onclick="goView('timetable')"><div class="ico">📆</div><div class="lbl">Timetable</div></div>
-    <div class="grid-btn" onclick="goView('bag')"><div class="ico">🎒</div><div class="lbl">Bag Check</div></div>
+    <div class="grid-btn" onclick="goView('bag')"><div class="ico">🎒</div><div class="lbl">Bag</div></div>
+    <div class="grid-btn" onclick="goView('exams')"><div class="ico">🧪</div><div class="lbl">Exams</div></div>
+    <div class="grid-btn" onclick="goView('timer')"><div class="ico">⏰</div><div class="lbl">Timer</div></div>
+    <div class="grid-btn" onclick="goView('myworld')"><div class="ico">🌟</div><div class="lbl">My World</div></div>
+    <div class="grid-btn" onclick="goView('review')"><div class="ico">🏆</div><div class="lbl">Review</div></div>
     </div>
   </div>
 
@@ -456,6 +460,186 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
         <div style="background:#0f1d42;border-radius:12px;padding:12px;text-align:center;"><div style="font-size:22px;font-weight:900;color:#FFAA00;">K Block</div><div style="font-size:14px;color:#8899cc;">Technology (K12)</div></div>
         <div style="background:#0f1d42;border-radius:12px;padding:12px;text-align:center;"><div style="font-size:22px;font-weight:900;color:#33DDDD;">Gate 3</div><div style="font-size:14px;color:#8899cc;">Your entry (Years 7–8)</div></div>
       </div>
+    </div>
+  </div>
+
+  <!-- ═══ EXAMS TRACKER ═══ -->
+  <div class="view" id="view-exams">
+    <button class="back" onclick="goHome()">← Home</button>
+    <div style="padding:8px 0 16px;"><h2 style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:2px;color:#FF5555;text-shadow:0 0 25px rgba(255,85,85,0.8);">🧪 UPCOMING EXAMS</h2></div>
+
+    <!-- Exam cards -->
+    <div style="display:flex;background:#1e3068;border:2px solid #FF5555;border-radius:20px;overflow:hidden;margin-bottom:12px;">
+      <img src="assets/mrbean-maths.jpg" style="width:300px;flex-shrink:0;object-fit:cover;object-position:top;">
+      <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:10px;">
+        <div style="font-family:'Bangers',cursive;font-size:36px;letter-spacing:1px;color:#00EEFF;text-shadow:0 0 20px rgba(0,238,255,0.8);">Maths — Fractions Test</div>
+        <div style="font-size:20px;color:#FF5555;font-weight:900;">📅 Wednesday 16 April — Period 1 (J7)</div>
+        <div style="font-size:18px;color:#8899cc;">Topics: adding/subtracting fractions, equivalent fractions, mixed numbers</div>
+        <div style="font-size:18px;color:#FF9933;font-weight:700;">⏰ 11 days away</div>
+        <div style="font-size:16px;color:#8899cc;margin-top:4px;">Study plan:</div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:10px;padding:12px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:18px;">⬜</span><span style="font-size:16px;font-weight:600;">Review class notes (Week 1)</span></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:10px;padding:12px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:18px;">⬜</span><span style="font-size:16px;font-weight:600;">Practice questions (Week 2)</span></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:10px;padding:12px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:18px;">⬜</span><span style="font-size:16px;font-weight:600;">Ask Mr Bean to quiz me (day before)</span></div>
+      </div>
+    </div>
+
+    <div style="display:flex;background:#1e3068;border:2px solid #2d4488;border-radius:20px;overflow:hidden;margin-bottom:12px;">
+      <img src="assets/mrbean-science.jpg" style="width:300px;flex-shrink:0;object-fit:cover;object-position:top;">
+      <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:10px;">
+        <div style="font-family:'Bangers',cursive;font-size:36px;letter-spacing:1px;color:#44FF66;text-shadow:0 0 20px rgba(68,255,102,0.8);">Science — Forces Assessment</div>
+        <div style="font-size:20px;color:#8899cc;font-weight:900;">📅 Week 4 Term 2</div>
+        <div style="font-size:18px;color:#8899cc;">Topics: gravity, friction, balanced/unbalanced forces, diagrams</div>
+        <div style="font-size:18px;color:#FF9933;font-weight:700;">⏰ 3+ weeks away</div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:10px;padding:12px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:18px;">⬜</span><span style="font-size:16px;font-weight:600;">Review diagrams from class</span></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:10px;padding:12px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:18px;">⬜</span><span style="font-size:16px;font-weight:600;">Practice labelling force diagrams</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ VISUAL TIMER ═══ -->
+  <div class="view" id="view-timer">
+    <button class="back" onclick="goHome()">← Home</button>
+    <div style="padding:8px 0 16px;"><h2 style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:2px;color:#33DDDD;text-shadow:0 0 25px rgba(51,221,221,0.8);">⏰ TIME TRACKER</h2></div>
+
+    <!-- Time until next event -->
+    <div style="background:#1e3068;border:2px solid #33DDDD;border-radius:20px;padding:24px;margin-bottom:16px;text-align:center;">
+      <div style="font-size:16px;color:#8899cc;">RIGHT NOW</div>
+      <div style="font-family:'Bangers',cursive;font-size:56px;color:#33DDDD;text-shadow:0 0 30px rgba(51,221,221,0.8);" id="timerNow"></div>
+      <div style="font-size:22px;color:#FF9933;font-weight:900;" id="timerNext"></div>
+      <div style="height:24px;background:rgba(255,255,255,0.06);border-radius:12px;margin-top:16px;overflow:hidden;">
+        <div id="timerBar" style="height:100%;background:linear-gradient(90deg,#FF9933,#33DDDD);border-radius:12px;transition:width 1s;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:14px;color:#8899cc;margin-top:6px;"><span id="timerStart"></span><span id="timerEnd"></span></div>
+    </div>
+
+    <!-- Day timeline -->
+    <div style="background:#1e3068;border:2px solid #2d4488;border-radius:20px;padding:24px;">
+      <div style="font-family:'Bangers',cursive;font-size:28px;color:#FF9933;margin-bottom:16px;">Today's Timeline</div>
+      <div id="dayTimeline"></div>
+    </div>
+  </div>
+
+  <!-- ═══ MY WORLD (Hobbies/Interests) ═══ -->
+  <div class="view" id="view-myworld">
+    <button class="back" onclick="goHome()">← Home</button>
+    <div style="padding:8px 0 16px;"><h2 style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:2px;color:#FF9933;text-shadow:0 0 25px rgba(255,153,51,0.8);">🌟 MY WORLD</h2></div>
+
+    <!-- One Piece -->
+    <div style="display:flex;background:#1e3068;border:2px solid #FF9933;border-radius:20px;overflow:hidden;margin-bottom:12px;">
+      <img src="assets/mrbean-onepiece-captain.jpg" style="width:378px;flex-shrink:0;object-fit:cover;object-position:top;">
+      <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:12px;">
+        <div style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:1px;color:#FF9933;text-shadow:0 0 25px rgba(255,153,51,0.9);">🏴‍☠️ ONE PIECE</div>
+        <div style="font-size:20px;color:#8899cc;">Your favourite anime. The Straw Hats are your crew.</div>
+        <div style="font-size:18px;color:#FF9933;font-weight:700;">Fun fact: Luffy's dream wasn't just to be Pirate King — it was to have the most freedom in the world.</div>
+        <div onclick="goChat('bean');document.getElementById('msgIn').value='Tell me something I don\'t know about One Piece';" style="padding:14px;background:rgba(255,153,51,0.1);border:2px solid #FF9933;border-radius:12px;cursor:pointer;text-align:center;font-size:18px;font-weight:800;color:#FF9933;">Ask Mr Bean about One Piece 🏴‍☠️</div>
+      </div>
+    </div>
+
+    <!-- Cooking -->
+    <div style="display:flex;background:#1e3068;border:2px solid #2d4488;border-radius:20px;overflow:hidden;margin-bottom:12px;">
+      <img src="assets/mrbean-cooking.jpg" style="width:378px;flex-shrink:0;object-fit:cover;object-position:top;">
+      <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:12px;">
+        <div style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:1px;color:#FF9933;text-shadow:0 0 25px rgba(255,153,51,0.9);">🍳 COOKING</div>
+        <div style="font-size:20px;color:#8899cc;">Fried rice master. Karaage king. Nick DiGiovanni fan.</div>
+        <div style="font-size:18px;color:#44FF66;font-weight:700;">Favourite foods: mash potatoes, meat pies, karaage</div>
+        <div onclick="goChat('bean');document.getElementById('msgIn').value='Give me a recipe to try this weekend';" style="padding:14px;background:rgba(68,255,102,0.1);border:2px solid #44FF66;border-radius:12px;cursor:pointer;text-align:center;font-size:18px;font-weight:800;color:#44FF66;">Ask Mr Bean for a recipe 🍳</div>
+      </div>
+    </div>
+
+    <!-- Comics & Art -->
+    <div style="display:flex;background:#1e3068;border:2px solid #2d4488;border-radius:20px;overflow:hidden;margin-bottom:12px;">
+      <img src="assets/mrbean-comic-artist.jpg" style="width:378px;flex-shrink:0;object-fit:cover;object-position:top;">
+      <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:12px;">
+        <div style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:1px;color:#FF55CC;text-shadow:0 0 25px rgba(255,85,204,0.9);">🎨 COMICS & ART</div>
+        <div style="font-size:20px;color:#8899cc;">Future comic book artist. Your visual skills are in the top 7% of kids your age.</div>
+        <div style="font-size:18px;color:#FF55CC;font-weight:700;">Draw something every day. Even 10 minutes counts.</div>
+        <div onclick="goChat('jarvis');document.getElementById('msgIn').value='How do I get better at drawing comics?';" style="padding:14px;background:rgba(255,85,204,0.1);border:2px solid #FF55CC;border-radius:12px;cursor:pointer;text-align:center;font-size:18px;font-weight:800;color:#FF55CC;">Ask Jarvis how to improve 🎨</div>
+      </div>
+    </div>
+
+    <!-- Music -->
+    <div style="display:flex;background:#1e3068;border:2px solid #2d4488;border-radius:20px;overflow:hidden;margin-bottom:12px;">
+      <img src="assets/mrbean-70s80s-vinyl.jpg" style="width:378px;flex-shrink:0;object-fit:cover;object-position:top;">
+      <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:12px;">
+        <div style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:1px;color:#8888FF;text-shadow:0 0 25px rgba(136,136,255,0.9);">🎵 70s & 80s MUSIC</div>
+        <div style="font-size:20px;color:#8899cc;">Queen, Bee Gees, Michael Jackson, Wham. Better taste than most adults.</div>
+        <div onclick="goChat('bean');document.getElementById('msgIn').value='Quiz me on 80s music!';" style="padding:14px;background:rgba(136,136,255,0.1);border:2px solid #8888FF;border-radius:12px;cursor:pointer;text-align:center;font-size:18px;font-weight:800;color:#8888FF;">Music quiz with Mr Bean 🎵</div>
+      </div>
+    </div>
+
+    <!-- Golden Retriever -->
+    <div style="display:flex;background:#1e3068;border:2px solid #2d4488;border-radius:20px;overflow:hidden;margin-bottom:12px;">
+      <img src="assets/mrbean-golden-retriever.jpg" style="width:378px;flex-shrink:0;object-fit:cover;object-position:top;">
+      <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:12px;">
+        <div style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:1px;color:#FFAA00;text-shadow:0 0 25px rgba(255,170,0,0.9);">🐕 MY DOG</div>
+        <div style="font-size:20px;color:#8899cc;">6-month-old Golden Retriever. Best friend. Walking buddy.</div>
+        <div onclick="goChat('bean');document.getElementById('msgIn').value='Tell me a fun fact about Golden Retrievers';" style="padding:14px;background:rgba(255,170,0,0.1);border:2px solid #FFAA00;border-radius:12px;cursor:pointer;text-align:center;font-size:18px;font-weight:800;color:#FFAA00;">Dog facts with Mr Bean 🐕</div>
+      </div>
+    </div>
+
+    <!-- Jiu-Jitsu -->
+    <div style="display:flex;background:#1e3068;border:2px solid #2d4488;border-radius:20px;overflow:hidden;margin-bottom:12px;">
+      <img src="assets/mrbean-jiujitsu.jpg" style="width:378px;flex-shrink:0;object-fit:cover;object-position:top;">
+      <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:12px;">
+        <div style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:1px;color:#FF5555;text-shadow:0 0 25px rgba(255,85,85,0.9);">🥋 JIU-JITSU</div>
+        <div style="font-size:20px;color:#8899cc;">Tuesdays & Thursdays 5-6pm. Discipline, respect, body control.</div>
+        <div style="font-size:18px;color:#FF5555;font-weight:700;">Showing up tired after school? That takes guts. Be proud of it.</div>
+      </div>
+    </div>
+
+    <!-- Coding -->
+    <div style="display:flex;background:#1e3068;border:2px solid #2d4488;border-radius:20px;overflow:hidden;margin-bottom:12px;">
+      <img src="assets/mrbean-robotics.jpg" style="width:378px;flex-shrink:0;object-fit:cover;object-position:top;">
+      <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:12px;">
+        <div style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:1px;color:#33DDDD;text-shadow:0 0 25px rgba(51,221,221,0.9);">🤖 CODING & ROBOTICS</div>
+        <div style="font-size:20px;color:#8899cc;">Tuesdays 3-4:30pm. Your logical reasoning is in the top 8%. You're built for this.</div>
+        <div onclick="goChat('bean');document.getElementById('msgIn').value='Give me a coding challenge';" style="padding:14px;background:rgba(51,221,221,0.1);border:2px solid #33DDDD;border-radius:12px;cursor:pointer;text-align:center;font-size:18px;font-weight:800;color:#33DDDD;">Coding challenge 🤖</div>
+      </div>
+    </div>
+
+    <!-- Bike -->
+    <div style="display:flex;background:#1e3068;border:2px solid #2d4488;border-radius:20px;overflow:hidden;margin-bottom:12px;">
+      <img src="assets/mrbean-bike.jpg" style="width:378px;flex-shrink:0;object-fit:cover;object-position:top;">
+      <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:12px;">
+        <div style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:1px;color:#44FF66;text-shadow:0 0 25px rgba(68,255,102,0.9);">🚲 BIKE RIDING</div>
+        <div style="font-size:20px;color:#8899cc;">Freedom on two wheels. Best way to clear your head.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ WEEKLY REVIEW ═══ -->
+  <div class="view" id="view-review">
+    <button class="back" onclick="goHome()">← Home</button>
+    <div style="padding:8px 0 16px;"><h2 style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:2px;color:#FF9933;text-shadow:0 0 25px rgba(255,153,51,0.8);">🏆 WEEKLY REVIEW</h2></div>
+
+    <div style="background:#1e3068;border:2px solid #FF9933;border-radius:20px;padding:24px;margin-bottom:16px;">
+      <div style="font-family:'Bangers',cursive;font-size:32px;color:#FF9933;margin-bottom:12px;">This Week's Stats</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;">
+        <div style="background:#0f1d42;border-radius:14px;padding:16px;text-align:center;"><div style="font-size:32px;font-weight:900;color:#44FF66;" id="rvTasks">0</div><div style="font-size:14px;color:#8899cc;">Tasks Done</div></div>
+        <div style="background:#0f1d42;border-radius:14px;padding:16px;text-align:center;"><div style="font-size:32px;font-weight:900;color:#00EEFF;" id="rvXP">0</div><div style="font-size:14px;color:#8899cc;">XP Earned</div></div>
+        <div style="background:#0f1d42;border-radius:14px;padding:16px;text-align:center;"><div style="font-size:32px;font-weight:900;color:#FF9933;" id="rvStreak">0</div><div style="font-size:14px;color:#8899cc;">Best Streak</div></div>
+        <div style="background:#0f1d42;border-radius:14px;padding:16px;text-align:center;"><div style="font-size:32px;font-weight:900;color:#FF55CC;" id="rvGames">0</div><div style="font-size:14px;color:#8899cc;">Games Played</div></div>
+      </div>
+    </div>
+
+    <div style="background:#1e3068;border:2px solid #2d4488;border-radius:20px;padding:24px;margin-bottom:16px;">
+      <div style="font-family:'Bangers',cursive;font-size:28px;color:#44FF66;margin-bottom:12px;">🌟 Wins This Week</div>
+      <div style="font-size:18px;color:#8899cc;line-height:2;" id="rvWins">Complete some tasks to see your wins here!</div>
+    </div>
+
+    <div style="background:#1e3068;border:2px solid #2d4488;border-radius:20px;padding:24px;margin-bottom:16px;">
+      <div style="font-family:'Bangers',cursive;font-size:28px;color:#FF9933;margin-bottom:12px;">📅 Coming Next Week</div>
+      <div style="font-size:18px;color:#8899cc;line-height:2;">
+        🧪 Maths Test — Wednesday 16 April<br>
+        🥋 Jiu-Jitsu — Tue & Thu<br>
+        🎾 Tennis — Saturday 9am<br>
+        🎹 Piano — Saturday 1:15pm
+      </div>
+    </div>
+
+    <div style="background:#1e3068;border:2px solid #2d4488;border-radius:20px;padding:24px;">
+      <div style="font-family:'Bangers',cursive;font-size:28px;color:#55AAFF;margin-bottom:12px;">🤖 Jarvis Says</div>
+      <div style="font-size:18px;color:#8899cc;font-style:italic;">"Every week you show up is a week you get stronger. Not just at school — at life. Keep going, William."</div>
     </div>
   </div>
 
@@ -694,6 +878,74 @@ function uC(){document.getElementById('clock').textContent=new Date().toLocaleTi
 
 // Init timetable
 setTimeout(()=>renderTimetable(),100);
+
+// VISUAL TIMER
+const DAY_EVENTS = [
+  {time:'05:30',label:'🌅 Morning Brain',end:'07:30'},
+  {time:'07:50',label:'🏫 School Starts',end:'09:55'},
+  {time:'09:55',label:'☕ Recess',end:'10:15'},
+  {time:'10:15',label:'🏫 School (Period 3-4)',end:'12:05'},
+  {time:'12:05',label:'🍝 Lunch',end:'12:50'},
+  {time:'12:50',label:'🏫 School (Period 5-6)',end:'14:35'},
+  {time:'15:00',label:'🏠 Free Time',end:'15:30'},
+  {time:'15:30',label:'🐻 Mr Bean Check-in',end:'16:00'},
+  {time:'16:00',label:'📚 Homework',end:'20:00'},
+  {time:'20:00',label:'🤖 Jarvis + Journal',end:'20:30'},
+  {time:'20:30',label:'🌙 Wind Down',end:'21:00'},
+  {time:'21:00',label:'😴 Bedtime',end:'23:59'},
+];
+
+function updateTimer(){
+  const now=new Date();
+  const hh=String(now.getHours()).padStart(2,'0');
+  const mm=String(now.getMinutes()).padStart(2,'0');
+  const nowStr=hh+':'+mm;
+  const el1=document.getElementById('timerNow');
+  const el2=document.getElementById('timerNext');
+  const bar=document.getElementById('timerBar');
+  if(!el1)return;
+  
+  let current=null,next=null;
+  for(let i=0;i<DAY_EVENTS.length;i++){
+    if(nowStr>=DAY_EVENTS[i].time && nowStr<DAY_EVENTS[i].end){
+      current=DAY_EVENTS[i];
+      next=DAY_EVENTS[i+1]||null;
+      break;
+    }
+  }
+  
+  if(current){
+    el1.textContent=current.label;
+    const startMins=parseInt(current.time.split(':')[0])*60+parseInt(current.time.split(':')[1]);
+    const endMins=parseInt(current.end.split(':')[0])*60+parseInt(current.end.split(':')[1]);
+    const nowMins=now.getHours()*60+now.getMinutes();
+    const pct=Math.min(100,((nowMins-startMins)/(endMins-startMins))*100);
+    bar.style.width=pct+'%';
+    const left=endMins-nowMins;
+    el2.textContent=left+' minutes left'+(next?' → Next: '+next.label:'');
+    document.getElementById('timerStart').textContent=current.time;
+    document.getElementById('timerEnd').textContent=current.end;
+  } else {
+    el1.textContent='🌙 Rest';
+    el2.textContent='Nothing scheduled right now';
+    bar.style.width='0%';
+  }
+  
+  // Day timeline
+  const tl=document.getElementById('dayTimeline');
+  if(tl){
+    tl.innerHTML=DAY_EVENTS.map(e=>{
+      const active=nowStr>=e.time&&nowStr<e.end;
+      const past=nowStr>=e.end;
+      return `<div style="display:flex;gap:12px;align-items:center;padding:8px 12px;border-radius:10px;margin-bottom:4px;background:${active?'rgba(51,221,221,0.1)':past?'rgba(0,0,0,0.2)':'transparent'};opacity:${past?'0.4':'1'};">
+        <div style="font-size:14px;font-weight:900;color:${active?'#33DDDD':'#8899cc'};width:50px;">${e.time}</div>
+        <div style="font-size:16px;font-weight:${active?'900':'600'};color:${active?'#33DDDD':'#fff'};">${e.label}${active?' ◀ NOW':''}</div>
+      </div>`;
+    }).join('');
+  }
+}
+updateTimer();
+setInterval(updateTimer,30000);
 
 // FLOATERS
 const FL=['🐻','🧸','👒','🍖','🦌','🏴‍☠️','⚓','🌊','🍳','🎵','🐕','🎹','🎨','🥋','⭐'];
