@@ -27,6 +27,8 @@ body {
   text-decoration: none;
 }
 .back-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+.floater { position: fixed; font-size: 40px; pointer-events: none; z-index: 0; opacity: 0; animation: floatAcross linear forwards; }
+@keyframes floatAcross { 0% { transform: translateX(-80px) rotate(-5deg); opacity: 0; } 5% { opacity: 0.5; } 50% { transform: translateX(50vw) rotate(5deg); opacity: 0.4; } 100% { transform: translateX(110vw) rotate(-3deg); opacity: 0; } }
 
 .header { text-align: center; margin-bottom: 16px; }
 .title { font-size: 24px; font-weight: 900; }
@@ -315,6 +317,22 @@ function endGame() {
     if (pd) { pd.xp += xp; pd.todayXP += xp; pd.history.unshift({ xp, reason: '🎨 Colour Switch (' + accuracy + '%)', time: new Date().toISOString() }); localStorage.setItem('williamXP', JSON.stringify(pd)); }
   } catch(e) {}
 }
+
+// Floating characters
+const FLOATERS = ['🐻','🧸','👒','🗡️','🍖','🦌','🏴‍☠️','⚓','🌊','🍳','🎵','🔧','📖','🎯','🐕','🎹','🎨','🥋'];
+function spawnFloater() {
+  const el = document.createElement('div');
+  el.className = 'floater';
+  el.textContent = FLOATERS[Math.floor(Math.random() * FLOATERS.length)];
+  el.style.top = (10 + Math.random() * 70) + 'vh';
+  el.style.fontSize = (30 + Math.random() * 25) + 'px';
+  const d = 12 + Math.random() * 10;
+  el.style.animationDuration = d + 's';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), d * 1000);
+}
+setInterval(() => spawnFloater(), 3000 + Math.random() * 3000);
+for (let i = 0; i < 3; i++) setTimeout(spawnFloater, i * 1500);
 
 // Keyboard shortcuts
 document.addEventListener('keydown', (e) => {

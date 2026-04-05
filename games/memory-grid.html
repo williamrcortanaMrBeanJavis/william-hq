@@ -47,6 +47,23 @@ body {
 }
 .back-btn:hover { border-color: var(--cyan); color: var(--cyan); }
 
+/* Floating characters */
+.floater {
+  position: fixed;
+  font-size: 40px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  animation: floatAcross linear forwards;
+}
+@keyframes floatAcross {
+  0% { transform: translateX(-80px) translateY(0) rotate(-5deg); opacity: 0; }
+  5% { opacity: 0.6; }
+  50% { transform: translateX(50vw) translateY(-20px) rotate(5deg); opacity: 0.5; }
+  95% { opacity: 0.4; }
+  100% { transform: translateX(110vw) translateY(10px) rotate(-3deg); opacity: 0; }
+}
+
 .game-header { text-align: center; margin-bottom: 20px; }
 .game-title { font-size: 24px; font-weight: 900; }
 .game-subtitle { font-size: 13px; color: var(--muted); margin-top: 4px; }
@@ -344,6 +361,47 @@ function nextRound() {
 
 // Init
 createGrid();
+
+// Floating characters
+const FLOATERS = [
+  '🐻', // Mr Bean
+  '🧸', // Teddy
+  '👒', // Luffy's hat
+  '🗡️', // Zoro
+  '🍖', // Luffy's meat
+  '🦌', // Chopper
+  '🏴‍☠️', // Jolly Roger
+  '⚓', // Anchor
+  '🌊', // Waves
+  '🍳', // Sanji cooking
+  '🎵', // Brook
+  '🔧', // Franky
+  '📖', // Robin
+  '🎯', // Usopp
+  '🐕', // William's dog
+  '🎹', // Piano
+  '🎨', // Art
+  '🥋', // Jiu-Jitsu
+];
+
+function spawnFloater() {
+  const el = document.createElement('div');
+  el.className = 'floater';
+  el.textContent = FLOATERS[Math.floor(Math.random() * FLOATERS.length)];
+  el.style.top = (10 + Math.random() * 70) + 'vh';
+  el.style.left = '-80px';
+  el.style.fontSize = (30 + Math.random() * 25) + 'px';
+  const duration = 12 + Math.random() * 10;
+  el.style.animationDuration = duration + 's';
+  el.style.animationDelay = '0s';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), duration * 1000);
+}
+
+// Spawn one every 3-6 seconds
+setInterval(() => spawnFloater(), 3000 + Math.random() * 3000);
+// Initial burst
+for (let i = 0; i < 3; i++) setTimeout(spawnFloater, i * 1500);
 </script>
 </body>
 </html>
