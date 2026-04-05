@@ -47,10 +47,10 @@ body {
   border-radius: 20px;
   overflow: hidden;
   position: relative;
-  height: 180px;
   cursor: pointer;
 }
-.hero img { width: 100%; height: 100%; object-fit: cover; }
+.hero img { width: 100%; display: block; }
+
 .hero .hero-overlay {
   position: absolute; inset: 0;
   background: linear-gradient(0deg, rgba(10,15,40,0.9) 20%, rgba(10,15,40,0) 70%);
@@ -89,11 +89,11 @@ body {
 }
 .quick-card {
   border-radius: 16px; overflow: hidden; position: relative;
-  height: 100px; cursor: pointer; border: 2px solid #2d4488;
+  cursor: pointer; border: 2px solid #2d4488;
   transition: all 0.15s;
 }
 .quick-card:hover { border-color: #33DDDD; transform: translateY(-2px); }
-.quick-card img { width: 100%; height: 100%; object-fit: cover; }
+.quick-card img { width: 100%; display: block; }
 .quick-card .qc-overlay {
   position: absolute; inset: 0;
   background: linear-gradient(0deg, rgba(10,15,40,0.9) 20%, rgba(10,15,40,0) 70%);
@@ -106,9 +106,9 @@ body {
 .view.active { display: block; }
 .view-header {
   border-radius: 18px; overflow: hidden; position: relative;
-  height: 120px; margin-bottom: 14px;
+  margin-bottom: 14px;
 }
-.view-header img { width: 100%; height: 100%; object-fit: cover; }
+.view-header img { width: 100%; display: block; }
 .view-header .vh-overlay {
   position: absolute; inset: 0;
   background: linear-gradient(0deg, rgba(10,15,40,0.95) 20%, rgba(10,15,40,0) 70%);
@@ -159,11 +159,11 @@ body {
 /* ═══ BRAIN MODE ═══ */
 .topic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .topic {
-  border-radius: 14px; overflow: hidden; position: relative; height: 110px;
+  border-radius: 14px; overflow: hidden; position: relative;
   cursor: pointer; border: 2px solid #2d4488; transition: all 0.15s;
 }
 .topic:hover { border-color: #33DDDD; transform: translateY(-2px); }
-.topic img { width: 100%; height: 100%; object-fit: cover; }
+.topic img { width: 100%; display: block; }
 .topic .t-ov { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(10,15,40,0.9) 25%, rgba(10,15,40,0) 70%); display: flex; flex-direction: column; justify-content: flex-end; padding: 10px; pointer-events: none; }
 .topic h4 { font-size: 13px; font-weight: 900; }
 
@@ -185,9 +185,9 @@ body {
 
 /* ═══ GAMES ═══ */
 .game-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-.game-card { border-radius: 14px; overflow: hidden; position: relative; height: 130px; border: 2px solid #2d4488; transition: all 0.15s; }
+.game-card { border-radius: 14px; overflow: hidden; position: relative; border: 2px solid #2d4488; transition: all 0.15s; }
 .game-card:hover { border-color: #33DDDD; transform: translateY(-2px); }
-.game-card img { width: 100%; height: 100%; object-fit: cover; }
+.game-card img { width: 100%; display: block; }
 .game-card .g-ov { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(10,15,40,0.9) 25%, rgba(10,15,40,0) 70%); display: flex; flex-direction: column; justify-content: flex-end; padding: 10px; pointer-events: none; }
 
 /* ═══ SOS ═══ */
@@ -274,8 +274,8 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
   <div class="view" id="view-chat">
     <button class="back" onclick="goHome()">← Home</button>
     <div style="display:flex; gap:8px; margin-bottom:10px;">
-      <div class="quick-card" style="flex:1; height:60px;" onclick="selectChar('bean')"><img src="assets/mrbean-avatar.jpg"><div class="qc-overlay"><h3 style="font-size:13px;">🐻 Bean</h3></div></div>
-      <div class="quick-card" style="flex:1; height:60px;" onclick="selectChar('jarvis')"><img src="assets/jarvis-avatar.jpg"><div class="qc-overlay"><h3 style="font-size:13px;">🤖 Jarvis</h3></div></div>
+      <div class="quick-card" style="flex:1;" onclick="selectChar('bean')"><img src="assets/mrbean-avatar.jpg"><div class="qc-overlay"><h3 style="font-size:13px;">🐻 Bean</h3></div></div>
+      <div class="quick-card" style="flex:1;" onclick="selectChar('jarvis')"><img src="assets/jarvis-avatar.jpg"><div class="qc-overlay"><h3 style="font-size:13px;">🤖 Jarvis</h3></div></div>
     </div>
     <div class="chat-wrap">
       <div class="chat-msgs" id="chatMsgs">
@@ -362,9 +362,9 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
     <button class="back" onclick="goHome()">← Home</button>
     <div class="view-header"><img src="assets/mrbean-focus.jpg"><div class="vh-overlay"><h2>⚡ BRAIN GAMES</h2></div></div>
     <div class="game-grid">
-      <a href="games/memory-grid.html" class="game-card" style="text-decoration:none;"><img src="assets/mrbean-art.jpg"><div class="g-ov"><h4 style="font-size:12px; color:#fff;">🧩 Memory</h4></div></a>
-      <a href="games/speed-match.html" class="game-card" style="text-decoration:none;"><img src="assets/mrbean-jiujitsu.jpg"><div class="g-ov"><h4 style="font-size:12px; color:#fff;">⚡ Speed</h4></div></a>
-      <a href="games/colour-switch.html" class="game-card" style="text-decoration:none;"><img src="assets/mrbean-music-cooking.jpg"><div class="g-ov"><h4 style="font-size:12px; color:#fff;">🎨 Colour</h4></div></a>
+      <a href="games/memory-grid.html" class="game-card" style="text-decoration:none;"><img src="assets/mrbean-art.jpg"><div class="g-ov"><h4 style="font-size:13px; color:#fff;">🧩 Memory</h4></div></a>
+      <a href="games/speed-match.html" class="game-card" style="text-decoration:none;"><img src="assets/mrbean-jiujitsu.jpg"><div class="g-ov"><h4 style="font-size:13px; color:#fff;">⚡ Speed</h4></div></a>
+      <a href="games/colour-switch.html" class="game-card" style="text-decoration:none;"><img src="assets/mrbean-music-cooking.jpg"><div class="g-ov"><h4 style="font-size:13px; color:#fff;">🎨 Colour</h4></div></a>
     </div>
   </div>
 
