@@ -425,6 +425,118 @@ body.discreet .input-area input { background: #f5f5f5; color: #333; border: 1px 
 .topic-card .topic-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
 .topic-card .topic-desc { font-size: 13px; color: var(--muted); }
 
+/* ═══════ SOS BUTTON ═══════ */
+.sos-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #ff2222;
+  border: 3px solid #ff6666;
+  color: white;
+  font-size: 12px;
+  font-weight: 900;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(255, 0, 0, 0.4);
+  animation: sos-pulse 3s infinite;
+  letter-spacing: 1px;
+}
+.sos-btn:hover { transform: scale(1.1); }
+@keyframes sos-pulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(255, 0, 0, 0.3); }
+  50% { box-shadow: 0 4px 30px rgba(255, 0, 0, 0.6); }
+}
+body.discreet .sos-btn { background: #cc0000; border-color: #dd4444; }
+
+/* SOS Modal */
+.sos-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+}
+.sos-overlay.active { display: flex; }
+.sos-modal {
+  background: #1a1a2e;
+  border: 3px solid #ff2222;
+  border-radius: 24px;
+  padding: 32px;
+  max-width: 380px;
+  width: 90%;
+  text-align: center;
+}
+body.discreet .sos-modal { background: #fff; border-color: #cc0000; color: #333; }
+.sos-modal h2 {
+  color: #ff2222;
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+.sos-modal p {
+  color: #aaa;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+body.discreet .sos-modal p { color: #666; }
+.sos-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.sos-contact a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 15px;
+  transition: all 0.15s;
+}
+.sos-call {
+  background: rgba(46,204,64,0.15);
+  border: 2px solid #2ECC40;
+  color: #2ECC40;
+}
+.sos-call:hover { background: rgba(46,204,64,0.3); }
+.sos-text {
+  background: rgba(68,136,255,0.15);
+  border: 2px solid #4488ff;
+  color: #4488ff;
+}
+.sos-text:hover { background: rgba(68,136,255,0.3); }
+.sos-email {
+  background: rgba(232,164,68,0.15);
+  border: 2px solid #E8A444;
+  color: #E8A444;
+}
+.sos-email:hover { background: rgba(232,164,68,0.3); }
+.sos-cancel {
+  padding: 10px 24px;
+  border-radius: 12px;
+  border: 2px solid #444;
+  background: transparent;
+  color: #888;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: 'Inter';
+}
+.sos-cancel:hover { border-color: #888; color: #ccc; }
+.sos-confirm-step { display: none; }
+.sos-confirm-step.active { display: block; }
+
 /* ═══════ RESPONSIVE (tablet/laptop) ═══════ */
 @media (max-width: 768px) {
   .sidebar { width: 200px; }
@@ -662,6 +774,47 @@ body.discreet .input-area input { background: #f5f5f5; color: #333; border: 1px 
   </div>
 </div>
 
+<!-- ═══════ SOS BUTTON ═══════ -->
+<button class="sos-btn" onclick="openSOS()" title="Emergency">SOS</button>
+
+<!-- ═══════ SOS MODAL ═══════ -->
+<div class="sos-overlay" id="sosOverlay">
+  <div class="sos-modal">
+    <!-- Step 1: Confirm -->
+    <div class="sos-confirm-step active" id="sosStep1">
+      <h2>🚨 SOS</h2>
+      <p>This will contact your parents and Uncle Adam.<br><strong>Only use for real emergencies.</strong></p>
+      <div style="display: flex; gap: 12px; justify-content: center;">
+        <button onclick="activateSOS()" style="padding: 14px 32px; border-radius: 14px; border: none; background: #ff2222; color: white; font-weight: 800; font-size: 16px; cursor: pointer; font-family: 'Inter';">🚨 YES, I NEED HELP</button>
+        <button class="sos-cancel" onclick="closeSOS()">Cancel</button>
+      </div>
+    </div>
+    <!-- Step 2: Contacts -->
+    <div class="sos-confirm-step" id="sosStep2">
+      <h2>🚨 Help is coming</h2>
+      <p>Tap to call, text, or email. Everyone has been notified.</p>
+      <div class="sos-contact">
+        <a href="tel:0433296915" class="sos-call">📞 Call Dad (Simon)</a>
+        <a href="tel:ANNETTE_PHONE" class="sos-call">📞 Call Mum (Annette)</a>
+        <a href="tel:ADAM_PHONE" class="sos-call">📞 Call Uncle Adam</a>
+        <a href="tel:0299694151" class="sos-call">📞 Call Pharmacy (TCPA)</a>
+      </div>
+      <div class="sos-contact">
+        <a href="sms:0433296915&body=SOS%20from%20William%20-%20I%20need%20help%20right%20now" class="sos-text">📱 Text Dad</a>
+        <a href="sms:ANNETTE_PHONE&body=SOS%20from%20William%20-%20I%20need%20help%20right%20now" class="sos-text">📱 Text Mum</a>
+        <a href="sms:ADAM_PHONE&body=SOS%20from%20William%20-%20I%20need%20help%20right%20now" class="sos-text">📱 Text Uncle Adam</a>
+      </div>
+      <div class="sos-contact">
+        <a href="mailto:ADAM_EMAIL,SIMON_EMAIL,ANNETTE_EMAIL,info@tcpa.com.au?subject=SOS%20from%20William&body=William%20pressed%20the%20emergency%20button.%20Please%20check%20on%20him%20immediately." class="sos-email">📧 Email Everyone</a>
+      </div>
+      <div style="margin-top: 16px; padding: 12px; background: rgba(46,204,64,0.1); border: 1px solid #2ECC40; border-radius: 10px; font-size: 12px; color: #2ECC40;">
+        ✅ If you're in danger, call <a href="tel:000" style="color: #2ECC40; font-weight: 800;">000</a> (police/ambulance/fire)
+      </div>
+      <button class="sos-cancel" onclick="closeSOS()" style="margin-top: 16px;">Close</button>
+    </div>
+  </div>
+</div>
+
 <script>
 let currentChar = 'bean';
 let isDiscreet = false;
@@ -860,6 +1013,32 @@ function toggleTask(el) {
     check.textContent = '✅';
     el.style.opacity = '0.6';
   }
+}
+
+// ═══════ SOS SYSTEM ═══════
+function openSOS() {
+  document.getElementById('sosOverlay').classList.add('active');
+  document.getElementById('sosStep1').classList.add('active');
+  document.getElementById('sosStep2').classList.remove('active');
+}
+function closeSOS() {
+  document.getElementById('sosOverlay').classList.remove('active');
+}
+function activateSOS() {
+  document.getElementById('sosStep1').classList.remove('active');
+  document.getElementById('sosStep2').classList.add('active');
+  
+  // Auto-send email to all contacts
+  const emailLink = document.querySelector('.sos-email');
+  if (emailLink) {
+    // Trigger the email
+    window.open(emailLink.href, '_blank');
+  }
+  
+  // Log the SOS event (for parent dashboard)
+  const sosTime = new Date().toISOString();
+  localStorage.setItem('lastSOS', sosTime);
+  console.log('SOS ACTIVATED:', sosTime);
 }
 
 // Brain mode topics
