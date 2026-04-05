@@ -618,6 +618,96 @@ body.discreet .sos-modal p { color: #666; }
 .sos-confirm-step { display: none; }
 .sos-confirm-step.active { display: block; }
 
+/* ═══════ FUN STUFF ═══════ */
+/* Floating characters in background */
+.floater {
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  animation: floatUp linear forwards;
+}
+@keyframes floatUp {
+  0% { transform: translateY(100vh) rotate(0deg) scale(0.8); opacity: 0; }
+  10% { opacity: 0.15; }
+  50% { transform: translateY(50vh) rotate(10deg) scale(1); opacity: 0.12; }
+  90% { opacity: 0.08; }
+  100% { transform: translateY(-100px) rotate(-5deg) scale(0.9); opacity: 0; }
+}
+
+/* Animated gradient border on active card */
+.char-card.selected {
+  animation: borderGlow 3s ease-in-out infinite;
+}
+@keyframes borderGlow {
+  0%, 100% { box-shadow: 0 0 15px rgba(232,164,68,0.2); }
+  50% { box-shadow: 0 0 30px rgba(0,200,200,0.3); }
+}
+.char-card.jarvis.selected {
+  animation: borderGlowBlue 3s ease-in-out infinite;
+}
+@keyframes borderGlowBlue {
+  0%, 100% { box-shadow: 0 0 15px rgba(68,136,255,0.2); }
+  50% { box-shadow: 0 0 30px rgba(68,136,255,0.4); }
+}
+
+/* Fun hover effects on sidebar */
+.sidebar-btn:hover .icon {
+  display: inline-block;
+  animation: wiggle 0.5s ease;
+}
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-10deg); }
+  75% { transform: rotate(10deg); }
+}
+
+/* Chat bubble animation */
+.chat-bubble {
+  animation: msgBounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes msgBounce {
+  from { opacity: 0; transform: translateY(20px) scale(0.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Task complete celebration */
+.task-item.celebrating {
+  animation: taskDone 0.6s ease;
+}
+@keyframes taskDone {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.05); background: rgba(46,204,64,0.1); }
+  100% { transform: scale(1); }
+}
+
+/* XP popup */
+.xp-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--green);
+  pointer-events: none;
+  z-index: 9998;
+  animation: xpPop 1.5s ease forwards;
+  text-shadow: 0 0 20px rgba(46,204,64,0.5);
+}
+@keyframes xpPop {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+  30% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+  60% { opacity: 1; transform: translate(-50%, -60%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -150%) scale(0.8); }
+}
+
+/* Confetti */
+@keyframes confettiBurst {
+  0% { opacity: 1; transform: translateY(0) translateX(0) rotate(0deg) scale(1); }
+  100% { opacity: 0; transform: translateY(-200px) translateX(calc(-100px + 200px * var(--r, 0.5))) rotate(360deg) scale(0.3); }
+}
+
 /* ═══════ RESPONSIVE (tablet/laptop) ═══════ */
 @media (max-width: 768px) {
   .sidebar { width: 200px; }
@@ -1039,6 +1129,32 @@ body.discreet .sos-modal p { color: #666; }
 </div>
 
 <script>
+// ═══ FUN: Floating characters ═══
+const FUN_FLOATERS = ['🐻','🧸','👒','🍖','🦌','🏴‍☠️','⚓','🌊','🍳','🎵','🐕','🎹','🎨','🥋','🗡️','🎯','🔧','📖','⭐','🌟'];
+function spawnFloater() {
+  const el = document.createElement('div');
+  el.className = 'floater';
+  el.textContent = FUN_FLOATERS[Math.floor(Math.random() * FUN_FLOATERS.length)];
+  el.style.left = (5 + Math.random() * 85) + 'vw';
+  el.style.fontSize = (24 + Math.random() * 20) + 'px';
+  const d = 15 + Math.random() * 15;
+  el.style.animationDuration = d + 's';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), d * 1000);
+}
+setInterval(spawnFloater, 5000 + Math.random() * 4000);
+setTimeout(spawnFloater, 2000);
+setTimeout(spawnFloater, 4000);
+
+// XP popup effect
+function showXPPopup(amount) {
+  const el = document.createElement('div');
+  el.className = 'xp-popup';
+  el.textContent = '+' + amount + ' XP ⚡';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1600);
+}
+
 // First launch → welcome experience
 if (!localStorage.getItem('welcomeSeen')) {
   window.location.href = 'welcome.html';
@@ -1229,17 +1345,36 @@ function toggleDiscreet() {
   }
 }
 
-// Task toggle
+// Task toggle with celebration
 function toggleTask(el) {
   const check = el.querySelector('.task-check');
   if (check.classList.contains('done')) {
     check.classList.remove('done');
     check.textContent = '⬜';
     el.style.opacity = '1';
+    el.classList.remove('celebrating');
   } else {
     check.classList.add('done');
     check.textContent = '✅';
     el.style.opacity = '0.6';
+    el.classList.add('celebrating');
+    
+    // XP for completing a task!
+    addXP(15, '✅ Task completed');
+    
+    // Confetti burst!
+    for (let i = 0; i < 8; i++) {
+      setTimeout(() => {
+        const conf = document.createElement('div');
+        conf.style.cssText = 'position:fixed;font-size:' + (16+Math.random()*16) + 'px;pointer-events:none;z-index:9999;';
+        conf.style.left = (30 + Math.random() * 40) + 'vw';
+        conf.style.top = '40vh';
+        conf.textContent = ['⭐','🎉','🎊','⚡','🔥','🌟','💪','🐻'][i];
+        conf.style.animation = 'confettiBurst 1.2s ease forwards';
+        document.body.appendChild(conf);
+        setTimeout(() => conf.remove(), 1300);
+      }, i * 60);
+    }
   }
 }
 
@@ -1865,13 +2000,24 @@ function addXP(amount, reason) {
     reason: reason,
     time: new Date().toISOString()
   });
-  // Keep last 50 entries
   if (playerData.history.length > 50) playerData.history = playerData.history.slice(0, 50);
+  
+  // XP popup!
+  showXPPopup(amount);
   
   const newLevel = getLevel(playerData.xp);
   if (newLevel.level > oldLevel.level) {
-    // LEVEL UP!
-    console.log('LEVEL UP!', newLevel.title);
+    // LEVEL UP CELEBRATION!
+    setTimeout(() => {
+      const popup = document.createElement('div');
+      popup.className = 'xp-popup';
+      popup.style.color = '#E8A444';
+      popup.style.fontSize = '28px';
+      popup.style.textShadow = '0 0 30px rgba(232,164,68,0.6)';
+      popup.textContent = '🎉 LEVEL UP! ' + newLevel.emoji + ' ' + newLevel.title + ' 🎉';
+      document.body.appendChild(popup);
+      setTimeout(() => popup.remove(), 2500);
+    }, 800);
   }
   
   saveXP();
