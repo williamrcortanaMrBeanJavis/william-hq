@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>William's HQ</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Bangers&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(180deg, #0f1d42 0%, #1a2d5e 100%);
+  color: #fff;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* ═══ HEADER ═══ */
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 0 16px;
+}
+.h-left { display: flex; align-items: center; gap: 12px; }
+.h-left img { width: 44px; height: 44px; border-radius: 12px; object-fit: cover; border: 2px solid #FF9933; }
+.h-title { font-family: 'Bangers', cursive; font-size: 28px; letter-spacing: 2px; color: #FF9933; }
+.h-right { font-size: 12px; color: #8899cc; display: flex; align-items: center; gap: 8px; }
+.h-time { font-size: 24px; font-weight: 900; color: #33DDDD; font-family: 'Inter'; }
+
+/* ═══ HEALTH ═══ */
+.health { display: flex; align-items: center; gap: 8px; padding-bottom: 16px; }
+.health span { font-size: 10px; color: #8899cc; font-weight: 700; }
+.hbar { flex: 1; height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; }
+.hbar div { height: 100%; background: #44DD55; border-radius: 3px; width: 100%; }
+
+/* ═══ VIEWS ═══ */
+.view { display: none; }
+.view.active { display: block; }
+
+/* ═══ HOME LAYOUT ═══ */
+.home-top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.home-bottom {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+/* ═══ IMAGE CARD ═══ */
+.card {
+  border-radius: 20px; overflow: hidden; position: relative;
+  cursor: pointer; border: 2px solid #2d4488;
+  transition: all 0.2s;
+}
+.card:hover { border-color: #33DDDD; transform: translateY(-3px); }
+.card:active { transform: scale(0.98); }
+.card img { width: 100%; display: block; }
+.card .ov {
+  position: absolute; inset: 0;
+  background: linear-gradient(0deg, rgba(10,15,40,0.92) 15%, rgba(10,15,40,0) 60%);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 16px; pointer-events: none;
+}
+.card h2 { font-family: 'Bangers', cursive; font-size: 22px; letter-spacing: 1px; }
+.card p { font-size: 11px; color: #8899cc; margin-top: 2px; }
+
+/* ═══ ICON BTNS ═══ */
+.icon-btn {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 18px 12px; background: #1e3068; border: 2px solid #2d4488;
+  border-radius: 18px; cursor: pointer; transition: all 0.15s;
+}
+.icon-btn:hover { border-color: #33DDDD; transform: translateY(-2px); }
+.icon-btn:active { transform: scale(0.95); }
+.icon-btn .ico { font-size: 32px; margin-bottom: 6px; }
+.icon-btn .lbl { font-size: 12px; font-weight: 800; }
+
+/* ═══ MORNING BANNER ═══ */
+.morning-banner {
+  background: linear-gradient(135deg, rgba(255,153,51,0.15), rgba(51,221,221,0.1));
+  border: 2px solid #FF9933;
+  border-radius: 16px;
+  padding: 14px 18px;
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 16px;
+}
+.morning-banner .mb-text { font-size: 13px; font-weight: 600; }
+.morning-banner .mb-sub { font-size: 11px; color: #8899cc; margin-top: 2px; }
+
+/* ═══ CHAT ═══ */
+.chat-full { display: flex; flex-direction: column; height: calc(100vh - 100px); }
+.chat-top { display: flex; gap: 10px; margin-bottom: 12px; }
+.chat-top .card { flex: 1; }
+.chat-msgs { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding: 8px 0; }
+.chat-row { display: flex; gap: 10px; align-items: flex-start; animation: msgIn 0.3s ease; }
+.chat-row.user { flex-direction: row-reverse; }
+@keyframes msgIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+.chat-av { width: 40px; height: 40px; border-radius: 12px; object-fit: cover; flex-shrink: 0; }
+.cb { max-width: 75%; padding: 12px 16px; border-radius: 18px; font-size: 15px; line-height: 1.5; }
+.cb.bean { background: rgba(255,153,51,0.12); border: 2px solid rgba(255,153,51,0.25); border-bottom-left-radius: 4px; }
+.cb.jarvis { background: rgba(85,170,255,0.12); border: 2px solid rgba(85,170,255,0.25); border-bottom-left-radius: 4px; }
+.cb.user-msg { background: rgba(51,221,221,0.1); border: 2px solid rgba(51,221,221,0.15); border-bottom-right-radius: 4px; }
+.chat-sender { font-size: 11px; font-weight: 800; margin-bottom: 3px; }
+.bean .chat-sender { color: #FF9933; }
+.jarvis .chat-sender { color: #55AAFF; }
+.chat-input { display: flex; gap: 10px; padding: 12px 0; border-top: 2px solid #2d4488; }
+.chat-input input { flex: 1; padding: 14px 16px; border-radius: 16px; border: 2px solid #2d4488; background: #1e3068; color: #fff; font-size: 16px; font-family: 'Inter'; outline: none; }
+.chat-input input:focus { border-color: #33DDDD; }
+.chat-input button { padding: 14px 24px; border-radius: 16px; border: none; font-weight: 800; font-size: 16px; cursor: pointer; font-family: 'Inter'; }
+.send-bean { background: #FF9933; color: #000; }
+.send-jarvis { background: #55AAFF; color: #fff; }
+.voice-btn { width: 50px; border-radius: 16px; border: 2px solid #2d4488; background: #1e3068; color: #8899cc; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+/* ═══ SCHEDULE ═══ */
+.sched { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
+.sched-time { font-size: 12px; font-weight: 800; color: #8899cc; width: 55px; text-align: right; flex-shrink: 0; }
+.sched-card { flex: 1; display: flex; align-items: center; gap: 12px; padding: 12px; background: #1e3068; border: 2px solid #2d4488; border-radius: 16px; }
+.sched-card img { width: 50px; height: 50px; border-radius: 12px; object-fit: cover; }
+
+/* ═══ BRAIN TOPICS ═══ */
+.topics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+
+/* ═══ BRAIN DUMP ═══ */
+.dump-in { display: flex; gap: 10px; margin-bottom: 14px; }
+.dump-in input { flex: 1; padding: 14px; border-radius: 16px; border: 2px solid #2d4488; background: #1e3068; color: #fff; font-size: 15px; font-family: 'Inter'; outline: none; }
+.dump-in button { padding: 14px 20px; border-radius: 16px; border: none; background: #33DDDD; color: #000; font-weight: 800; font-size: 16px; cursor: pointer; font-family: 'Inter'; }
+.dump-item { display: flex; gap: 10px; padding: 12px; background: #1e3068; border: 2px solid #2d4488; border-radius: 14px; margin-bottom: 8px; }
+
+/* ═══ XP ═══ */
+.xp-hero { border-radius: 20px; overflow: hidden; position: relative; margin-bottom: 16px; }
+.xp-hero img { width: 100%; display: block; }
+.xp-ov { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(10,15,40,0.95) 30%, rgba(10,15,40,0.2) 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; text-align: center; }
+.xp-bar { height: 14px; background: rgba(255,255,255,0.08); border-radius: 7px; margin: 10px 0; overflow: hidden; }
+.xp-fill { height: 100%; background: linear-gradient(90deg, #FF9933, #33DDDD); border-radius: 7px; transition: width 0.5s; }
+.streaks { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.sk { background: #1e3068; border: 2px solid #2d4488; border-radius: 16px; padding: 14px; text-align: center; }
+
+/* ═══ BACK ═══ */
+.back { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 12px; border: 2px solid #2d4488; background: #1e3068; color: #8899cc; font-size: 13px; font-weight: 700; cursor: pointer; margin-bottom: 14px; font-family: 'Inter'; }
+.back:hover { border-color: #33DDDD; color: #33DDDD; }
+
+/* ═══ SOS ═══ */
+.sos { position: fixed; bottom: 20px; right: 20px; width: 52px; height: 52px; border-radius: 50%; background: #FF5555; border: 2px solid #ff8888; color: #fff; font-size: 11px; font-weight: 900; cursor: pointer; z-index: 999; display: flex; align-items: center; justify-content: center; font-family: 'Inter'; box-shadow: 0 4px 20px rgba(255,0,0,0.3); }
+.sos-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:10000; align-items:center; justify-content:center; }
+.sos-overlay.active { display:flex; }
+.sos-modal { background:#1e3068; border:3px solid #FF5555; border-radius:20px; padding:24px; max-width:360px; width:90%; text-align:center; }
+
+/* ═══ FLOATERS ═══ */
+.floater { position:fixed; pointer-events:none; z-index:0; opacity:0; animation:floatUp 20s linear forwards; }
+@keyframes floatUp { 0%{transform:translateY(100vh);opacity:0;} 10%{opacity:0.1;} 90%{opacity:0.06;} 100%{transform:translateY(-80px);opacity:0;} }
+.xp-popup { position:fixed; top:40%; left:50%; transform:translate(-50%,-50%); font-size:30px; font-weight:900; color:#44DD55; pointer-events:none; z-index:9998; animation:xpPop 1.5s ease forwards; font-family:'Bangers',cursive; letter-spacing:2px; text-shadow:0 0 20px rgba(68,221,85,0.5); }
+@keyframes xpPop { 0%{opacity:0;transform:translate(-50%,-50%) scale(0.5);} 30%{opacity:1;transform:translate(-50%,-50%) scale(1.2);} 100%{opacity:0;transform:translate(-50%,-120%) scale(0.8);} }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="h-left">
+    <img src="assets/mrbean-avatar.jpg" id="topAv">
+    <div class="h-title">WILLIAM'S HQ</div>
+  </div>
+  <div class="h-right">
+    <div class="h-time" id="clock"></div>
+  </div>
+</div>
+
+<!-- HEALTH -->
+<div class="health"><span>🧠</span><div class="hbar"><div id="hFill"></div></div><span id="hPct">100%</span></div>
+
+<!-- ═══ HOME ═══ -->
+<div class="view active" id="view-home">
+
+  <!-- Morning banner (shows 5-7:30am) -->
+  <div class="morning-banner" id="morningBanner" style="display:none;">
+    <span style="font-size:28px;">🌅</span>
+    <div>
+      <div class="mb-text">Good morning William!</div>
+      <div class="mb-sub">Ask Mr Bean anything. Your brain is buzzing — let's use it.</div>
+    </div>
+  </div>
+
+  <!-- Two big character cards -->
+  <div class="home-top">
+    <div class="card" onclick="goChat('bean')">
+      <img src="assets/mrbean-onepiece-captain.jpg">
+      <div class="ov">
+        <h2>💬 MR BEAN</h2>
+        <p>Your mate</p>
+      </div>
+    </div>
+    <div class="card" onclick="goChat('jarvis')">
+      <img src="assets/jarvis-avatar.jpg">
+      <div class="ov">
+        <h2>🤖 JARVIS</h2>
+        <p>Your mentor</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action buttons -->
+  <div class="home-bottom">
+    <div class="icon-btn" onclick="goView('games')"><div class="ico">⚡</div><div class="lbl">Brain Games</div></div>
+    <div class="icon-btn" onclick="goView('tasks')"><div class="ico">✅</div><div class="lbl">Tasks</div></div>
+    <div class="icon-btn" onclick="goView('schedule')"><div class="ico">📅</div><div class="lbl">Today</div></div>
+    <div class="icon-btn" onclick="goView('brain')"><div class="ico">🧠</div><div class="lbl">Brain Mode</div></div>
+    <div class="icon-btn" onclick="goView('dump')"><div class="ico">💭</div><div class="lbl">Dump</div></div>
+    <div class="icon-btn" onclick="goView('xp')"><div class="ico">🎮</div><div class="lbl">My Level</div></div>
+  </div>
+</div>
+
+<!-- ═══ CHAT ═══ -->
+<div class="view" id="view-chat">
+  <button class="back" onclick="goHome()">← Home</button>
+  <div class="chat-top">
+    <div class="card" style="height:60px;" onclick="selectChar('bean')"><img src="assets/mrbean-avatar.jpg" style="height:60px; object-fit:cover;"><div class="ov" style="padding:10px;"><h2 style="font-size:16px;">🐻 Bean</h2></div></div>
+    <div class="card" style="height:60px;" onclick="selectChar('jarvis')"><img src="assets/jarvis-avatar.jpg" style="height:60px; object-fit:cover;"><div class="ov" style="padding:10px;"><h2 style="font-size:16px;">🤖 Jarvis</h2></div></div>
+  </div>
+  <div class="chat-full">
+    <div class="chat-msgs" id="chatMsgs">
+      <div class="chat-row"><img src="assets/mrbean-avatar.jpg" class="chat-av" style="border:2px solid #FF9933;"><div class="cb bean"><div class="chat-sender">🐻 Mr Bean</div>Hey William 👋 What's up?</div></div>
+    </div>
+    <div class="chat-input">
+      <button class="voice-btn" id="voiceBtn">🎤</button>
+      <input type="text" id="msgIn" placeholder="Ask Mr Bean..." onkeydown="if(event.key==='Enter')sendMsg()">
+      <button class="send-bean" id="sendBtn" onclick="sendMsg()">Send</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TASKS ═══ -->
+<div class="view" id="view-tasks">
+  <button class="back" onclick="goHome()">← Home</button>
+  <div class="card" style="margin-bottom:14px;"><img src="assets/mrbean-maths.jpg"><div class="ov"><h2>✅ MY TASKS</h2></div></div>
+  <div style="font-size:11px;font-weight:800;color:#8899cc;margin-bottom:8px;">DUE TODAY</div>
+  <div class="dump-item" onclick="toggleTask(this)" style="cursor:pointer;"><span class="tc" style="font-size:16px;">⬜</span><div style="flex:1;"><div style="font-weight:700;">Maths — Fractions</div><div style="font-size:11px;color:#8899cc;">Due: Tomorrow</div></div></div>
+  <div style="font-size:11px;font-weight:800;color:#8899cc;margin:12px 0 8px;">THIS WEEK</div>
+  <div class="dump-item" onclick="toggleTask(this)" style="cursor:pointer;"><span class="tc" style="font-size:16px;">⬜</span><div style="flex:1;"><div style="font-weight:700;">English — Narrative</div><div style="font-size:11px;color:#8899cc;">Due: Wednesday</div></div></div>
+  <div class="dump-item" onclick="toggleTask(this)" style="cursor:pointer;"><span class="tc" style="font-size:16px;">⬜</span><div style="flex:1;"><div style="font-weight:700;">Science — Lab Report</div><div style="font-size:11px;color:#8899cc;">Due: Friday</div></div></div>
+  <div class="dump-item" onclick="toggleTask(this)" style="cursor:pointer;"><span class="tc" style="font-size:16px;">⬜</span><div style="flex:1;"><div style="font-weight:700;">History — Egypt</div><div style="font-size:11px;color:#8899cc;">Due: Thursday</div></div></div>
+</div>
+
+<!-- ═══ SCHEDULE ═══ -->
+<div class="view" id="view-schedule">
+  <button class="back" onclick="goHome()">← Home</button>
+  <div class="card" style="margin-bottom:14px;"><img src="assets/mrbean-bike.jpg"><div class="ov"><h2>📅 TODAY</h2></div></div>
+  <div class="sched"><div class="sched-time">5:30</div><div class="sched-card"><img src="assets/mrbean-cooking.jpg"><div><div style="font-weight:700;">🌅 Morning Brain</div><div style="font-size:11px;color:#8899cc;">Ask anything</div></div></div></div>
+  <div class="sched"><div class="sched-time">7:50</div><div class="sched-card"><img src="assets/mrbean-maths.jpg"><div><div style="font-weight:700;">🏫 School</div><div style="font-size:11px;color:#8899cc;">Auto-recording</div></div></div></div>
+  <div class="sched"><div class="sched-time">3:00</div><div class="sched-card"><img src="assets/mrbean-golden-retriever.jpg"><div><div style="font-weight:700;">🏠 Free Time</div><div style="font-size:11px;color:#8899cc;">Walk the dog</div></div></div></div>
+  <div class="sched"><div class="sched-time">4:00</div><div class="sched-card"><img src="assets/mrbean-maths.jpg"><div><div style="font-weight:700;">📚 Homework</div><div style="font-size:11px;color:#8899cc;">One thing at a time</div></div></div></div>
+  <div class="sched"><div class="sched-time">8:00</div><div class="sched-card"><img src="assets/jarvis-avatar.jpg"><div><div style="font-weight:700;">🤖 Jarvis</div><div style="font-size:11px;color:#8899cc;">Evening check-in</div></div></div></div>
+  <div class="sched"><div class="sched-time">9:00</div><div class="sched-card"><img src="assets/mrbean-70s80s-vinyl.jpg"><div><div style="font-weight:700;">🌙 Bed</div><div style="font-size:11px;color:#8899cc;">Rest up</div></div></div></div>
+</div>
+
+<!-- ═══ BRAIN MODE ═══ -->
+<div class="view" id="view-brain">
+  <button class="back" onclick="goHome()">← Home</button>
+  <div class="card" style="margin-bottom:14px;"><img src="assets/mrbean-robotics.jpg"><div class="ov"><h2>🧠 BRAIN MODE</h2><p>Tap a topic. Explore.</p></div></div>
+  <div class="topics">
+    <div class="card" onclick="askT('space')"><img src="assets/mrbean-onepiece-sea-king.jpg"><div class="ov"><h2 style="font-size:16px;">🚀 Space</h2></div></div>
+    <div class="card" onclick="askT('animals')"><img src="assets/mrbean-golden-retriever.jpg"><div class="ov"><h2 style="font-size:16px;">🐕 Animals</h2></div></div>
+    <div class="card" onclick="askT('tech')"><img src="assets/mrbean-3dprinting.jpg"><div class="ov"><h2 style="font-size:16px;">🤖 Tech</h2></div></div>
+    <div class="card" onclick="askT('history')"><img src="assets/mrbean-history.jpg"><div class="ov"><h2 style="font-size:16px;">⚔️ History</h2></div></div>
+    <div class="card" onclick="askT('science')"><img src="assets/mrbean-science.jpg"><div class="ov"><h2 style="font-size:16px;">🔬 Science</h2></div></div>
+    <div class="card" onclick="askT('cooking')"><img src="assets/mrbean-cooking.jpg"><div class="ov"><h2 style="font-size:16px;">🍳 Cooking</h2></div></div>
+    <div class="card" onclick="askT('art')"><img src="assets/mrbean-art.jpg"><div class="ov"><h2 style="font-size:16px;">🎨 Art</h2></div></div>
+    <div class="card" onclick="askT('random')"><img src="assets/mrbean-onepiece.jpg"><div class="ov"><h2 style="font-size:16px;">🎲 Random</h2></div></div>
+  </div>
+</div>
+
+<!-- ═══ BRAIN DUMP ═══ -->
+<div class="view" id="view-dump">
+  <button class="back" onclick="goHome()">← Home</button>
+  <div class="card" style="margin-bottom:14px;"><img src="assets/mrbean-comic-artist.jpg"><div class="ov"><h2>💭 BRAIN DUMP</h2><p>Drop a thought. Mr Bean will find it.</p></div></div>
+  <div class="dump-in"><input type="text" id="dumpIn" placeholder="What's on your mind?" onkeydown="if(event.key==='Enter')addDump()"><button onclick="addDump()">💭</button></div>
+  <div id="dumpList"></div>
+</div>
+
+<!-- ═══ XP ═══ -->
+<div class="view" id="view-xp">
+  <button class="back" onclick="goHome()">← Home</button>
+  <div class="xp-hero"><img src="assets/mrbean-pirate-captain.jpg"><div class="xp-ov">
+    <div style="font-family:'Bangers',cursive; font-size:30px; letter-spacing:2px;" id="xpTitle">⚓ Recruit</div>
+    <div style="font-size:13px; color:#8899cc;">Level <span id="xpLvl">1</span></div>
+    <div class="xp-bar"><div class="xp-fill" id="xpBar" style="width:0%;"></div></div>
+    <div style="display:flex; justify-content:space-between; font-size:11px; color:#8899cc;"><span id="xpCur">0 XP</span><span id="xpNxt">100 to next</span></div>
+  </div></div>
+  <div class="streaks">
+    <div class="sk"><div style="font-size:24px; font-weight:900;" id="sHW">0</div><div style="font-size:10px;color:#8899cc;">🔥 Homework</div></div>
+    <div class="sk"><div style="font-size:24px; font-weight:900;" id="sMR">0</div><div style="font-size:10px;color:#8899cc;">🐻 Morning</div></div>
+    <div class="sk"><div style="font-size:24px; font-weight:900;" id="sJV">0</div><div style="font-size:10px;color:#8899cc;">🤖 Jarvis</div></div>
+  </div>
+  <div style="background:#1e3068; border:2px solid #2d4488; border-radius:16px; padding:16px;">
+    <div style="font-size:11px; font-weight:800; color:#8899cc; margin-bottom:8px;">THE GRAND LINE 🌊</div>
+    <div id="levelMap"></div>
+  </div>
+</div>
+
+<!-- ═══ GAMES ═══ -->
+<div class="view" id="view-games">
+  <button class="back" onclick="goHome()">← Home</button>
+  <div class="card" style="margin-bottom:14px;"><img src="assets/mrbean-focus.jpg"><div class="ov"><h2>⚡ BRAIN GAMES</h2><p>Train like a pirate</p></div></div>
+  <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+    <a href="games/memory-grid.html" class="card" style="text-decoration:none;"><img src="assets/mrbean-art.jpg"><div class="ov"><h2 style="font-size:16px;">🧩 Memory</h2></div></a>
+    <a href="games/speed-match.html" class="card" style="text-decoration:none;"><img src="assets/mrbean-jiujitsu.jpg"><div class="ov"><h2 style="font-size:16px;">⚡ Speed</h2></div></a>
+    <a href="games/colour-switch.html" class="card" style="text-decoration:none;"><img src="assets/mrbean-music-cooking.jpg"><div class="ov"><h2 style="font-size:16px;">🎨 Colour</h2></div></a>
+  </div>
+</div>
+
+<!-- SOS -->
+<button class="sos" onclick="openSOS()">SOS</button>
+<div class="sos-overlay" id="sosOv">
+  <div class="sos-modal">
+    <div id="ss1"><div style="font-size:24px;font-weight:900;color:#FF5555;">🚨 SOS</div><p style="color:#8899cc;font-size:12px;margin:10px 0;">Contacts parents + Uncle Adam</p><div style="display:flex;gap:8px;justify-content:center;"><button onclick="doSOS()" style="padding:14px 28px;border-radius:14px;border:none;background:#FF5555;color:#fff;font-weight:900;font-size:16px;cursor:pointer;font-family:'Inter';">🚨 HELP</button><button onclick="closeSOS()" style="padding:14px 20px;border-radius:14px;border:2px solid #2d4488;background:transparent;color:#8899cc;cursor:pointer;font-family:'Inter';">Cancel</button></div></div>
+    <div id="ss2" style="display:none;"><div style="font-size:18px;font-weight:900;color:#FF5555;margin-bottom:10px;">🚨 Help coming</div><div style="display:flex;flex-direction:column;gap:8px;"><a href="tel:0433296915" style="display:block;padding:12px;border-radius:12px;background:rgba(68,221,85,0.1);border:2px solid #44DD55;color:#44DD55;text-decoration:none;font-weight:800;text-align:center;font-size:16px;">📞 Call Dad</a><a href="tel:ANNETTE_PHONE" style="display:block;padding:12px;border-radius:12px;background:rgba(68,221,85,0.1);border:2px solid #44DD55;color:#44DD55;text-decoration:none;font-weight:800;text-align:center;font-size:16px;">📞 Call Mum</a><a href="tel:ADAM_PHONE" style="display:block;padding:12px;border-radius:12px;background:rgba(85,170,255,0.1);border:2px solid #55AAFF;color:#55AAFF;text-decoration:none;font-weight:800;text-align:center;font-size:16px;">📞 Uncle Adam</a></div><div style="margin-top:10px;padding:8px;background:rgba(68,221,85,0.1);border-radius:8px;font-size:12px;color:#44DD55;">Danger? Call <a href="tel:000" style="color:#44DD55;font-weight:900;">000</a></div><button onclick="closeSOS()" style="margin-top:10px;padding:8px 18px;border-radius:10px;border:1px solid #2d4488;background:transparent;color:#8899cc;cursor:pointer;font-family:'Inter';">Close</button></div>
+  </div>
+</div>
+
+<script>
+// NAV
+function goView(v){document.getElementById('view-home').classList.remove('active');document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');window.scrollTo(0,0);}
+function goHome(){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-home').classList.add('active');window.scrollTo(0,0);}
+function goChat(c){selectChar(c);goView('chat');}
+
+// CHAR
+let currentChar='bean';
+function selectChar(c){currentChar=c;document.getElementById('topAv').src=c==='bean'?'assets/mrbean-avatar.jpg':'assets/jarvis-avatar.jpg';document.getElementById('sendBtn').className=c==='bean'?'send-bean':'send-jarvis';document.getElementById('msgIn').placeholder=c==='bean'?'Ask Mr Bean...':'Talk to Jarvis...';}
+
+// CHAT
+function sendMsg(){const i=document.getElementById('msgIn'),t=i.value.trim();if(!t)return;const m=document.getElementById('chatMsgs');const r=document.createElement('div');r.className='chat-row user';r.innerHTML='<div class="cb user-msg">'+t+'</div>';m.appendChild(r);i.value='';m.scrollTop=m.scrollHeight;setTimeout(()=>{const d=document.createElement('div');d.className='chat-row';const av=currentChar==='bean'?'assets/mrbean-avatar.jpg':'assets/jarvis-avatar.jpg';const bc=currentChar==='bean'?'#FF9933':'#55AAFF';const cls=currentChar;const nm=currentChar==='bean'?'🐻 Mr Bean':'🤖 Jarvis';const rp=currentChar==='bean'?"Good question! Real Mr Bean coming soon 🐻":"Noted. Real Jarvis connecting soon.";d.innerHTML='<img src="'+av+'" class="chat-av" style="border:2px solid '+bc+';"><div class="cb '+cls+'"><div class="chat-sender">'+nm+'</div>'+rp+'</div>';m.appendChild(d);m.scrollTop=m.scrollHeight;},600);}
+
+// TASKS
+function toggleTask(el){const c=el.querySelector('.tc');if(c.textContent==='⬜'){c.textContent='✅';el.style.opacity='0.5';addXP(15,'✅ Task');}else{c.textContent='⬜';el.style.opacity='1';}}
+
+// DUMP
+let dumps=JSON.parse(localStorage.getItem('brainDumps')||'[]');renderDumps();
+function addDump(){const i=document.getElementById('dumpIn'),t=i.value.trim();if(!t)return;dumps.unshift({text:t,tl:new Date().toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'})});localStorage.setItem('brainDumps',JSON.stringify(dumps));i.value='';renderDumps();addXP(5,'💭 Dump');}
+function renderDumps(){const el=document.getElementById('dumpList');if(!el)return;if(!dumps.length){el.innerHTML='<div style="text-align:center;color:#8899cc;padding:20px;">💭 Drop a thought</div>';return;}el.innerHTML=dumps.slice(0,15).map((d,i)=>'<div class="dump-item"><div style="flex:1;"><div style="font-size:14px;">'+d.text+'</div><div style="font-size:10px;color:#8899cc;">'+d.tl+'</div></div><span style="cursor:pointer;color:#8899cc;" onclick="dumps.splice('+i+',1);localStorage.setItem(\'brainDumps\',JSON.stringify(dumps));renderDumps();">✖</span></div>').join('');}
+
+// XP
+const LVS=[{l:1,x:0,t:'Recruit',e:'⚓'},{l:2,x:100,t:'Deckhand',e:'🚣'},{l:3,x:300,t:'Cabin Boy',e:'⚙️'},{l:4,x:600,t:'Navigator',e:'🧭'},{l:5,x:1000,t:'First Mate',e:'⚔️'},{l:6,x:1500,t:'Captain',e:'🏴‍☠️'},{l:7,x:2500,t:'Grand Line',e:'🌊'},{l:8,x:4000,t:'Yonko',e:'🔥'},{l:9,x:6000,t:'PK Training',e:'👑'},{l:10,x:10000,t:'PIRATE KING',e:'🌟'}];
+let pd=JSON.parse(localStorage.getItem('williamXP')||'{"xp":0,"todayXP":0,"streaks":{"homework":0,"morning":0,"jarvis":0},"history":[]}');
+function gL(x){let c=LVS[0];for(const l of LVS){if(x>=l.x)c=l;else break;}return c;}
+function gN(x){for(const l of LVS){if(x<l.x)return l;}return null;}
+function addXP(a,r){const o=gL(pd.xp);pd.xp+=a;pd.todayXP+=a;pd.history.unshift({xp:a,reason:r});if(pd.history.length>50)pd.history=pd.history.slice(0,50);showXP(a);const n=gL(pd.xp);if(n.l>o.l)setTimeout(()=>{const p=document.createElement('div');p.className='xp-popup';p.style.color='#FF9933';p.textContent='🎉 LEVEL UP! '+n.e+' '+n.t;document.body.appendChild(p);setTimeout(()=>p.remove(),2500);},800);localStorage.setItem('williamXP',JSON.stringify(pd));renderXP();}
+function showXP(n){const e=document.createElement('div');e.className='xp-popup';e.textContent='+'+n+' XP ⚡';document.body.appendChild(e);setTimeout(()=>e.remove(),1600);}
+function renderXP(){const c=gL(pd.xp),n=gN(pd.xp);const t=document.getElementById('xpTitle'),l=document.getElementById('xpLvl'),cu=document.getElementById('xpCur'),nx=document.getElementById('xpNxt'),b=document.getElementById('xpBar');if(t)t.textContent=c.e+' '+c.t;if(l)l.textContent=c.l;if(cu)cu.textContent=pd.xp+' XP';if(n){const p=((pd.xp-c.x)/(n.x-c.x))*100;if(b)b.style.width=Math.min(p,100)+'%';if(nx)nx.textContent=(n.x-pd.xp)+' to '+n.t;}else{if(b)b.style.width='100%';if(nx)nx.textContent='MAX 🌟';}
+const hw=document.getElementById('sHW'),mr=document.getElementById('sMR'),jv=document.getElementById('sJV');if(hw)hw.textContent=pd.streaks.homework;if(mr)mr.textContent=pd.streaks.morning;if(jv)jv.textContent=pd.streaks.jarvis;
+const map=document.getElementById('levelMap');if(map)map.innerHTML=LVS.map(v=>{const r=pd.xp>=v.x,cu2=v.l===c.l;return'<div style="display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:8px;opacity:'+(r?'1':'0.3')+';background:'+(cu2?'rgba(51,221,221,0.08)':'transparent')+';margin-bottom:2px;"><span style="font-size:14px;">'+v.e+'</span><span style="font-size:12px;font-weight:700;">'+v.t+'</span>'+(cu2?'<span style="margin-left:auto;font-size:9px;color:#33DDDD;font-weight:800;">YOU</span>':'')+'</div>';}).join('');}
+renderXP();
+
+// BRAIN
+function askT(t){goChat('bean');document.getElementById('msgIn').value={space:"Why are black holes so powerful?",animals:"What's the coolest animal?",tech:"How does AI work?",history:"What was the most powerful empire?",science:"What's the craziest experiment?",cooking:"How to make karaage?",art:"How do I start a comic?",random:"Random fact!"}[t]||'';document.getElementById('msgIn').focus();}
+
+// SOS
+function openSOS(){document.getElementById('sosOv').classList.add('active');document.getElementById('ss1').style.display='block';document.getElementById('ss2').style.display='none';}
+function closeSOS(){document.getElementById('sosOv').classList.remove('active');}
+function doSOS(){document.getElementById('ss1').style.display='none';document.getElementById('ss2').style.display='block';}
+
+// CLOCK
+function uC(){const n=new Date();document.getElementById('clock').textContent=n.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'});
+// Morning banner 5-7:30am
+const h=n.getHours(),m=n.getMinutes();const mb=document.getElementById('morningBanner');if(mb){if(h>=5&&(h<7||(h===7&&m<=30)))mb.style.display='flex';else mb.style.display='none';}}
+uC();setInterval(uC,30000);
+
+// FLOATERS
+const FL=['🐻','🧸','👒','🍖','🦌','🏴‍☠️','⚓','🌊','🍳','🎵','🐕','🎹','🎨','🥋','⭐'];
+function sF(){const e=document.createElement('div');e.className='floater';e.textContent=FL[Math.floor(Math.random()*FL.length)];e.style.left=(5+Math.random()*85)+'vw';e.style.fontSize=(20+Math.random()*16)+'px';const d=18+Math.random()*12;e.style.animationDuration=d+'s';document.body.appendChild(e);setTimeout(()=>e.remove(),d*1000);}
+setInterval(sF,7000);setTimeout(sF,3000);
+</script>
+</body>
+</html>
