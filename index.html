@@ -244,6 +244,26 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
 
   <!-- ═══ HOME ═══ -->
   <div id="home" style="position: relative; min-height: calc(100vh - 80px);">
+    <!-- WHAT NOW BUTTON -->
+    <div onclick="whatNow()" style="margin:0 20px 14px;background:linear-gradient(135deg,#FF9933,#33DDDD);border-radius:20px;padding:18px 24px;cursor:pointer;text-align:center;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+      <div style="font-family:'Bangers',cursive;font-size:32px;color:#000;letter-spacing:2px;">WHAT SHOULD I DO RIGHT NOW?</div>
+      <div style="font-size:14px;color:rgba(0,0,0,0.6);margin-top:4px;">Tap and I'll tell you the ONE thing to focus on</div>
+    </div>
+
+    <!-- WHAT NOW OVERLAY -->
+    <div id="whatNowOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:10000;align-items:center;justify-content:center;flex-direction:column;padding:40px;">
+      <div style="max-width:600px;text-align:center;">
+        <div style="font-size:48px;margin-bottom:16px;" id="wnEmoji"></div>
+        <div style="font-family:'Bangers',cursive;font-size:42px;color:#FF9933;letter-spacing:2px;text-shadow:0 0 30px rgba(255,153,51,0.6);" id="wnTitle"></div>
+        <div style="font-size:22px;color:#8899cc;margin-top:12px;line-height:1.6;" id="wnDetail"></div>
+        <div style="font-size:18px;color:#33DDDD;margin-top:16px;font-weight:700;" id="wnAction"></div>
+        <div style="display:flex;gap:14px;justify-content:center;margin-top:24px;">
+          <button onclick="startFiveMin();document.getElementById('whatNowOverlay').style.display='none';" style="padding:16px 32px;border-radius:16px;border:none;background:#44FF66;color:#000;font-weight:900;font-size:18px;cursor:pointer;font-family:'Bangers',cursive;letter-spacing:1px;">START 5 MIN ⚡</button>
+          <button onclick="document.getElementById('whatNowOverlay').style.display='none'" style="padding:16px 32px;border-radius:16px;border:2px solid #2d4488;background:transparent;color:#8899cc;font-weight:700;font-size:16px;cursor:pointer;font-family:'Inter';">Got it</button>
+        </div>
+      </div>
+    </div>
+
     <!-- DAILY BRIEFING CARD -->
     <div style="margin:0 20px 14px;background:linear-gradient(135deg,rgba(255,153,51,0.12),rgba(51,221,221,0.08));border:2px solid #FF9933;border-radius:20px;padding:20px;">
       <div style="font-family:'Bangers',cursive;font-size:28px;color:#FF9933;margin-bottom:8px;" id="briefTitle">🌅 TODAY'S BRIEFING</div>
@@ -1524,6 +1544,113 @@ function renderPhotos(){
     <img src="${p.data}" style="width:100%;display:block;cursor:pointer;" onclick="window.open(this.src)">
     <div style="position:absolute;bottom:0;left:0;right:0;padding:8px;background:rgba(10,15,40,0.9);font-size:11px;color:#8899cc;">${p.subject} • ${p.tl}</div>
   </div>`).join('');
+}
+
+// WHAT SHOULD I DO RIGHT NOW — Priority Engine
+function whatNow(){
+  const now=new Date();
+  const h=now.getHours();
+  const day=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][now.getDay()];
+  const overlay=document.getElementById('whatNowOverlay');
+  const emoji=document.getElementById('wnEmoji');
+  const title=document.getElementById('wnTitle');
+  const detail=document.getElementById('wnDetail');
+  const action=document.getElementById('wnAction');
+  overlay.style.display='flex';
+  
+  // Priority logic based on time of day + day of week
+  if(h>=5&&h<7){
+    // Morning brain
+    emoji.textContent='🌅';
+    title.textContent='MORNING BRAIN TIME';
+    detail.textContent='Your brain is buzzing. Talk to Mr Bean. Ask him anything. Get your day brief.';
+    action.textContent='🐻 Open Mr Bean and say good morning';
+  } else if(h>=7&&h<8){
+    // Getting ready for school
+    emoji.textContent='💊';
+    title.textContent='TAKE YOUR MEDS + GET READY';
+    detail.textContent='Ritalin first. Then breakfast. Then check your bag.';
+    action.textContent='💊 Go to Meds tab and tick your morning dose';
+  } else if(h>=8&&h<15){
+    // School hours
+    emoji.textContent='🏫';
+    title.textContent='YOU\'RE AT SCHOOL';
+    detail.textContent='Laptop open. Recorder running. If you\'re lost, ask Mr Bean which room.';
+    action.textContent='💭 Use Brain Dump if you think of something';
+  } else if(h>=15&&h<15.5){
+    // Just got home
+    emoji.textContent='🏠';
+    title.textContent='FREE TIME';
+    detail.textContent='You just got home. Relax for 30 minutes. Walk the dog. Eat a snack. You earned it.';
+    action.textContent='🐕 Enjoy your break. Homework starts at 3:30.';
+  } else if(h>=15.5&&h<16&&day==='Tue'){
+    emoji.textContent='🤖';
+    title.textContent='ROBOTICS TIME!';
+    detail.textContent='Robotics/STEM class 3:00-4:30. Have fun building.';
+    action.textContent='🤖 Head to Robotics. Homework after.';
+  } else if(h>=17&&h<18&&(day==='Tue'||day==='Thu')){
+    emoji.textContent='🥋';
+    title.textContent='JIU-JITSU!';
+    detail.textContent='5:00-6:00pm. Discipline. Respect. Show up even when tired.';
+    action.textContent='🥋 Get your gi. Let\'s go.';
+  } else if(h>=15.5&&h<20){
+    // Homework time — the BIG decision engine
+    emoji.textContent='📚';
+    // Simple priority: earliest due date first
+    const tasks=[
+      {name:'Maths \u2014 Fractions Worksheet',due:'Monday',days:1,difficulty:'medium'},
+      {name:'History \u2014 Ancient Egypt Questions',due:'Thursday',days:4,difficulty:'medium'},
+      {name:'English \u2014 Narrative Draft',due:'Wednesday',days:3,difficulty:'hard'},
+      {name:'Science \u2014 Forces Lab Report',due:'Friday',days:5,difficulty:'hard'},
+    ];
+    // Sort by days (soonest first), then by difficulty (hardest first if same day)
+    tasks.sort((a,b)=>a.days-b.days || (b.difficulty==='hard'?1:0)-(a.difficulty==='hard'?1:0));
+    const top=tasks[0];
+    title.textContent=top.name;
+    detail.textContent=`Due ${top.due}. ${top.days===1?'TOMORROW!':top.days+' days away.'} This is your #1 priority right now.`;
+    action.textContent='\ud83d\udc47 Open Tasks. Start step 1. Just 5 minutes.';
+  } else if(h>=20&&h<21){
+    // Jarvis time
+    emoji.textContent='🤖';
+    title.textContent='JARVIS CHECK-IN';
+    detail.textContent='Homework should be done. Time to reflect. Open your journal.';
+    action.textContent='🤖 Go to Today > Jarvis > Write your journal';
+  } else if(h>=21){
+    // Bedtime
+    emoji.textContent='😴';
+    title.textContent='BEDTIME ROUTINE';
+    detail.textContent='Bag packed? Uniform out? Teeth brushed? Phone charging? Water bottle?';
+    action.textContent='😴 Go to Bedtime tab and tick everything off';
+  } else {
+    emoji.textContent='🌙';
+    title.textContent='REST TIME';
+    detail.textContent='Nothing urgent right now. Rest, play, be a kid.';
+    action.textContent='😊 Enjoy it.';
+  }
+}
+
+// FOCUS MODE
+function startFocusMode(taskName){
+  const overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;background:#0a0f25;z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;';
+  overlay.innerHTML=`
+    <div style="font-size:16px;color:#555;margin-bottom:8px;">FOCUS MODE</div>
+    <div style="font-family:'Bangers',cursive;font-size:36px;color:#FF9933;text-shadow:0 0 20px rgba(255,153,51,0.6);margin-bottom:24px;">${taskName||'Current Task'}</div>
+    <div style="font-family:'Bangers',cursive;font-size:100px;color:#33DDDD;text-shadow:0 0 40px rgba(51,221,221,0.8);" id="focusTimer">25:00</div>
+    <div style="font-size:14px;color:#555;margin-top:24px;">Everything else is hidden. Just this. Just now.</div>
+    <div style="display:flex;gap:12px;margin-top:24px;">
+      <button onclick="this.closest('div[style]').remove();addXP(20,'\ud83c\udfaf Focus session')" style="padding:14px 32px;border-radius:14px;border:2px solid #44FF66;background:rgba(68,255,102,0.1);color:#44FF66;font-weight:900;font-size:16px;cursor:pointer;font-family:'Inter';">✅ Done</button>
+      <button onclick="this.closest('div[style]').remove()" style="padding:14px 32px;border-radius:14px;border:2px solid #FF5555;background:rgba(255,85,85,0.1);color:#FF5555;font-weight:900;font-size:16px;cursor:pointer;font-family:'Inter';">❌ Stop</button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  let secs=1500;
+  const timer=overlay.querySelector('#focusTimer');
+  const iv=setInterval(()=>{
+    secs--;
+    timer.textContent=Math.floor(secs/60)+':'+(secs%60<10?'0':'')+(secs%60);
+    if(secs<=0){clearInterval(iv);timer.textContent='DONE!';timer.style.color='#44FF66';addXP(30,'\ud83c\udfaf Focus 25min complete!');}
+  },1000);
 }
 
 // JUST 5 MINUTES TIMER
