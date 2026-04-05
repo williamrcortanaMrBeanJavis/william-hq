@@ -293,6 +293,10 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
     <div class="grid-btn" onclick="goView('social')"><div class="ico">👋</div><div class="lbl">Social</div></div>
     <div class="grid-btn" onclick="goView('reading')"><div class="ico">📖</div><div class="lbl">Reading</div></div>
     <div class="grid-btn" onclick="goView('rewards')"><div class="ico">🏆</div><div class="lbl">Rewards</div></div>
+    <div class="grid-btn" onclick="startFiveMin()"><div class="ico">⏱️</div><div class="lbl">Just 5!</div></div>
+    <div class="grid-btn" onclick="goView('tomorrow')"><div class="ico">💡</div><div class="lbl">Tomorrow</div></div>
+    <div class="grid-btn" onclick="goView('flash')"><div class="ico">🃏</div><div class="lbl">Flash</div></div>
+    <div class="grid-btn" onclick="goView('spelling')"><div class="ico">🔤</div><div class="lbl">Spelling</div></div>
     </div>
   </div>
 
@@ -538,6 +542,57 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
       <div class="topic" onclick="askT('cooking')"><img src="assets/mrbean-cooking.jpg"><div class="t-ov"><h4>🍳 Cooking</h4></div></div>
       <div class="topic" onclick="askT('art')"><img src="assets/mrbean-art.jpg"><div class="t-ov"><h4>🎨 Art</h4></div></div>
       <div class="topic" onclick="askT('random')"><img src="assets/mrbean-onepiece.jpg"><div class="t-ov"><h4>🎲 Random</h4></div></div>
+    </div>
+  </div>
+
+  <!-- ═══ TOMORROW ═══ -->
+  <div class="view" id="view-tomorrow">
+    <button class="back" onclick="goHome()">← Home</button>
+    <div style="padding:8px 0 16px;"><h2 style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:2px;color:#33DDDD;text-shadow:0 0 25px rgba(51,221,221,0.8);">💡 TOMORROW</h2></div>
+    <div id="tomorrowContent" style="display:flex;flex-direction:column;gap:12px;"></div>
+  </div>
+
+  <!-- ═══ FLASHCARDS ═══ -->
+  <div class="view" id="view-flash">
+    <button class="back" onclick="goHome()">← Home</button>
+    <div style="padding:8px 0 16px;"><h2 style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:2px;color:#FF9933;text-shadow:0 0 25px rgba(255,153,51,0.8);">🃏 FLASHCARDS</h2></div>
+    <div style="font-size:16px;color:#8899cc;margin-bottom:12px;">Build your own flashcards. Tap to flip. Study anywhere.</div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <input type="text" id="flashQ" placeholder="Front: question or word" style="flex:1;padding:12px;border-radius:12px;border:2px solid #FF9933;background:#0f1d42;color:#fff;font-size:16px;font-family:'Inter';outline:none;">
+      <input type="text" id="flashA" placeholder="Back: answer" style="flex:1;padding:12px;border-radius:12px;border:2px solid #33DDDD;background:#0f1d42;color:#fff;font-size:16px;font-family:'Inter';outline:none;">
+      <button onclick="addFlashcard()" style="padding:12px 18px;border-radius:12px;border:none;background:#FF9933;color:#000;font-weight:900;cursor:pointer;font-family:'Inter';">➕</button>
+    </div>
+    <div id="flashDeck" style="margin-bottom:16px;"></div>
+    <!-- Study mode -->
+    <div id="flashStudy" style="display:none;text-align:center;">
+      <div onclick="flipCard()" style="background:#1e3068;border:3px solid #FF9933;border-radius:24px;padding:40px;min-height:200px;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-bottom:16px;">
+        <div id="flashCardFace" style="font-size:28px;font-weight:800;"></div>
+      </div>
+      <div style="display:flex;gap:12px;justify-content:center;">
+        <button onclick="flashNext(false)" style="padding:14px 28px;border-radius:14px;border:2px solid #FF5555;background:rgba(255,85,85,0.1);color:#FF5555;font-weight:900;font-size:16px;cursor:pointer;font-family:'Inter';">❌ Got it wrong</button>
+        <button onclick="flashNext(true)" style="padding:14px 28px;border-radius:14px;border:2px solid #44FF66;background:rgba(68,255,102,0.1);color:#44FF66;font-weight:900;font-size:16px;cursor:pointer;font-family:'Inter';">✅ Got it right</button>
+      </div>
+    </div>
+    <button onclick="startFlashStudy()" id="flashStartBtn" style="width:100%;padding:16px;border-radius:14px;border:none;background:linear-gradient(135deg,#FF9933,#33DDDD);color:#000;font-weight:900;font-size:20px;cursor:pointer;font-family:'Bangers',cursive;letter-spacing:2px;">🃏 STUDY MODE</button>
+  </div>
+
+  <!-- ═══ SPELLING DRILLS ═══ -->
+  <div class="view" id="view-spelling">
+    <button class="back" onclick="goHome()">← Home</button>
+    <div style="padding:8px 0 16px;"><h2 style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:2px;color:#44FF66;text-shadow:0 0 25px rgba(68,255,102,0.8);">🔤 SPELLING</h2></div>
+    <div style="background:#1e3068;border:2px solid #44FF66;border-radius:20px;padding:24px;text-align:center;margin-bottom:16px;">
+      <div style="font-size:16px;color:#8899cc;margin-bottom:12px;">Listen to the word, then type it</div>
+      <div style="font-family:'Bangers',cursive;font-size:48px;color:#44FF66;text-shadow:0 0 20px rgba(68,255,102,0.6);margin-bottom:16px;" id="spellWord"></div>
+      <input type="text" id="spellInput" placeholder="Type the word..." style="width:100%;max-width:400px;padding:16px;border-radius:14px;border:2px solid #2d4488;background:#0f1d42;color:#fff;font-size:24px;text-align:center;font-family:'Inter';outline:none;" onkeydown="if(event.key==='Enter')checkSpelling()">
+      <div style="display:flex;gap:12px;justify-content:center;margin-top:16px;">
+        <button onclick="showSpellWord()" style="padding:12px 24px;border-radius:12px;border:2px solid #FF9933;background:rgba(255,153,51,0.1);color:#FF9933;font-weight:800;cursor:pointer;font-family:'Inter';">👁️ Show word</button>
+        <button onclick="checkSpelling()" style="padding:12px 24px;border-radius:12px;border:none;background:#44FF66;color:#000;font-weight:900;cursor:pointer;font-family:'Inter';">Check ✅</button>
+        <button onclick="nextSpellWord()" style="padding:12px 24px;border-radius:12px;border:2px solid #33DDDD;background:rgba(51,221,221,0.1);color:#33DDDD;font-weight:800;cursor:pointer;font-family:'Inter';">Next ➡️</button>
+      </div>
+      <div id="spellResult" style="margin-top:12px;font-size:20px;font-weight:900;"></div>
+    </div>
+    <div style="background:#1e3068;border:2px solid #2d4488;border-radius:20px;padding:20px;">
+      <div style="font-size:14px;color:#8899cc;">Score: <span id="spellScore" style="color:#44FF66;font-weight:900;">0</span> / <span id="spellTotal">0</span></div>
     </div>
   </div>
 
@@ -1469,6 +1524,156 @@ function renderPhotos(){
     <img src="${p.data}" style="width:100%;display:block;cursor:pointer;" onclick="window.open(this.src)">
     <div style="position:absolute;bottom:0;left:0;right:0;padding:8px;background:rgba(10,15,40,0.9);font-size:11px;color:#8899cc;">${p.subject} • ${p.tl}</div>
   </div>`).join('');
+}
+
+// JUST 5 MINUTES TIMER
+function startFiveMin(){
+  const overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;';
+  let secs=300;
+  const timer=document.createElement('div');
+  timer.style.cssText="font-family:'Bangers',cursive;font-size:120px;color:#33DDDD;text-shadow:0 0 40px rgba(51,221,221,0.8);";
+  const label=document.createElement('div');
+  label.style.cssText='font-size:24px;color:#FF9933;margin-bottom:20px;';
+  label.textContent='JUST 5 MINUTES. You can do anything for 5 minutes.';
+  const sub=document.createElement('div');
+  sub.style.cssText='font-size:14px;color:#555;margin-top:20px;';
+  sub.textContent='tap to stop early';
+  overlay.appendChild(label);
+  overlay.appendChild(timer);
+  overlay.appendChild(sub);
+  document.body.appendChild(overlay);
+  overlay.onclick=()=>{clearInterval(iv);overlay.remove();addXP(10,'\u23f1\ufe0f 5-min focus');};
+  const iv=setInterval(()=>{
+    secs--;
+    const m=Math.floor(secs/60);
+    const s=secs%60;
+    timer.textContent=m+':'+(s<10?'0':'')+s;
+    if(secs<=0){clearInterval(iv);timer.textContent='DONE!';timer.style.color='#44FF66';label.textContent='\ud83c\udf89 You did it! +25 XP';addXP(25,'\u23f1\ufe0f 5-min focus COMPLETE');setTimeout(()=>overlay.remove(),3000);}
+  },1000);
+  timer.textContent='5:00';
+}
+
+// TOMORROW SCREEN
+function renderTomorrow(){
+  const el=document.getElementById('tomorrowContent');
+  if(!el)return;
+  const tomorrow=new Date();tomorrow.setDate(tomorrow.getDate()+1);
+  const dayNames=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const shortDay=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const tDay=shortDay[tomorrow.getDay()];
+  const tDayFull=dayNames[tomorrow.getDay()];
+  const periods=TIMETABLE[currentWeek][tDay];
+  const activities={Tue:'\ud83e\udd16 Robotics 3-4:30 \u2022 \ud83e\udd4b Jiu-Jitsu 5-6',Thu:'\ud83e\udd4b Jiu-Jitsu 5-6'};
+  let html='';
+  html+=`<div style="background:#1e3068;border:2px solid #33DDDD;border-radius:20px;padding:24px;"><div style="font-family:'Bangers',cursive;font-size:32px;color:#33DDDD;">${tDayFull} \u2014 Week ${currentWeek}</div></div>`;
+  if(periods){
+    const subjects=[...new Set(periods.filter(p=>p.sub&&p.sub!=='RECESS'&&p.sub!=='LUNCH'&&p.sub!=='').map(p=>p.sub))];
+    html+=`<div style="background:#1e3068;border:2px solid #2d4488;border-radius:20px;padding:20px;"><div style="font-family:'Bangers',cursive;font-size:24px;color:#FF9933;margin-bottom:8px;">\ud83c\udfeb Subjects</div><div style="font-size:20px;color:#fff;">${subjects.join(' \u2022 ')}</div></div>`;
+    // Rooms
+    const rooms=periods.filter(p=>p.room&&p.sub!=='RECESS'&&p.sub!=='LUNCH').map(p=>`${p.sub}: <strong style="color:#33DDDD;">${p.room}</strong>`);
+    html+=`<div style="background:#1e3068;border:2px solid #2d4488;border-radius:20px;padding:20px;"><div style="font-family:'Bangers',cursive;font-size:24px;color:#44FF66;margin-bottom:8px;">\ud83d\udccd Rooms</div><div style="font-size:16px;color:#8899cc;line-height:2;">${rooms.join('<br>')}</div></div>`;
+  } else {
+    html+=`<div style="background:#1e3068;border:2px solid #44FF66;border-radius:20px;padding:24px;text-align:center;"><div style="font-size:32px;">\ud83c\udf89</div><div style="font-family:'Bangers',cursive;font-size:28px;color:#44FF66;">No school tomorrow!</div></div>`;
+  }
+  if(activities[tDay]) html+=`<div style="background:#1e3068;border:2px solid #FF5555;border-radius:20px;padding:20px;"><div style="font-family:'Bangers',cursive;font-size:24px;color:#FF5555;margin-bottom:8px;">\ud83c\udfc3 Activities</div><div style="font-size:20px;color:#fff;">${activities[tDay]}</div></div>`;
+  // Bag check
+  if(periods){
+    const subjects=[...new Set(periods.filter(p=>p.sub&&p.sub!=='RECESS'&&p.sub!=='LUNCH'&&p.sub!=='Sport'&&p.sub!=='Pastoral Care'&&p.sub!=='').map(p=>p.sub))];
+    const items=['\ud83c\udf92 School bag','\ud83d\udcbb Laptop + charger','\ud83d\udca7 Water bottle','\ud83c\udf5e Lunch + snacks',...subjects.map(s=>'\ud83d\udcd3 '+s+' book/folder')];
+    if(periods.some(p=>p.sub==='PE'||p.sub==='Sport')) items.push('\ud83d\udc5f PE gear');
+    html+=`<div style="background:#1e3068;border:2px solid #FFAA00;border-radius:20px;padding:20px;"><div style="font-family:'Bangers',cursive;font-size:24px;color:#FFAA00;margin-bottom:8px;">\ud83c\udf92 Pack Your Bag</div>${items.map(i=>'<div onclick="this.querySelector(\'span\').textContent=this.querySelector(\'span\').textContent===\'\u2b1c\'?\'\u2705\':\'\u2b1c\'" style="display:flex;align-items:center;gap:10px;padding:10px;background:#0f1d42;border-radius:10px;margin-bottom:4px;cursor:pointer;"><span style="font-size:18px;">\u2b1c</span><span style="font-size:16px;">${i}</span></div>').join('')}</div>`;
+  }
+  html+=`<div style="background:rgba(255,153,51,0.08);border:1px solid #FF9933;border-radius:14px;padding:16px;"><div style="font-size:16px;color:#FF9933;font-weight:700;">\ud83d\udc3b Mr Bean says:</div><div style="font-size:16px;color:#8899cc;margin-top:4px;">Get this sorted tonight. Tomorrow-you will thank tonight-you.</div></div>`;
+  el.innerHTML=html;
+}
+setTimeout(renderTomorrow,400);
+
+// FLASHCARDS
+let flashcards=JSON.parse(localStorage.getItem('flashcards')||'[]');
+let flashIdx=0,flashFlipped=false;
+renderFlashDeck();
+function addFlashcard(){
+  const q=document.getElementById('flashQ'),a=document.getElementById('flashA');
+  if(!q.value.trim()||!a.value.trim())return;
+  flashcards.push({q:q.value.trim(),a:a.value.trim(),right:0,wrong:0});
+  localStorage.setItem('flashcards',JSON.stringify(flashcards));
+  q.value='';a.value='';
+  renderFlashDeck();
+  addXP(5,'\ud83c\udccf Card created');
+}
+function renderFlashDeck(){
+  const el=document.getElementById('flashDeck');
+  if(!el)return;
+  if(!flashcards.length){el.innerHTML='<div style="text-align:center;color:#8899cc;padding:16px;">No cards yet. Add some above!</div>';return;}
+  el.innerHTML=`<div style="font-size:14px;color:#8899cc;margin-bottom:8px;">${flashcards.length} cards in deck</div>`+flashcards.slice(0,10).map((c,i)=>`<div style="display:flex;justify-content:space-between;padding:8px 12px;background:#0f1d42;border-radius:10px;margin-bottom:4px;"><span style="color:#FF9933;font-weight:700;">${c.q}</span><span style="color:#33DDDD;">${c.a}</span><span style="cursor:pointer;color:#555;" onclick="flashcards.splice(${i},1);localStorage.setItem('flashcards',JSON.stringify(flashcards));renderFlashDeck();">\u2716</span></div>`).join('');
+}
+function startFlashStudy(){
+  if(!flashcards.length)return;
+  flashIdx=0;flashFlipped=false;
+  document.getElementById('flashStudy').style.display='block';
+  document.getElementById('flashStartBtn').style.display='none';
+  showFlashCard();
+}
+function showFlashCard(){
+  if(flashIdx>=flashcards.length){document.getElementById('flashCardFace').textContent='\ud83c\udf89 Done! +15 XP';addXP(15,'\ud83c\udccf Flash study');setTimeout(()=>{document.getElementById('flashStudy').style.display='none';document.getElementById('flashStartBtn').style.display='block';},2000);return;}
+  flashFlipped=false;
+  document.getElementById('flashCardFace').textContent=flashcards[flashIdx].q;
+  document.getElementById('flashCardFace').style.color='#FF9933';
+}
+function flipCard(){
+  if(!flashFlipped){flashFlipped=true;document.getElementById('flashCardFace').textContent=flashcards[flashIdx].a;document.getElementById('flashCardFace').style.color='#33DDDD';}
+  else{flashFlipped=false;document.getElementById('flashCardFace').textContent=flashcards[flashIdx].q;document.getElementById('flashCardFace').style.color='#FF9933';}
+}
+function flashNext(correct){
+  if(correct)flashcards[flashIdx].right++;else flashcards[flashIdx].wrong++;
+  localStorage.setItem('flashcards',JSON.stringify(flashcards));
+  flashIdx++;
+  showFlashCard();
+}
+
+// SPELLING DRILLS
+const SPELL_WORDS=[
+  'beautiful','successful','permanent','different','separate','definitely','necessary',
+  'environment','government','temperature','experiment','hypothesis','conclusion',
+  'paragraph','persuasive','narrative','character','beginning','immediately','favourite',
+  'apparently','unfortunately','opportunity','responsible','independent','appreciate',
+  'guarantee','embarrass','achieve','believe','receive','weird','foreign','height',
+  'strength','through','thought','although','enough','thorough','knowledge'
+];
+let spellCurrent='',spellScore=0,spellTotal=0,spellRevealed=false;
+nextSpellWord();
+function nextSpellWord(){
+  spellCurrent=SPELL_WORDS[Math.floor(Math.random()*SPELL_WORDS.length)];
+  document.getElementById('spellWord').textContent='_ '.repeat(spellCurrent.length).trim();
+  document.getElementById('spellInput').value='';
+  document.getElementById('spellResult').textContent='';
+  spellRevealed=false;
+}
+function showSpellWord(){
+  document.getElementById('spellWord').textContent=spellCurrent;
+  spellRevealed=true;
+  setTimeout(()=>{if(spellRevealed)document.getElementById('spellWord').textContent='_ '.repeat(spellCurrent.length).trim();},3000);
+}
+function checkSpelling(){
+  const answer=document.getElementById('spellInput').value.trim().toLowerCase();
+  spellTotal++;
+  if(answer===spellCurrent){
+    spellScore++;
+    document.getElementById('spellResult').innerHTML='<span style="color:#44FF66;">\u2705 CORRECT!</span>';
+    addXP(10,'\ud83d\udd24 Spelling correct');
+    setTimeout(nextSpellWord,1500);
+  } else {
+    document.getElementById('spellResult').innerHTML=`<span style="color:#FF5555;">\u274c It's: <strong style="color:#FF9933;">${spellCurrent}</strong></span>`;
+  }
+  document.getElementById('spellScore').textContent=spellScore;
+  document.getElementById('spellTotal').textContent=spellTotal;
+}
+
+// MISSING WORK RADAR (check daily briefing)
+function getMissingWork(){
+  // Placeholder - will be populated by Mr Bean from recordings/teacher input
+  return [];
 }
 
 // SOCIAL CHALLENGES
