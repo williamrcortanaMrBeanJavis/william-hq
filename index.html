@@ -17,10 +17,8 @@ body {
 }
 .app {
   width: 100%;
-  max-width: 900px;
   min-height: 100vh;
   position: relative;
-  padding: 0 20px;
 }
 
 /* ═══ HEADER ═══ */
@@ -232,40 +230,36 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
   <div class="health"><span>🧠</span><div class="hbar"><div id="hFill"></div></div><span id="hPct">100%</span></div>
 
   <!-- ═══ HOME ═══ -->
-  <div id="home">
-    <!-- Hero: Mr Bean -->
-    <div class="hero" onclick="goChat('bean')">
-      <img src="assets/mrbean-onepiece-captain.jpg">
-      <div class="hero-overlay">
-        <h2>💬 TALK TO MR BEAN</h2>
-        <p>Your mate. Ask anything.</p>
-      </div>
+  <div id="home" style="position: relative; min-height: calc(100vh - 80px);">
+    <!-- Full screen Mr Bean background -->
+    <div style="position: fixed; inset: 0; z-index: 0;">
+      <img src="assets/mrbean-full.jpg" style="width: 100%; height: 100%; object-fit: cover;">
+      <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(10,15,40,0.85) 0%, rgba(10,15,40,0.3) 40%, rgba(10,15,40,0.1) 70%, rgba(10,15,40,0.4) 100%);"></div>
     </div>
 
-    <!-- Two cards: Jarvis + Games -->
-    <div class="two-up">
-      <div class="quick-card" onclick="goChat('jarvis')">
-        <img src="assets/jarvis-avatar.jpg">
-        <div class="qc-overlay"><h3>🤖 JARVIS</h3></div>
+    <!-- Buttons floating over the background -->
+    <div style="position: relative; z-index: 10; padding: 20px; display: flex; flex-direction: column; justify-content: flex-end; min-height: calc(100vh - 80px);">
+      <!-- Top row: two big character buttons -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+        <div class="grid-btn" onclick="goChat('bean')" style="padding: 22px; border-radius: 20px; background: rgba(30,48,104,0.85); backdrop-filter: blur(10px);">
+          <img src="assets/mrbean-avatar.jpg" style="width: 56px; height: 56px; border-radius: 14px; object-fit: cover; border: 3px solid #FF9933; margin-bottom: 8px;">
+          <div class="lbl" style="font-size: 16px; color: #FF9933;">💬 Mr Bean</div>
+        </div>
+        <div class="grid-btn" onclick="goChat('jarvis')" style="padding: 22px; border-radius: 20px; background: rgba(30,48,104,0.85); backdrop-filter: blur(10px);">
+          <img src="assets/jarvis-avatar.jpg" style="width: 56px; height: 56px; border-radius: 14px; object-fit: cover; border: 3px solid #55AAFF; margin-bottom: 8px;">
+          <div class="lbl" style="font-size: 16px; color: #55AAFF;">🤖 Jarvis</div>
+        </div>
       </div>
-      <div class="quick-card" onclick="goView('games')">
-        <img src="assets/mrbean-superbean.jpg">
-        <div class="qc-overlay"><h3>⚡ GAMES</h3></div>
+
+      <!-- Bottom row: 6 action buttons -->
+      <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px;">
+        <div class="grid-btn" onclick="goView('games')" style="background: rgba(30,48,104,0.85); backdrop-filter: blur(10px);"><div class="ico">⚡</div><div class="lbl">Games</div></div>
+        <div class="grid-btn" onclick="goView('tasks')" style="background: rgba(30,48,104,0.85); backdrop-filter: blur(10px);"><div class="ico">✅</div><div class="lbl">Tasks</div></div>
+        <div class="grid-btn" onclick="goView('schedule')" style="background: rgba(30,48,104,0.85); backdrop-filter: blur(10px);"><div class="ico">📅</div><div class="lbl">Today</div></div>
+        <div class="grid-btn" onclick="goView('brain')" style="background: rgba(30,48,104,0.85); backdrop-filter: blur(10px);"><div class="ico">🧠</div><div class="lbl">Brain</div></div>
+        <div class="grid-btn" onclick="goView('dump')" style="background: rgba(30,48,104,0.85); backdrop-filter: blur(10px);"><div class="ico">💭</div><div class="lbl">Dump</div></div>
+        <div class="grid-btn" onclick="goView('xp')" style="background: rgba(30,48,104,0.85); backdrop-filter: blur(10px);"><div class="ico">🎮</div><div class="lbl">Level</div></div>
       </div>
-    </div>
-
-    <!-- Grid: 4 clear buttons -->
-    <div class="grid">
-      <div class="grid-btn" onclick="goView('tasks')"><div class="ico">✅</div><div class="lbl">Tasks</div></div>
-      <div class="grid-btn" onclick="goView('schedule')"><div class="ico">📅</div><div class="lbl">Today</div></div>
-      <div class="grid-btn" onclick="goView('dump')"><div class="ico">💭</div><div class="lbl">Dump</div></div>
-      <div class="grid-btn" onclick="goView('xp')"><div class="ico">🎮</div><div class="lbl">Level</div></div>
-    </div>
-
-    <!-- Brain Mode -->
-    <div class="quick-card" onclick="goView('brain')">
-      <img src="assets/mrbean-onepiece.jpg">
-      <div class="qc-overlay"><h3>🧠 BRAIN MODE</h3></div>
     </div>
   </div>
 
