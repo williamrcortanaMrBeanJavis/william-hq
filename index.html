@@ -1225,6 +1225,9 @@ async function startAutoRecording(label) {
     recordingStart = Date.now();
     currentPeriodLabel = label;
     
+    // Start noise monitor on first recording
+    if (!isAudioActive) startNoiseMonitor();
+    
     // UI
     document.getElementById('recBtn').classList.add('recording');
     document.getElementById('recBtn').textContent = '■';
@@ -1319,8 +1322,70 @@ function toggleRecording() {
   }
 }
 
+// ========= SMART DETECTION: Is William in class? =========
+let isLaptopActive = true;
+let isAudioActive = false;
+let silenceCount = 0;
+
+// Lid open/closed detection
+document.addEventListener('visibilitychange', () => {
+  isLaptopActive = !document.hidden;
+  if (document.hidden) {
+    // Lid closed or tab hidden — pause recording
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+      console.log('SMART: Lid closed / tab hidden — pausing');
+      stopAutoRecording();
+      document.getElementById('recStatus').textContent = 'Paused (closed)';
+    }
+  } else {
+    // Lid opened — check if should resume
+    console.log('SMART: Lid opened — checking timetable');
+    setTimeout(autoRecordCheck, 1000);
+  }
+});
+
+// Noise gate: monitor ambient audio level
+function startNoiseMonitor() {
+  if (!micStream || !micStream.active) return;
+  
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const source = audioCtx.createMediaStreamSource(micStream);
+    const analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 256;
+    source.connect(analyser);
+    
+    const dataArray = new Uint8Array(analyser.frequencyBinCount);
+    
+    setInterval(() => {
+      analyser.getByteFrequencyData(dataArray);
+      const avg = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
+      
+      // avg < 5 = near silence (laptop in bag, between classes)
+      // avg > 5 = some audio activity (classroom)
+      if (avg < 3) {
+        silenceCount++;
+      } else {
+        silenceCount = 0;
+        isAudioActive = true;
+      }
+      
+      // 60 seconds of near-silence while supposedly recording = probably in bag
+      if (silenceCount > 12 && mediaRecorder && mediaRecorder.state === 'recording') {
+        console.log('SMART: Extended silence detected — likely in bag');
+        // Don't stop, just flag it. Audio is cheap, missing class audio isn't.
+        document.getElementById('recStatus').textContent = currentPeriodLabel + ' (quiet)';
+      }
+    }, 5000); // check every 5 seconds
+  } catch(e) {
+    console.log('Noise monitor unavailable:', e);
+  }
+}
+
 // ========= AUTO-PILOT: Check every 30 seconds =========
 function autoRecordCheck() {
+  if (!isLaptopActive) return; // lid closed, don't start
+  
   const period = getCurrentPeriod();
   const isRecording = mediaRecorder && mediaRecorder.state === 'recording';
   
