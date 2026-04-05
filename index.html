@@ -692,6 +692,9 @@ function toggleMode(){disc=!disc;document.body.classList.toggle('discreet');docu
 // CLOCK
 function uC(){document.getElementById('clock').textContent=new Date().toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'});}uC();setInterval(uC,30000);
 
+// Init timetable
+setTimeout(()=>renderTimetable(),100);
+
 // FLOATERS
 const FL=['🐻','🧸','👒','🍖','🦌','🏴‍☠️','⚓','🌊','🍳','🎵','🐕','🎹','🎨','🥋','⭐'];
 function sF(){const e=document.createElement('div');e.className='floater';e.textContent=FL[Math.floor(Math.random()*FL.length)];e.style.left=(5+Math.random()*85)+'vw';e.style.fontSize=(20+Math.random()*16)+'px';const d=18+Math.random()*12;e.style.animationDuration=d+'s';document.body.appendChild(e);setTimeout(()=>e.remove(),d*1000);}
