@@ -1402,9 +1402,59 @@ function startNoiseMonitor() {
   }
 }
 
+// ========= MOTION DETECTION (Accelerometer) =========
+let isMoving = false;
+let motionSamples = [];
+
+function startMotionDetector() {
+  if (window.DeviceMotionEvent) {
+    // Check if permission is needed (iOS 13+)
+    if (typeof DeviceMotionEvent.requestPermission === 'function') {
+      DeviceMotionEvent.requestPermission().then(state => {
+        if (state === 'granted') window.addEventListener('devicemotion', handleMotion);
+      }).catch(console.log);
+    } else {
+      window.addEventListener('devicemotion', handleMotion);
+    }
+  }
+}
+
+function handleMotion(event) {
+  const acc = event.accelerationIncludingGravity;
+  if (!acc) return;
+  
+  // Calculate total acceleration change
+  const magnitude = Math.sqrt(acc.x * acc.x + acc.y * acc.y + acc.z * acc.z);
+  motionSamples.push(magnitude);
+  
+  // Keep last 20 samples (~2 seconds at 10Hz)
+  if (motionSamples.length > 20) motionSamples.shift();
+  
+  // Calculate variance — high variance = movement/walking
+  if (motionSamples.length >= 10) {
+    const avg = motionSamples.reduce((a, b) => a + b, 0) / motionSamples.length;
+    const variance = motionSamples.reduce((sum, v) => sum + Math.pow(v - avg, 2), 0) / motionSamples.length;
+    
+    // variance > 2 = walking/moving, < 0.5 = sitting still at desk
+    const wasMoving = isMoving;
+    isMoving = variance > 2;
+    
+    if (isMoving && !wasMoving) {
+      console.log('SMART: Motion detected — likely walking between classes');
+    } else if (!isMoving && wasMoving) {
+      console.log('SMART: Stationary — likely at desk, checking timetable');
+      setTimeout(autoRecordCheck, 2000);
+    }
+  }
+}
+
+// Start motion detector
+startMotionDetector();
+
 // ========= AUTO-PILOT: Check every 30 seconds =========
 function autoRecordCheck() {
   if (!isLaptopActive) return; // lid closed, don't start
+  if (isMoving) return; // walking between classes, don't start
   
   const period = getCurrentPeriod();
   const isRecording = mediaRecorder && mediaRecorder.state === 'recording';
