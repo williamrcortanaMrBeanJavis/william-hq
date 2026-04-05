@@ -352,13 +352,56 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
   <!-- ═══ SCHEDULE ═══ -->
   <div class="view" id="view-schedule">
     <button class="back" onclick="goHome()">← Home</button>
-    <div class="view-header"><img src="assets/mrbean-bike.jpg"><div class="vh-overlay"><h2>📅 TODAY</h2></div></div>
-    <div class="sched-item"><div class="sched-time">5:30am</div><div class="sched-card"><img src="assets/mrbean-cooking.jpg"><div><div class="sc-title">🌅 Morning Brain</div><div class="sc-sub">Ask Mr Bean anything</div></div></div></div>
-    <div class="sched-item"><div class="sched-time">7:50am</div><div class="sched-card"><img src="assets/mrbean-maths.jpg"><div><div class="sc-title">🏫 School</div><div class="sc-sub">Auto-recording on</div></div></div></div>
-    <div class="sched-item"><div class="sched-time">3:00pm</div><div class="sched-card"><img src="assets/mrbean-golden-retriever.jpg"><div><div class="sc-title">🏠 Free Time</div><div class="sc-sub">Walk the dog. Relax.</div></div></div></div>
-    <div class="sched-item"><div class="sched-time">4:00pm</div><div class="sched-card"><img src="assets/mrbean-maths.jpg"><div><div class="sc-title">📚 Homework</div><div class="sc-sub">One thing at a time</div></div></div></div>
-    <div class="sched-item"><div class="sched-time">8:00pm</div><div class="sched-card"><img src="assets/jarvis-avatar.jpg"><div><div class="sc-title">🤖 Jarvis</div><div class="sc-sub">What went well?</div></div></div></div>
-    <div class="sched-item"><div class="sched-time">9:00pm</div><div class="sched-card"><img src="assets/mrbean-70s80s-vinyl.jpg"><div><div class="sc-title">🌙 Bed</div><div class="sc-sub">Rest up, captain</div></div></div></div>
+    <div style="padding:8px 0 16px;"><h2 style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:2px;color:#FF9933;text-shadow:0 0 25px rgba(255,153,51,0.8);">📅 TODAY'S SCHEDULE</h2></div>
+
+    <div style="display:flex;background:#1e3068;border:2px solid #2d4488;border-radius:20px;overflow:hidden;margin-bottom:12px;">
+      <img src="assets/mrbean-cooking.jpg" style="width:378px;flex-shrink:0;object-fit:cover;object-position:top;">
+      <div style="flex:1;padding:28px;display:flex;flex-direction:column;justify-content:center;gap:8px;">
+        <div style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:1px;color:#FF9933;text-shadow:0 0 25px rgba(255,153,51,0.9);">🌅 5:30am — Morning Brain</div>
+        <div style="font-size:20px;color:#8899cc;">Ask Mr Bean anything. Your brain is buzzing — use it.</div>
+      </div>
+    </div>
+
+    <div style="display:flex;background:#1e3068;border:2px solid #2d4488;border-radius:20px;overflow:hidden;margin-bottom:12px;">
+      <img src="assets/mrbean-maths.jpg" style="width:378px;flex-shrink:0;object-fit:cover;object-position:top;">
+      <div style="flex:1;padding:28px;display:flex;flex-direction:column;justify-content:center;gap:8px;">
+        <div style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:1px;color:#00EEFF;text-shadow:0 0 25px rgba(0,238,255,0.9);">🏫 7:50am — School</div>
+        <div style="font-size:20px;color:#8899cc;">Auto-recording is ON. Just open the laptop.</div>
+      </div>
+    </div>
+
+    <div style="display:flex;background:#1e3068;border:2px solid #2d4488;border-radius:20px;overflow:hidden;margin-bottom:12px;">
+      <img src="assets/mrbean-golden-retriever.jpg" style="width:378px;flex-shrink:0;object-fit:cover;object-position:top;">
+      <div style="flex:1;padding:28px;display:flex;flex-direction:column;justify-content:center;gap:8px;">
+        <div style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:1px;color:#44FF66;text-shadow:0 0 25px rgba(68,255,102,0.9);">🏠 3:00pm — Free Time</div>
+        <div style="font-size:20px;color:#8899cc;">Walk the dog. Snack. Relax. You earned it.</div>
+      </div>
+    </div>
+
+    <div style="display:flex;background:#1e3068;border:2px solid #2d4488;border-radius:20px;overflow:hidden;margin-bottom:12px;">
+      <img src="assets/mrbean-maths.jpg" style="width:378px;flex-shrink:0;object-fit:cover;object-position:top;">
+      <div style="flex:1;padding:28px;display:flex;flex-direction:column;justify-content:center;gap:8px;">
+        <div style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:1px;color:#FF55CC;text-shadow:0 0 25px rgba(255,85,204,0.9);">📚 4:00pm — Homework</div>
+        <div style="font-size:20px;color:#8899cc;">One thing at a time. Ask Mr Bean to help.</div>
+        <div style="font-size:20px;color:#FF9933;font-weight:700;">⏰ Must finish by 8:00pm!</div>
+      </div>
+    </div>
+
+    <div style="display:flex;background:#1e3068;border:2px solid #2d4488;border-radius:20px;overflow:hidden;margin-bottom:12px;">
+      <img src="assets/jarvis-avatar.jpg" style="width:378px;flex-shrink:0;object-fit:cover;object-position:top;">
+      <div style="flex:1;padding:28px;display:flex;flex-direction:column;justify-content:center;gap:8px;">
+        <div style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:1px;color:#55AAFF;text-shadow:0 0 25px rgba(85,170,255,0.9);">🤖 8:00pm — Jarvis</div>
+        <div style="font-size:20px;color:#8899cc;">Evening check-in. What went well? What’s tomorrow?</div>
+      </div>
+    </div>
+
+    <div style="display:flex;background:#1e3068;border:2px solid #2d4488;border-radius:20px;overflow:hidden;margin-bottom:12px;">
+      <img src="assets/mrbean-70s80s-vinyl.jpg" style="width:378px;flex-shrink:0;object-fit:cover;object-position:top;">
+      <div style="flex:1;padding:28px;display:flex;flex-direction:column;justify-content:center;gap:8px;">
+        <div style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:1px;color:#8888FF;text-shadow:0 0 25px rgba(136,136,255,0.9);">🌙 9:00pm — Bed</div>
+        <div style="font-size:20px;color:#8899cc;">Music, chill, lights out. Rest up, captain.</div>
+      </div>
+    </div>
   </div>
 
   <!-- ═══ BRAIN MODE ═══ -->
