@@ -675,6 +675,7 @@ body.discreet .sos-modal p { color: #666; }
     <button class="sidebar-btn" data-view="tasks"><span class="icon">✅</span> My Tasks</button>
     <button class="sidebar-btn" data-view="schedule"><span class="icon">📅</span> Today</button>
     <button class="sidebar-btn" data-view="brain"><span class="icon">🧠</span> Brain Mode</button>
+    <button class="sidebar-btn" data-view="dump"><span class="icon">💭</span> Brain Dump</button>
   </div>
 
   <!-- ═══════ MAIN AREA ═══════ -->
@@ -807,6 +808,25 @@ body.discreet .sos-modal p { color: #666; }
         </div>
         <div style="text-align: center; color: var(--muted); font-size: 12px; margin-top: 20px; padding: 16px; border: 1px dashed var(--border); border-radius: 12px;">
           Times will be confirmed by Simon. This is a template.
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ BRAIN DUMP ═══════ -->
+    <div class="view" id="view-dump">
+      <div style="padding: 20px; display: flex; flex-direction: column; height: 100%;">
+        <div style="font-size: 18px; font-weight: 800; margin-bottom: 4px;">💭 Brain Dump</div>
+        <div style="font-size: 13px; color: var(--muted); margin-bottom: 16px;">Random thought? Question? Idea? Type it here. Mr Bean and Jarvis will see it when you get home.</div>
+        
+        <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+          <input type="text" id="dumpInput" placeholder="What's on your mind?" style="flex: 1; padding: 12px 16px; border-radius: 12px; border: 2px solid var(--border); background: var(--bg); color: var(--text); font-size: 14px; font-family: 'Inter'; outline: none;" onkeydown="if(event.key==='Enter')addDump()">
+          <button onclick="addDump()" style="padding: 12px 20px; border-radius: 12px; border: none; background: var(--cyan); color: #000; font-weight: 700; font-size: 14px; cursor: pointer; font-family: 'Inter'; white-space: nowrap;">💭 Dump</button>
+        </div>
+        
+        <div id="dumpList" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;"></div>
+        
+        <div style="text-align: center; color: var(--muted); font-size: 11px; margin-top: 12px; padding: 8px;" id="dumpHint">
+          💡 Quick dump during class — Mr Bean will ask about these when you get home
         </div>
       </div>
     </div>
@@ -1419,6 +1439,93 @@ setTimeout(autoRecordCheck, 2000);
 // Show current week
 const weekEl = document.getElementById('recWeek');
 if (weekEl) weekEl.textContent = 'Week ' + getCurrentWeek();
+
+// ═══════ BRAIN DUMP ═══════
+let brainDumps = JSON.parse(localStorage.getItem('brainDumps') || '[]');
+renderDumps();
+
+function addDump() {
+  const input = document.getElementById('dumpInput');
+  const text = input.value.trim();
+  if (!text) return;
+  
+  const now = new Date();
+  const period = getCurrentPeriod();
+  
+  brainDumps.unshift({
+    text: text,
+    time: now.toISOString(),
+    timeLabel: now.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' }),
+    subject: period ? period.subject : 'After school',
+    period: period ? 'P' + period.period : '',
+    reviewed: false
+  });
+  
+  localStorage.setItem('brainDumps', JSON.stringify(brainDumps));
+  input.value = '';
+  renderDumps();
+}
+
+function renderDumps() {
+  const list = document.getElementById('dumpList');
+  if (!list) return;
+  
+  const today = new Date().toISOString().slice(0, 10);
+  const todayDumps = brainDumps.filter(d => d.time && d.time.startsWith(today));
+  const olderDumps = brainDumps.filter(d => !d.time || !d.time.startsWith(today));
+  
+  let html = '';
+  
+  if (todayDumps.length === 0 && olderDumps.length === 0) {
+    html = '<div style="text-align: center; color: var(--muted); padding: 40px; font-size: 14px;"><div style="font-size: 40px; margin-bottom: 12px;">💭</div>Nothing yet. Drop a thought in here anytime.</div>';
+  }
+  
+  if (todayDumps.length > 0) {
+    html += '<div style="font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: 1px; margin-bottom: 4px;">TODAY</div>';
+    todayDumps.forEach((d, i) => {
+      html += renderDumpCard(d, i);
+    });
+  }
+  
+  if (olderDumps.length > 0) {
+    html += '<div style="font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: 1px; margin-top: 12px; margin-bottom: 4px;">EARLIER</div>';
+    olderDumps.forEach((d, i) => {
+      html += renderDumpCard(d, todayDumps.length + i, true);
+    });
+  }
+  
+  list.innerHTML = html;
+}
+
+function renderDumpCard(d, idx, older) {
+  const opacity = d.reviewed ? '0.5' : '1';
+  const check = d.reviewed ? '✅' : '⬜';
+  const subjectColor = d.subject === 'After school' ? 'var(--muted)' : 'var(--cyan)';
+  return `
+    <div style="display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; background: var(--card); border: 2px solid var(--border); border-radius: 12px; opacity: ${opacity};">
+      <span style="cursor: pointer; font-size: 16px;" onclick="toggleDumpReviewed(${idx})">${check}</span>
+      <div style="flex: 1;">
+        <div style="font-size: 14px; font-weight: 500;">${d.text}</div>
+        <div style="font-size: 11px; color: var(--muted); margin-top: 4px;">
+          ${d.timeLabel} ${d.period ? '• ' + d.period : ''} <span style="color: ${subjectColor};">${d.subject}</span>
+        </div>
+      </div>
+      <span style="cursor: pointer; font-size: 12px; color: var(--muted);" onclick="deleteDump(${idx})">✖</span>
+    </div>
+  `;
+}
+
+function toggleDumpReviewed(idx) {
+  brainDumps[idx].reviewed = !brainDumps[idx].reviewed;
+  localStorage.setItem('brainDumps', JSON.stringify(brainDumps));
+  renderDumps();
+}
+
+function deleteDump(idx) {
+  brainDumps.splice(idx, 1);
+  localStorage.setItem('brainDumps', JSON.stringify(brainDumps));
+  renderDumps();
+}
 
 // ═══════ SOS SYSTEM ═══════
 function openSOS() {
