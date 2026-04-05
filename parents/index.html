@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>William's Progress</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f8f9fa;
+  --card: #ffffff;
+  --border: #e8e8f0;
+  --text: #2d3436;
+  --muted: #888;
+  --green: #2ECC40;
+  --orange: #E8A444;
+  --blue: #4488ff;
+  --red: #ff4444;
+  --light-green: #e8f8e8;
+  --light-orange: #fff5e6;
+  --light-blue: #e8f0ff;
+  --light-red: #ffe8e8;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  max-width: 600px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+
+/* ═══════ HEADER ═══════ */
+.header {
+  padding: 24px 20px 16px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  background: white;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.header h1 {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+.header .subtitle {
+  font-size: 13px;
+  color: var(--muted);
+}
+.header .date {
+  font-size: 12px;
+  color: var(--blue);
+  margin-top: 8px;
+  font-weight: 600;
+}
+
+/* ═══════ SECTIONS ═══════ */
+.section {
+  padding: 20px;
+}
+.section-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+/* ═══════ SCORE CARD ═══════ */
+.score-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.score-card {
+  flex: 1;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+}
+.score-card .score-num {
+  font-size: 32px;
+  font-weight: 800;
+}
+.score-card .score-label {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.score-green { color: var(--green); }
+.score-orange { color: var(--orange); }
+.score-red { color: var(--red); }
+
+/* ═══════ TASK LIST ═══════ */
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 8px;
+}
+.task-status { font-size: 20px; width: 28px; text-align: center; }
+.task-body { flex: 1; }
+.task-name { font-size: 14px; font-weight: 600; }
+.task-detail { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.task-subject {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.subj-maths { background: var(--light-blue); color: var(--blue); }
+.subj-english { background: var(--light-orange); color: #b8860b; }
+.subj-science { background: var(--light-green); color: #1a8a1a; }
+.subj-history { background: var(--light-red); color: #cc3333; }
+
+/* ═══════ AI STATUS ═══════ */
+.ai-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 8px;
+}
+.ai-avatar {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+.ai-info { flex: 1; }
+.ai-name { font-size: 14px; font-weight: 700; }
+.ai-status { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.ai-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot-green { background: var(--green); }
+.dot-orange { background: var(--orange); }
+
+/* ═══════ WEEK VIEW ═══════ */
+.week-row {
+  display: flex;
+  gap: 8px;
+}
+.week-day {
+  flex: 1;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 8px;
+  text-align: center;
+}
+.week-day .day-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.week-day .day-score {
+  font-size: 20px;
+  font-weight: 800;
+}
+.week-day.today { border-color: var(--blue); background: var(--light-blue); }
+
+/* ═══════ FLAGS ═══════ */
+.flag-card {
+  padding: 14px 16px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+.flag-green { background: var(--light-green); border: 1px solid #b8e6b8; color: #1a6b1a; }
+.flag-orange { background: var(--light-orange); border: 1px solid #ffe0b0; color: #8b6914; }
+.flag-red { background: var(--light-red); border: 1px solid #ffb8b8; color: #cc2222; }
+
+/* ═══════ FOOTER ═══════ */
+.footer {
+  text-align: center;
+  padding: 24px 20px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ═══════ PRIVACY BADGE ═══════ */
+.privacy-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: var(--light-green);
+  border: 1px solid #b8e6b8;
+  border-radius: 20px;
+  font-size: 11px;
+  color: #1a6b1a;
+  font-weight: 600;
+  margin-top: 8px;
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════ PIN GATE ═══════ -->
+<div id="pinGate" style="position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px;">
+  <div style="font-size: 40px;">🔒</div>
+  <div style="font-size: 18px; font-weight: 800;">Parent Access</div>
+  <div style="font-size: 13px; color: var(--muted);">Enter PIN to view William's progress</div>
+  <input type="password" id="pinInput" maxlength="4" placeholder="••••" style="width: 120px; text-align: center; font-size: 24px; letter-spacing: 8px; padding: 12px; border-radius: 12px; border: 2px solid var(--border); background: var(--card); color: var(--text); font-family: 'Inter'; outline: none;" onkeydown="if(event.key==='Enter')checkPin()">
+  <button onclick="checkPin()" style="padding: 10px 32px; border-radius: 10px; border: none; background: #4488ff; color: white; font-weight: 700; font-size: 14px; cursor: pointer; font-family: 'Inter';">Enter</button>
+  <div id="pinError" style="font-size: 12px; color: #ff4444; display: none;">Incorrect PIN</div>
+</div>
+<script>
+function checkPin() {
+  const pin = document.getElementById('pinInput').value;
+  // PIN is set by Admiral Adam. Change here to update.
+  if (pin === '2013') {
+    document.getElementById('pinGate').style.display = 'none';
+    sessionStorage.setItem('parentAuth', 'true');
+  } else {
+    document.getElementById('pinError').style.display = 'block';
+    document.getElementById('pinInput').value = '';
+    document.getElementById('pinInput').focus();
+  }
+}
+// Check if already authenticated this session
+if (sessionStorage.getItem('parentAuth') === 'true') {
+  document.getElementById('pinGate').style.display = 'none';
+}
+</script>
+
+<!-- ═══════ HEADER ═══════ -->
+<div class="header">
+  <h1>📊 William's Progress</h1>
+  <div class="subtitle">For Simon & Annette</div>
+  <div class="date" id="dateDisplay"></div>
+  <div class="privacy-badge">🔒 Conversations are private — you see tasks only</div>
+</div>
+
+<!-- ═══════ TODAY'S SCORES ═══════ -->
+<div class="section">
+  <div class="section-title">Today's Overview</div>
+  <div class="score-row">
+    <div class="score-card">
+      <div class="score-num score-green">0</div>
+      <div class="score-label">Completed</div>
+    </div>
+    <div class="score-card">
+      <div class="score-num score-orange">3</div>
+      <div class="score-label">In Progress</div>
+    </div>
+    <div class="score-card">
+      <div class="score-num score-red">1</div>
+      <div class="score-label">Not Started</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ HOMEWORK ═══════ -->
+<div class="section">
+  <div class="section-title">📚 Homework & Assignments</div>
+  <div class="task-item">
+    <div class="task-status">⏳</div>
+    <div class="task-body">
+      <div class="task-name">Fractions Worksheet</div>
+      <div class="task-detail">Due: Tomorrow</div>
+    </div>
+    <div class="task-subject subj-maths">MATHS</div>
+  </div>
+  <div class="task-item">
+    <div class="task-status">⏳</div>
+    <div class="task-body">
+      <div class="task-name">Narrative Draft — 500 words</div>
+      <div class="task-detail">Due: Wednesday</div>
+    </div>
+    <div class="task-subject subj-english">ENGLISH</div>
+  </div>
+  <div class="task-item">
+    <div class="task-status">❌</div>
+    <div class="task-body">
+      <div class="task-name">Lab Report — Forces Experiment</div>
+      <div class="task-detail">Due: Friday</div>
+    </div>
+    <div class="task-subject subj-science">SCIENCE</div>
+  </div>
+  <div class="task-item">
+    <div class="task-status">⏳</div>
+    <div class="task-body">
+      <div class="task-name">Ancient Egypt Questions</div>
+      <div class="task-detail">Due: Thursday</div>
+    </div>
+    <div class="task-subject subj-history">HISTORY</div>
+  </div>
+  <div style="text-align: center; color: var(--muted); font-size: 12px; margin-top: 12px; padding: 12px; border: 1px dashed var(--border); border-radius: 10px;">
+    Tasks auto-update when William tells Mr Bean or Jarvis he's done
+  </div>
+</div>
+
+<!-- ═══════ HOME TASKS ═══════ -->
+<div class="section">
+  <div class="section-title">🏠 Home Responsibilities</div>
+  <div class="task-item">
+    <div class="task-status">⬜</div>
+    <div class="task-body">
+      <div class="task-name">Clean room</div>
+      <div class="task-detail">Before dinner</div>
+    </div>
+  </div>
+  <div style="text-align: center; color: var(--muted); font-size: 12px; margin-top: 12px; padding: 12px; border: 1px dashed var(--border); border-radius: 10px;">
+    Awaiting full chore schedule from Simon
+  </div>
+</div>
+
+<!-- ═══════ AI HEALTH ═══════ -->
+<div class="section">
+  <div class="section-title">🧠 AI Brain Health</div>
+  <div style="background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 12px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+      <div style="font-size: 14px; font-weight: 700;">🐻 Mr Bean</div>
+      <div style="font-size: 12px; font-weight: 700; color: var(--green);">⚡ 100% — Sharp</div>
+    </div>
+    <div style="height: 10px; background: #e8e8e8; border-radius: 5px; overflow: hidden;">
+      <div id="bean-health" style="height: 100%; width: 100%; background: linear-gradient(90deg, #2ECC40, #40E050); border-radius: 5px; transition: width 1s;"></div>
+    </div>
+    <div style="font-size: 11px; color: var(--muted); margin-top: 6px;">The "brain" fills up during long chats. Below 40%, answers get shorter and less accurate. William can type "fresh start" to reset.</div>
+  </div>
+  <div style="background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+      <div style="font-size: 14px; font-weight: 700;">🤖 Jarvis</div>
+      <div style="font-size: 12px; font-weight: 700; color: var(--green);">⚡ 100% — Sharp</div>
+    </div>
+    <div style="height: 10px; background: #e8e8e8; border-radius: 5px; overflow: hidden;">
+      <div id="jarvis-health" style="height: 100%; width: 100%; background: linear-gradient(90deg, #2ECC40, #40E050); border-radius: 5px; transition: width 1s;"></div>
+    </div>
+    <div style="font-size: 11px; color: var(--muted); margin-top: 6px;">Same system. If Jarvis seems off, William knows to reset. No frustration — it's just how AI brains work.</div>
+  </div>
+  <div style="background: var(--light-blue); border: 1px solid #90caf9; border-radius: 12px; padding: 12px; margin-top: 12px;">
+    <div style="font-size: 12px; color: #1565c0;"><strong>💡 What is this?</strong></div>
+    <div style="font-size: 11px; color: #1565c0; margin-top: 4px;">AI has a "context window" — like short-term memory. The more you chat, the fuller it gets. When it's low, the AI gives shorter, less helpful answers. "Fresh start" clears the memory and brings it back to 100%. This is normal — William understands it and knows what to do.</div>
+  </div>
+</div>
+
+<!-- ═══════ AI STATUS ═══════ -->
+<div class="section">
+  <div class="section-title">🤖 AI Companion Status</div>
+  <div class="ai-card">
+    <div class="ai-avatar" style="background: #fff5e6;">🐻</div>
+    <div class="ai-info">
+      <div class="ai-name">Mr Bean</div>
+      <div class="ai-status">Homework support, curiosity, fun</div>
+    </div>
+    <div class="ai-dot dot-orange"></div>
+  </div>
+  <div class="ai-card">
+    <div class="ai-avatar" style="background: #e8f0ff;">🤖</div>
+    <div class="ai-info">
+      <div class="ai-name">Jarvis</div>
+      <div class="ai-status">Growth, discipline, accountability</div>
+    </div>
+    <div class="ai-dot dot-orange"></div>
+  </div>
+</div>
+
+<!-- ═══════ FLAGS ═══════ -->
+<div class="section">
+  <div class="section-title">🚩 Flags & Notes</div>
+  <div class="flag-card flag-green">
+    ✅ No concerns raised by Mr Bean or Jarvis today
+  </div>
+  <div style="font-size: 12px; color: var(--muted); margin-top: 8px;">
+    If Mr Bean or Jarvis notice something important (struggling with a topic, frustrated, mentions being bullied), it will appear here as an orange or red flag.
+  </div>
+</div>
+
+<!-- ═══════ WEEK VIEW ═══════ -->
+<div class="section">
+  <div class="section-title">📊 This Week</div>
+  <div class="week-row">
+    <div class="week-day"><div class="day-label">MON</div><div class="day-score" style="color: var(--muted);">—</div></div>
+    <div class="week-day"><div class="day-label">TUE</div><div class="day-score" style="color: var(--muted);">—</div></div>
+    <div class="week-day"><div class="day-label">WED</div><div class="day-score" style="color: var(--muted);">—</div></div>
+    <div class="week-day"><div class="day-label">THU</div><div class="day-score" style="color: var(--muted);">—</div></div>
+    <div class="week-day today"><div class="day-label">FRI</div><div class="day-score" style="color: var(--muted);">—</div></div>
+  </div>
+  <div style="text-align: center; color: var(--muted); font-size: 12px; margin-top: 12px;">
+    Scores show completed tasks / total tasks each day
+  </div>
+</div>
+
+<!-- ═══════ FOOTER ═══════ -->
+<div class="footer">
+  <div>Powered by Mr Bean 🐻 & Jarvis 🤖</div>
+  <div style="margin-top: 4px;">Built by Uncle Adam's AI Fleet</div>
+  <div style="margin-top: 8px; font-size: 10px;">
+    🔒 William's conversations with Mr Bean and Jarvis are private.<br>
+    This dashboard shows WHAT tasks are done, not HOW they talked about it.<br>
+    Only Admiral Adam has full system access.
+  </div>
+</div>
+
+<script>
+// Date display
+const now = new Date();
+const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+document.getElementById('dateDisplay').textContent = now.toLocaleDateString('en-AU', options);
+</script>
+</body>
+</html>

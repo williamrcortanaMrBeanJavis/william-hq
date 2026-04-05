@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>William's HQ</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0f1a;
+  --card: #1a1a2e;
+  --border: #2a2a4a;
+  --text: #e8e8f0;
+  --muted: #8888aa;
+  --bean-orange: #E8A444;
+  --jarvis-blue: #4488ff;
+  --green: #2ECC40;
+  --cyan: #00C8C8;
+  --red: #ff4444;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ═══════ HEALTH BAR ═══════ */
+.health-bar-container {
+  padding: 8px 20px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.health-bar-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.health-bar-track {
+  flex: 1;
+  height: 12px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+.health-bar-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 1s ease, background 1s ease;
+  position: relative;
+}
+.health-bar-fill::after {
+  content: '';
+  position: absolute;
+  right: 0; top: 0;
+  width: 20px; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3));
+  border-radius: 0 6px 6px 0;
+}
+.health-pct {
+  font-size: 12px;
+  font-weight: 800;
+  min-width: 38px;
+  text-align: right;
+}
+.health-status {
+  font-size: 10px;
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.health-tip {
+  font-size: 10px;
+  color: var(--muted);
+  text-align: center;
+  padding: 4px 20px;
+  background: var(--card);
+  border-bottom: 2px solid var(--border);
+}
+body.discreet .health-bar-container { background: #fff; border-bottom: 1px solid #e0e0e0; }
+body.discreet .health-bar-track { background: #e8e8e8; }
+body.discreet .health-tip { background: #fff; border-bottom: 1px solid #e0e0e0; color: #888; }
+body.discreet .health-bar-label { color: #888; }
+body.discreet .health-pct { color: #333; }
+
+/* ═══════ DISCREET MODE (for school) ═══════ */
+body.discreet {
+  --bg: #f5f5f5;
+  --card: #ffffff;
+  --border: #e0e0e0;
+  --text: #333;
+  --muted: #888;
+}
+body.discreet .top-bar { background: #fff; border-bottom: 1px solid #e0e0e0; }
+body.discreet .top-bar .title { color: #333; }
+body.discreet .chat-bubble.bean { background: #fff3e0; color: #333; border: 1px solid #e0e0e0; }
+body.discreet .chat-bubble.jarvis { background: #e3f2fd; color: #333; border: 1px solid #e0e0e0; }
+body.discreet .chat-bubble.user { background: #e8e8e8; color: #333; }
+body.discreet .sidebar-btn { background: #fff; border: 1px solid #e0e0e0; color: #333; }
+body.discreet .sidebar-btn.active { background: #e3f2fd; border-color: #90caf9; }
+body.discreet .task-item { background: #fff; border: 1px solid #e0e0e0; }
+body.discreet .input-area { background: #fff; border-top: 1px solid #e0e0e0; }
+body.discreet .input-area input { background: #f5f5f5; color: #333; border: 1px solid #e0e0e0; }
+
+/* ═══════ TOP BAR ═══════ */
+.top-bar {
+  height: 56px;
+  background: var(--card);
+  border-bottom: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+}
+.top-bar .title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+}
+.top-bar .controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.mode-toggle {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  font-size: 11px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.mode-toggle:hover { border-color: var(--cyan); color: var(--cyan); }
+.mode-toggle.active { background: var(--cyan); color: #000; border-color: var(--cyan); }
+
+/* ═══════ LAYOUT ═══════ */
+.app-layout {
+  display: flex;
+  margin-top: 56px;
+  height: calc(100vh - 56px);
+}
+
+/* ═══════ LEFT SIDEBAR ═══════ */
+.sidebar {
+  width: 260px;
+  background: var(--card);
+  border-right: 2px solid var(--border);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+.sidebar-section {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 12px 0 6px;
+}
+.sidebar-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: transparent;
+  border: 2px solid transparent;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Inter', sans-serif;
+  text-align: left;
+  width: 100%;
+}
+.sidebar-btn:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+.sidebar-btn.active { border-color: var(--cyan); color: var(--text); background: rgba(0,200,200,0.08); }
+.sidebar-btn .icon { font-size: 20px; width: 28px; text-align: center; }
+
+/* Character select */
+.char-card {
+  padding: 16px;
+  border-radius: 16px;
+  border: 2px solid var(--border);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+.char-card:hover { transform: translateY(-2px); }
+.char-card.bean { border-color: var(--bean-orange); background: rgba(232,164,68,0.08); }
+.char-card.jarvis { border-color: var(--jarvis-blue); background: rgba(68,136,255,0.08); }
+.char-card.bean.selected { background: rgba(232,164,68,0.2); box-shadow: 0 0 20px rgba(232,164,68,0.2); }
+.char-card.jarvis.selected { background: rgba(68,136,255,0.2); box-shadow: 0 0 20px rgba(68,136,255,0.2); }
+.char-card .char-emoji { font-size: 40px; margin-bottom: 8px; }
+.char-card .char-name { font-size: 16px; font-weight: 700; }
+.char-card .char-desc { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+/* ═══════ MAIN AREA ═══════ */
+.main-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ═══════ VIEWS ═══════ */
+.view { display: none; flex: 1; flex-direction: column; overflow: hidden; }
+.view.active { display: flex; }
+
+/* ═══════ CHAT VIEW ═══════ */
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.chat-bubble {
+  max-width: 70%;
+  padding: 12px 16px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  animation: msgIn 0.2s ease;
+}
+@keyframes msgIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.chat-bubble.bean {
+  background: rgba(232,164,68,0.15);
+  border: 1px solid rgba(232,164,68,0.3);
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+.chat-bubble.jarvis {
+  background: rgba(68,136,255,0.15);
+  border: 1px solid rgba(68,136,255,0.3);
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+.chat-bubble.user {
+  background: rgba(255,255,255,0.1);
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+.chat-sender {
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.bean .chat-sender { color: var(--bean-orange); }
+.jarvis .chat-sender { color: var(--jarvis-blue); }
+
+.input-area {
+  padding: 16px 20px;
+  background: var(--card);
+  border-top: 2px solid var(--border);
+  display: flex;
+  gap: 10px;
+}
+.input-area input {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+}
+.input-area input:focus { border-color: var(--cyan); }
+.input-area button {
+  padding: 12px 24px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.15s;
+}
+.send-btn.bean-mode { background: var(--bean-orange); color: #000; }
+.send-btn.jarvis-mode { background: var(--jarvis-blue); color: #fff; }
+.voice-btn {
+  width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.05);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  font-size: 18px;
+  cursor: pointer;
+  color: var(--muted);
+}
+.voice-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+.voice-btn.recording { background: rgba(255,68,68,0.2); border-color: var(--red); color: var(--red); animation: pulse-rec 1s infinite; }
+@keyframes pulse-rec {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,68,68,0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(255,68,68,0); }
+}
+
+/* ═══════ TASKS VIEW ═══════ */
+.tasks-view {
+  padding: 20px;
+  overflow-y: auto;
+}
+.task-section {
+  margin-bottom: 24px;
+}
+.task-section-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.task-item:hover { border-color: var(--cyan); }
+.task-check {
+  width: 24px; height: 24px;
+  border-radius: 8px;
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.task-check.done { background: var(--green); border-color: var(--green); color: #000; }
+.task-info { flex: 1; }
+.task-title { font-size: 14px; font-weight: 600; }
+.task-due { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.task-subject {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  display: inline-block;
+}
+.subj-maths { background: rgba(68,136,255,0.2); color: var(--jarvis-blue); }
+.subj-english { background: rgba(232,164,68,0.2); color: var(--bean-orange); }
+.subj-science { background: rgba(46,204,64,0.2); color: var(--green); }
+.subj-history { background: rgba(200,49,42,0.2); color: var(--red); }
+
+/* ═══════ SCHEDULE VIEW ═══════ */
+.schedule-view { padding: 20px; overflow-y: auto; }
+.time-block {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+  align-items: flex-start;
+}
+.time-label {
+  width: 70px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  text-align: right;
+  padding-top: 12px;
+  flex-shrink: 0;
+}
+.time-content {
+  flex: 1;
+  padding: 12px 16px;
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  font-size: 14px;
+}
+.time-content.active { border-color: var(--cyan); background: rgba(0,200,200,0.05); }
+.time-content .time-title { font-weight: 600; margin-bottom: 2px; }
+.time-content .time-desc { font-size: 12px; color: var(--muted); }
+
+/* ═══════ BRAIN VIEW (Curiosity Mode) ═══════ */
+.brain-view { padding: 20px; overflow-y: auto; }
+.topic-card {
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.topic-card:hover { border-color: var(--cyan); transform: translateY(-2px); }
+.topic-card .topic-emoji { font-size: 32px; margin-bottom: 8px; }
+.topic-card .topic-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.topic-card .topic-desc { font-size: 13px; color: var(--muted); }
+
+/* ═══════ RESPONSIVE (tablet/laptop) ═══════ */
+@media (max-width: 768px) {
+  .sidebar { width: 200px; }
+  .chat-bubble { max-width: 85%; }
+}
+@media (max-width: 600px) {
+  .sidebar { display: none; }
+  .top-bar .title { font-size: 14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════ TOP BAR ═══════ -->
+<div class="top-bar">
+  <div class="title">🐻 William's HQ</div>
+  <div class="controls">
+    <button class="mode-toggle" onclick="toggleDiscreet()" id="discreetBtn">🏫 School Mode</button>
+    <span style="font-size: 12px; color: var(--muted);" id="clock"></span>
+  </div>
+</div>
+
+<!-- ═══════ HEALTH BAR ═══════ -->
+<div class="health-bar-container" id="healthBar">
+  <div class="health-bar-label"><span id="healthEmoji">🧠</span> Brain Energy</div>
+  <div class="health-bar-track">
+    <div class="health-bar-fill" id="healthFill" style="width: 100%; background: linear-gradient(90deg, #2ECC40, #40E050);"></div>
+  </div>
+  <div class="health-pct" id="healthPct" style="color: #2ECC40;">100%</div>
+  <div class="health-status" id="healthStatus" style="background: rgba(46,204,64,0.15); color: #2ECC40;">⚡ Sharp</div>
+</div>
+<div class="health-tip" id="healthTip" style="display: none;"></div>
+
+<!-- ═══════ APP LAYOUT ═══════ -->
+<div class="app-layout">
+
+  <!-- ═══════ SIDEBAR ═══════ -->
+  <div class="sidebar">
+    <!-- Character Select -->
+    <div class="sidebar-section">Talk To</div>
+    <div class="char-card bean selected" onclick="selectChar('bean')">
+      <div class="char-emoji">🐻</div>
+      <div class="char-name">Mr Bean</div>
+      <div class="char-desc">Your mate. Questions, homework, fun.</div>
+    </div>
+    <div style="height: 8px;"></div>
+    <div class="char-card jarvis" onclick="selectChar('jarvis')">
+      <div class="char-emoji">🤖</div>
+      <div class="char-name">Jarvis</div>
+      <div class="char-desc">Your mentor. Growth, discipline, goals.</div>
+    </div>
+
+    <div class="sidebar-section" style="margin-top: 20px;">Navigate</div>
+    <button class="sidebar-btn active" data-view="chat"><span class="icon">💬</span> Chat</button>
+    <button class="sidebar-btn" data-view="tasks"><span class="icon">✅</span> My Tasks</button>
+    <button class="sidebar-btn" data-view="schedule"><span class="icon">📅</span> Today</button>
+    <button class="sidebar-btn" data-view="brain"><span class="icon">🧠</span> Brain Mode</button>
+  </div>
+
+  <!-- ═══════ MAIN AREA ═══════ -->
+  <div class="main-area">
+
+    <!-- ═══════ CHAT VIEW ═══════ -->
+    <div class="view active" id="view-chat">
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-bubble bean">
+          <div class="chat-sender">🐻 Mr Bean</div>
+          Hey William 👋 I'm Mr Bean — your AI. I'm here to help you remember stuff, answer questions, and make sure things don't get missed. Think of me as your brain backup. What's going on today?
+        </div>
+      </div>
+      <div class="input-area">
+        <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()">🎤</button>
+        <input type="text" id="msgInput" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter')sendMsg()">
+        <button class="send-btn bean-mode" id="sendBtn" onclick="sendMsg()">Send</button>
+      </div>
+    </div>
+
+    <!-- ═══════ TASKS VIEW ═══════ -->
+    <div class="view" id="view-tasks">
+      <div class="tasks-view">
+        <div class="task-section">
+          <div class="task-section-title">📚 DUE TODAY</div>
+          <div class="task-item" onclick="toggleTask(this)">
+            <div class="task-check">⬜</div>
+            <div class="task-info">
+              <div class="task-title">Maths — Fractions Worksheet</div>
+              <div class="task-due">Due: Tomorrow morning</div>
+            </div>
+            <div class="task-subject subj-maths">MATHS</div>
+          </div>
+        </div>
+        <div class="task-section">
+          <div class="task-section-title">📋 DUE THIS WEEK</div>
+          <div class="task-item" onclick="toggleTask(this)">
+            <div class="task-check">⬜</div>
+            <div class="task-info">
+              <div class="task-title">English — Narrative Draft</div>
+              <div class="task-due">Due: Wednesday</div>
+            </div>
+            <div class="task-subject subj-english">ENGLISH</div>
+          </div>
+          <div class="task-item" onclick="toggleTask(this)">
+            <div class="task-check">⬜</div>
+            <div class="task-info">
+              <div class="task-title">Science — Lab Report</div>
+              <div class="task-due">Due: Friday</div>
+            </div>
+            <div class="task-subject subj-science">SCIENCE</div>
+          </div>
+          <div class="task-item" onclick="toggleTask(this)">
+            <div class="task-check">⬜</div>
+            <div class="task-info">
+              <div class="task-title">History — Ancient Egypt Questions</div>
+              <div class="task-due">Due: Thursday</div>
+            </div>
+            <div class="task-subject subj-history">HISTORY</div>
+          </div>
+        </div>
+        <div class="task-section">
+          <div class="task-section-title">🏠 HOME</div>
+          <div class="task-item" onclick="toggleTask(this)">
+            <div class="task-check">⬜</div>
+            <div class="task-info">
+              <div class="task-title">Clean room</div>
+              <div class="task-due">Before dinner</div>
+            </div>
+          </div>
+        </div>
+        <div style="text-align: center; color: var(--muted); font-size: 12px; margin-top: 20px; padding: 16px; border: 1px dashed var(--border); border-radius: 12px;">
+          Tasks will sync with Mr Bean & Jarvis once connected.<br>Tell Mr Bean when you finish something!
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ SCHEDULE VIEW ═══════ -->
+    <div class="view" id="view-schedule">
+      <div class="schedule-view">
+        <div style="font-size: 18px; font-weight: 800; margin-bottom: 20px;">📅 Today's Schedule</div>
+        <div class="time-block">
+          <div class="time-label">5:30am</div>
+          <div class="time-content">
+            <div class="time-title">🌅 Wake Up + Morning Brain</div>
+            <div class="time-desc">Ask Mr Bean anything on your mind. Day brief incoming.</div>
+          </div>
+        </div>
+        <div class="time-block">
+          <div class="time-label">7:30am</div>
+          <div class="time-content">
+            <div class="time-title">🏫 School</div>
+            <div class="time-desc">Subjects TBC from Simon's timetable</div>
+          </div>
+        </div>
+        <div class="time-block">
+          <div class="time-label">3:30pm</div>
+          <div class="time-content active">
+            <div class="time-title">🏠 Home — 30 Min Free Time</div>
+            <div class="time-desc">Relax, YouTube, snack. Then Mr Bean checks in.</div>
+          </div>
+        </div>
+        <div class="time-block">
+          <div class="time-label">4:00pm</div>
+          <div class="time-content">
+            <div class="time-title">📚 Homework Time</div>
+            <div class="time-desc">Mr Bean guides. One thing at a time. You've got this.</div>
+          </div>
+        </div>
+        <div class="time-block">
+          <div class="time-label">6:00pm</div>
+          <div class="time-content">
+            <div class="time-title">🍽️ Dinner + Free Time</div>
+            <div class="time-desc">You earned it.</div>
+          </div>
+        </div>
+        <div class="time-block">
+          <div class="time-label">8:00pm</div>
+          <div class="time-content">
+            <div class="time-title">🤖 Jarvis Check-in</div>
+            <div class="time-desc">Quick goal review. What went well? What's tomorrow?</div>
+          </div>
+        </div>
+        <div class="time-block">
+          <div class="time-label">8:30pm</div>
+          <div class="time-content">
+            <div class="time-title">🌙 Wind Down</div>
+            <div class="time-desc">Screen off. Rest up.</div>
+          </div>
+        </div>
+        <div style="text-align: center; color: var(--muted); font-size: 12px; margin-top: 20px; padding: 16px; border: 1px dashed var(--border); border-radius: 12px;">
+          Times will be confirmed by Simon. This is a template.
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ BRAIN MODE ═══════ -->
+    <div class="view" id="view-brain">
+      <div class="brain-view">
+        <div style="font-size: 18px; font-weight: 800; margin-bottom: 8px;">🧠 Brain Mode</div>
+        <div style="font-size: 13px; color: var(--muted); margin-bottom: 20px;">Curious about something? Pick a topic or just ask Mr Bean anything.</div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="topic-card" onclick="askAbout('space')">
+            <div class="topic-emoji">🚀</div>
+            <div class="topic-title">Space & Universe</div>
+            <div class="topic-desc">Black holes, planets, stars, galaxies</div>
+          </div>
+          <div class="topic-card" onclick="askAbout('animals')">
+            <div class="topic-emoji">🦁</div>
+            <div class="topic-title">Animals & Nature</div>
+            <div class="topic-desc">Wild animals, ocean life, evolution</div>
+          </div>
+          <div class="topic-card" onclick="askAbout('tech')">
+            <div class="topic-emoji">🤖</div>
+            <div class="topic-title">Technology & AI</div>
+            <div class="topic-desc">How things work, robots, gaming tech</div>
+          </div>
+          <div class="topic-card" onclick="askAbout('history')">
+            <div class="topic-emoji">⚔️</div>
+            <div class="topic-title">History & Ancient World</div>
+            <div class="topic-desc">Egypt, Rome, warriors, civilisations</div>
+          </div>
+          <div class="topic-card" onclick="askAbout('science')">
+            <div class="topic-emoji">🔬</div>
+            <div class="topic-title">Science & Experiments</div>
+            <div class="topic-desc">Chemistry, physics, biology, cool facts</div>
+          </div>
+          <div class="topic-card" onclick="askAbout('random')">
+            <div class="topic-emoji">🎲</div>
+            <div class="topic-title">Random Question</div>
+            <div class="topic-desc">Ask literally anything</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let currentChar = 'bean';
+let isDiscreet = false;
+let healthLevel = 100;
+let messageCount = 0;
+
+// ═══════ HEALTH BAR SYSTEM ═══════
+// Simulates context window usage. In production, this reads from OpenClaw API.
+function updateHealthBar(level) {
+  healthLevel = Math.max(0, Math.min(100, level));
+  const fill = document.getElementById('healthFill');
+  const pct = document.getElementById('healthPct');
+  const status = document.getElementById('healthStatus');
+  const emoji = document.getElementById('healthEmoji');
+  const tip = document.getElementById('healthTip');
+  
+  fill.style.width = healthLevel + '%';
+  pct.textContent = healthLevel + '%';
+  
+  if (healthLevel > 70) {
+    // GREEN — Sharp
+    fill.style.background = 'linear-gradient(90deg, #2ECC40, #40E050)';
+    pct.style.color = '#2ECC40';
+    status.style.background = 'rgba(46,204,64,0.15)';
+    status.style.color = '#2ECC40';
+    status.textContent = '⚡ Sharp';
+    emoji.textContent = '🧠';
+    tip.style.display = 'none';
+  } else if (healthLevel > 40) {
+    // ORANGE — Getting Tired
+    fill.style.background = 'linear-gradient(90deg, #E8A444, #FFB830)';
+    pct.style.color = '#E8A444';
+    status.style.background = 'rgba(232,164,68,0.15)';
+    status.style.color = '#E8A444';
+    status.textContent = '😴 Tired';
+    emoji.textContent = '😴';
+    tip.style.display = 'block';
+    tip.textContent = '💡 Brain is getting full! Answers might be shorter. If things get weird, type "fresh start" to reset.';
+  } else if (healthLevel > 15) {
+    // RED — Running Low
+    fill.style.background = 'linear-gradient(90deg, #ff4444, #ff6666)';
+    pct.style.color = '#ff4444';
+    status.style.background = 'rgba(255,68,68,0.15)';
+    status.style.color = '#ff4444';
+    status.textContent = '🔋 Low';
+    emoji.textContent = '🥱';
+    tip.style.display = 'block';
+    tip.textContent = '⚠️ Brain is almost full. Might forget things or give weird answers. Type "fresh start" to reboot me!';
+  } else {
+    // CRITICAL — Needs Reset
+    fill.style.background = 'linear-gradient(90deg, #cc0000, #ff2222)';
+    pct.style.color = '#ff2222';
+    status.style.background = 'rgba(255,0,0,0.2)';
+    status.style.color = '#ff2222';
+    status.textContent = '💀 Empty';
+    emoji.textContent = '💀';
+    tip.style.display = 'block';
+    tip.textContent = '🚨 Brain is full! I need a reset. Type "fresh start" and I\'ll come back good as new.';
+  }
+}
+
+// Drain health as conversation goes on (simulate context usage)
+function drainHealth() {
+  messageCount++;
+  // Each exchange uses roughly 2-3% of context
+  // Long conversations = degraded performance
+  const drain = 2 + Math.random() * 1.5;
+  updateHealthBar(healthLevel - drain);
+}
+
+// Clock
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent = now.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
+}
+updateClock();
+setInterval(updateClock, 30000);
+
+// Navigation
+document.querySelectorAll('.sidebar-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('view-' + btn.dataset.view).classList.add('active');
+  });
+});
+
+// Character select
+function selectChar(char) {
+  currentChar = char;
+  document.querySelectorAll('.char-card').forEach(c => c.classList.remove('selected'));
+  document.querySelector('.char-card.' + char).classList.add('selected');
+  
+  const sendBtn = document.getElementById('sendBtn');
+  sendBtn.className = 'send-btn ' + char + '-mode';
+  
+  // Update placeholder
+  if (char === 'bean') {
+    document.getElementById('msgInput').placeholder = 'Ask Mr Bean anything...';
+  } else {
+    document.getElementById('msgInput').placeholder = 'Talk to Jarvis...';
+  }
+}
+
+// Send message
+function sendMsg() {
+  const input = document.getElementById('msgInput');
+  const text = input.value.trim();
+  if (!text) return;
+  
+  const messages = document.getElementById('chatMessages');
+  
+  // User bubble
+  const userBubble = document.createElement('div');
+  userBubble.className = 'chat-bubble user';
+  userBubble.textContent = text;
+  messages.appendChild(userBubble);
+  
+  input.value = '';
+  
+  // Drain health on each exchange
+  drainHealth();
+  
+  // Check for reset command
+  if (text.toLowerCase().includes('fresh start')) {
+    setTimeout(() => {
+      const resp = document.createElement('div');
+      resp.className = 'chat-bubble ' + currentChar;
+      if (currentChar === 'bean') {
+        resp.innerHTML = '<div class="chat-sender">🐻 Mr Bean</div>🔄 Rebooting brain... *whirring noises* ... I\'m back! Fresh and sharp. What were we doing? 🐻';
+      } else {
+        resp.innerHTML = '<div class="chat-sender">🤖 Jarvis</div>🔄 Systems refreshed. Full capacity restored. Where were we, William?';
+      }
+      messages.appendChild(resp);
+      messages.scrollTop = messages.scrollHeight;
+      healthLevel = 100;
+      messageCount = 0;
+      updateHealthBar(100);
+    }, 500);
+    return;
+  }
+  
+  // Simulated response
+  setTimeout(() => {
+    const resp = document.createElement('div');
+    resp.className = 'chat-bubble ' + currentChar;
+    if (currentChar === 'bean') {
+      resp.innerHTML = '<div class="chat-sender">🐻 Mr Bean</div>Good question, William. Let me think about that... This is where the real Mr Bean AI will respond via OpenClaw. For now I\'m just the UI shell! 🐻';
+    } else {
+      resp.innerHTML = '<div class="chat-sender">🤖 Jarvis</div>Noted. This is where the real Jarvis AI will respond via OpenClaw. The interface is ready — the intelligence comes next.';
+    }
+    messages.appendChild(resp);
+    messages.scrollTop = messages.scrollHeight;
+  }, 800);
+  
+  messages.scrollTop = messages.scrollHeight;
+}
+
+// Voice toggle
+function toggleVoice() {
+  const btn = document.getElementById('voiceBtn');
+  btn.classList.toggle('recording');
+  if (btn.classList.contains('recording')) {
+    btn.textContent = '🔴';
+  } else {
+    btn.textContent = '🎤';
+  }
+}
+
+// Discreet mode
+function toggleDiscreet() {
+  isDiscreet = !isDiscreet;
+  document.body.classList.toggle('discreet');
+  const btn = document.getElementById('discreetBtn');
+  if (isDiscreet) {
+    btn.textContent = '🌙 Dark Mode';
+    btn.classList.add('active');
+    document.querySelector('.top-bar .title').textContent = '📝 Study Helper';
+  } else {
+    btn.textContent = '🏫 School Mode';
+    btn.classList.remove('active');
+    document.querySelector('.top-bar .title').textContent = '🐻 William\'s HQ';
+  }
+}
+
+// Task toggle
+function toggleTask(el) {
+  const check = el.querySelector('.task-check');
+  if (check.classList.contains('done')) {
+    check.classList.remove('done');
+    check.textContent = '⬜';
+    el.style.opacity = '1';
+  } else {
+    check.classList.add('done');
+    check.textContent = '✅';
+    el.style.opacity = '0.6';
+  }
+}
+
+// Brain mode topics
+function askAbout(topic) {
+  // Switch to chat view
+  document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelector('[data-view="chat"]').classList.add('active');
+  document.getElementById('view-chat').classList.add('active');
+  
+  const topics = {
+    space: "Tell me something cool about black holes!",
+    animals: "What's the most dangerous animal in Australia?",
+    tech: "How does AI actually work?",
+    history: "What was the most powerful ancient civilisation?",
+    science: "What's the craziest science experiment ever?",
+    random: "Hit me with a random fact I won't believe!"
+  };
+  
+  document.getElementById('msgInput').value = topics[topic] || '';
+  document.getElementById('msgInput').focus();
+}
+</script>
+</body>
+</html>
