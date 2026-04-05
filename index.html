@@ -1039,6 +1039,11 @@ body.discreet .sos-modal p { color: #666; }
 </div>
 
 <script>
+// First launch → welcome experience
+if (!localStorage.getItem('welcomeSeen')) {
+  window.location.href = 'welcome.html';
+}
+
 let currentChar = 'bean';
 let isDiscreet = false;
 let healthLevel = 100;
