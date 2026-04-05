@@ -4,2302 +4,697 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>William's HQ</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Bangers&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #1a2744;
-  --card: #223366;
-  --border: #3355aa;
-  --text: #ffffff;
-  --muted: #99aadd;
-  --bean-orange: #FF9933;
-  --jarvis-blue: #55aaff;
-  --green: #44DD55;
+  --ocean: #1a2d5e;
+  --deep: #0f1d42;
+  --sky: #2a4488;
+  --gold: #FF9933;
   --cyan: #33DDDD;
+  --green: #44DD55;
   --red: #FF5555;
-  --warm-yellow: #FFD700;
-  --sky-blue: #55CCFF;
-  --sunset-pink: #FF7799;
-  --sea-green: #33CC99;
+  --blue: #55AAFF;
+  --pink: #FF7799;
+  --white: #ffffff;
+  --muted: #8899cc;
+  --card: #1e3068;
+  --border: #2d4488;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
   font-family: 'Inter', sans-serif;
-  background: linear-gradient(135deg, #1a2744 0%, #223366 25%, #2a4488 50%, #1a3355 75%, #1a2744 100%);
-  color: var(--text);
+  background: linear-gradient(180deg, #0f1d42 0%, #1a2d5e 50%, #0f1d42 100%);
+  color: var(--white);
   min-height: 100vh;
   overflow-x: hidden;
 }
 
-/* ═══════ HEALTH BAR ═══════ */
-.health-bar-container {
-  padding: 8px 20px;
-  background: var(--card);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.health-bar-label {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--muted);
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.health-bar-track {
-  flex: 1;
-  height: 12px;
-  background: rgba(255,255,255,0.06);
-  border-radius: 6px;
-  overflow: hidden;
-  position: relative;
-}
-.health-bar-fill {
-  height: 100%;
-  border-radius: 6px;
-  transition: width 1s ease, background 1s ease;
-  position: relative;
-}
-.health-bar-fill::after {
-  content: '';
-  position: absolute;
-  right: 0; top: 0;
-  width: 20px; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3));
-  border-radius: 0 6px 6px 0;
-}
-.health-pct {
-  font-size: 12px;
-  font-weight: 800;
-  min-width: 38px;
-  text-align: right;
-}
-.health-status {
-  font-size: 10px;
-  padding: 3px 10px;
-  border-radius: 10px;
-  font-weight: 700;
-  white-space: nowrap;
-}
-.health-tip {
-  font-size: 10px;
-  color: var(--muted);
-  text-align: center;
-  padding: 4px 20px;
-  background: var(--card);
+/* ═══ TOP BAR ═══ */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 54px;
+  background: linear-gradient(90deg, #1a2d5e, #223872, #1a2d5e);
   border-bottom: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px;
 }
-body.discreet .health-bar-container { background: #fff; border-bottom: 1px solid #e0e0e0; }
-body.discreet .health-bar-track { background: #e8e8e8; }
-body.discreet .health-tip { background: #fff; border-bottom: 1px solid #e0e0e0; color: #888; }
-body.discreet .health-bar-label { color: #888; }
-body.discreet .health-pct { color: #333; }
+.topbar-left { display: flex; align-items: center; gap: 10px; }
+.topbar-left img { width: 34px; height: 34px; border-radius: 10px; object-fit: cover; border: 2px solid var(--gold); }
+.topbar-title { font-family: 'Bangers', cursive; font-size: 22px; letter-spacing: 2px; color: var(--gold); }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.topbar-btn {
+  padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border);
+  background: rgba(255,255,255,0.05); color: var(--muted); font-size: 11px;
+  font-weight: 700; cursor: pointer; font-family: 'Inter';
+}
+.topbar-btn:hover { border-color: var(--cyan); color: var(--cyan); }
 
-/* ═══════ DISCREET MODE (for school) ═══════ */
-body.discreet {
-  --bg: #f5f5f5;
-  --card: #ffffff;
-  --border: #e0e0e0;
-  --text: #333;
-  --muted: #888;
+/* ═══ HEALTH BAR (slim) ═══ */
+.health-slim {
+  position: fixed; top: 54px; left: 0; right: 0; z-index: 99;
+  height: 20px; background: var(--deep);
+  display: flex; align-items: center; padding: 0 16px; gap: 8px;
+  border-bottom: 1px solid var(--border);
 }
-body.discreet .top-bar { background: #fff; border-bottom: 1px solid #e0e0e0; }
-body.discreet .top-bar .title { color: #333; }
-body.discreet .chat-bubble.bean { background: #fff3e0; color: #333; border: 1px solid #e0e0e0; }
-body.discreet .chat-bubble.jarvis { background: #e3f2fd; color: #333; border: 1px solid #e0e0e0; }
-body.discreet .chat-bubble.user { background: #e8e8e8; color: #333; }
-body.discreet .sidebar-btn { background: #fff; border: 1px solid #e0e0e0; color: #333; }
-body.discreet .sidebar-btn.active { background: #e3f2fd; border-color: #90caf9; }
-body.discreet .task-item { background: #fff; border: 1px solid #e0e0e0; }
-body.discreet .input-area { background: #fff; border-top: 1px solid #e0e0e0; }
-body.discreet .input-area input { background: #f5f5f5; color: #333; border: 1px solid #e0e0e0; }
+.health-slim .hl { font-size: 9px; color: var(--muted); font-weight: 700; }
+.health-slim .hbar { flex: 1; height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
+.health-slim .hfill { height: 100%; background: var(--green); border-radius: 3px; width: 100%; transition: width 1s; }
+.health-slim .hpct { font-size: 9px; color: var(--green); font-weight: 900; }
 
-/* ═══════ TOP BAR ═══════ */
-.top-bar {
-  height: 56px;
-  background: linear-gradient(90deg, #223366, #2a4488, #223366);
-  border-bottom: 2px solid #4477cc;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
+/* ═══ RECORDER BAR ═══ */
+.rec-bar {
+  position: fixed; top: 74px; left: 0; right: 0; z-index: 98;
+  height: 22px; background: var(--deep);
+  display: flex; align-items: center; padding: 0 16px; gap: 8px;
+  border-bottom: 1px solid var(--border); font-size: 10px;
 }
-.top-bar .title {
-  font-size: 18px;
-  font-weight: 800;
-  color: var(--text);
-}
-.top-bar .controls {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-.mode-toggle {
-  padding: 6px 14px;
-  border-radius: 20px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--muted);
-  font-size: 11px;
-  cursor: pointer;
-  font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  transition: all 0.2s;
-}
-.mode-toggle:hover { border-color: var(--cyan); color: var(--cyan); }
-.mode-toggle.active { background: var(--cyan); color: #000; border-color: var(--cyan); }
+.rec-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+.rec-dot.on { background: var(--red); animation: recPulse 1.5s infinite; }
+@keyframes recPulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
 
-/* ═══════ LAYOUT ═══════ */
-.app-layout {
-  display: flex;
-  margin-top: 88px;
-  height: calc(100vh - 88px);
-}
+/* ═══ MAIN LAYOUT ═══ */
+.main { margin-top: 96px; padding: 12px; min-height: calc(100vh - 96px); }
 
-/* ═══════ LEFT SIDEBAR ═══════ */
-.sidebar {
-  width: 260px;
-  background: linear-gradient(180deg, #223366, #1a2744);
-  border-right: 2px solid #3355aa;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  overflow-y: auto;
-  flex-shrink: 0;
+/* ═══ NAV TABS ═══ */
+.nav-tabs {
+  display: flex; gap: 6px; overflow-x: auto; padding-bottom: 12px;
+  -webkit-overflow-scrolling: touch;
 }
-.sidebar-section {
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--muted);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin: 12px 0 6px;
-}
-.sidebar-btn {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 14px;
-  border-radius: 12px;
-  background: transparent;
-  border: 2px solid transparent;
-  color: var(--muted);
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
+.nav-tab {
+  padding: 8px 16px; border-radius: 20px; border: 2px solid var(--border);
+  background: var(--card); color: var(--muted); font-size: 12px;
+  font-weight: 700; cursor: pointer; white-space: nowrap; font-family: 'Inter';
   transition: all 0.15s;
-  font-family: 'Inter', sans-serif;
-  text-align: left;
-  width: 100%;
 }
-.sidebar-btn:hover { background: rgba(255,255,255,0.05); color: var(--text); }
-.sidebar-btn.active { border-color: var(--cyan); color: #ffffff; background: linear-gradient(135deg, rgba(51,221,221,0.15), rgba(85,170,255,0.1)); }
-.sidebar-btn .icon { font-size: 20px; width: 28px; text-align: center; }
+.nav-tab:hover { border-color: var(--cyan); color: var(--white); }
+.nav-tab.active { background: var(--cyan); color: #000; border-color: var(--cyan); }
 
-/* Character select */
-.char-card {
-  padding: 16px;
-  border-radius: 16px;
+/* ═══ VIEWS ═══ */
+.view { display: none; }
+.view.active { display: block; }
+
+/* ═══ IMAGE CARD ═══ */
+.img-card {
+  border-radius: 20px; overflow: hidden; position: relative;
+  cursor: pointer; transition: transform 0.2s;
   border: 2px solid var(--border);
-  cursor: pointer;
-  transition: all 0.2s;
-  text-align: center;
 }
-.char-card:hover { transform: translateY(-2px); }
-.char-card.bean { border-color: var(--bean-orange); background: linear-gradient(135deg, rgba(255,153,51,0.12), rgba(255,215,0,0.05)); }
-.char-card.jarvis { border-color: var(--jarvis-blue); background: linear-gradient(135deg, rgba(85,170,255,0.12), rgba(51,221,221,0.05)); }
-.char-card.bean.selected { background: linear-gradient(135deg, rgba(255,153,51,0.25), rgba(255,215,0,0.1)); box-shadow: 0 0 25px rgba(255,153,51,0.3); }
-.char-card.jarvis.selected { background: linear-gradient(135deg, rgba(85,170,255,0.25), rgba(51,221,221,0.1)); box-shadow: 0 0 25px rgba(85,170,255,0.3); }
-.char-card .char-emoji { font-size: 40px; margin-bottom: 8px; }
-.char-card .char-name { font-size: 16px; font-weight: 700; }
-.char-card .char-desc { font-size: 11px; color: var(--muted); margin-top: 4px; }
-
-/* ═══════ MAIN AREA ═══════ */
-.main-area {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+.img-card:hover { transform: translateY(-3px); border-color: var(--cyan); }
+.img-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.img-card .overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(0deg, rgba(15,29,66,0.95) 15%, rgba(15,29,66,0) 60%);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 14px; pointer-events: none;
 }
+.img-card .overlay h3 { font-family: 'Bangers', cursive; font-size: 20px; letter-spacing: 1px; }
+.img-card .overlay p { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
-/* ═══════ VIEWS ═══════ */
-.view { display: none; flex: 1; flex-direction: column; overflow: hidden; }
-.view.active { display: flex; }
-
-/* ═══════ CHAT VIEW ═══════ */
-.chat-messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+/* ═══ HOME GRID ═══ */
+.home-grid {
+  display: grid; gap: 12px;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: minmax(140px, auto);
 }
+.home-grid .wide { grid-column: span 2; }
+.home-grid .tall { grid-row: span 2; }
+
+/* ═══ CHAT ═══ */
+.chat-wrap { display: flex; flex-direction: column; height: calc(100vh - 150px); }
+.chat-msgs { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding: 8px 0; }
+.chat-row { display: flex; gap: 8px; align-items: flex-start; animation: msgIn 0.3s ease; }
+.chat-row.user { flex-direction: row-reverse; }
+@keyframes msgIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+.chat-avatar { width: 36px; height: 36px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
 .chat-bubble {
-  max-width: 70%;
-  padding: 12px 16px;
-  border-radius: 16px;
-  font-size: 14px;
-  line-height: 1.5;
-  animation: msgIn 0.2s ease;
+  max-width: 75%; padding: 10px 14px; border-radius: 16px; font-size: 14px; line-height: 1.5;
 }
-@keyframes msgIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+.chat-bubble.bean { background: rgba(255,153,51,0.15); border: 2px solid rgba(255,153,51,0.3); border-bottom-left-radius: 4px; }
+.chat-bubble.jarvis { background: rgba(85,170,255,0.15); border: 2px solid rgba(85,170,255,0.3); border-bottom-left-radius: 4px; }
+.chat-bubble.user-msg { background: rgba(51,221,221,0.12); border: 2px solid rgba(51,221,221,0.2); border-bottom-right-radius: 4px; }
+.chat-sender { font-size: 11px; font-weight: 800; margin-bottom: 3px; }
+.bean .chat-sender { color: var(--gold); }
+.jarvis .chat-sender { color: var(--blue); }
+.chat-input {
+  display: flex; gap: 8px; padding: 12px 0;
+  border-top: 2px solid var(--border);
 }
-.chat-bubble.bean {
-  background: linear-gradient(135deg, rgba(255,153,51,0.2), rgba(255,215,0,0.1));
-  border: 2px solid rgba(255,153,51,0.4);
-  align-self: flex-start;
-  border-bottom-left-radius: 4px;
+.chat-input input {
+  flex: 1; padding: 12px 14px; border-radius: 14px; border: 2px solid var(--border);
+  background: var(--card); color: var(--white); font-size: 14px; font-family: 'Inter'; outline: none;
 }
-.chat-bubble.jarvis {
-  background: linear-gradient(135deg, rgba(85,170,255,0.2), rgba(51,221,221,0.1));
-  border: 2px solid rgba(85,170,255,0.4);
-  align-self: flex-start;
-  border-bottom-left-radius: 4px;
+.chat-input input:focus { border-color: var(--cyan); }
+.chat-input button {
+  padding: 12px 20px; border-radius: 14px; border: none; font-weight: 800;
+  font-size: 14px; cursor: pointer; font-family: 'Inter';
 }
-.chat-bubble.user {
-  background: linear-gradient(135deg, rgba(51,204,153,0.2), rgba(68,221,85,0.1));
-  border: 2px solid rgba(51,204,153,0.3);
-  align-self: flex-end;
-  border-bottom-right-radius: 4px;
-}
-.chat-sender {
-  font-size: 11px;
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-.bean .chat-sender { color: var(--bean-orange); }
-.jarvis .chat-sender { color: var(--jarvis-blue); }
+.send-bean { background: var(--gold); color: #000; }
+.send-jarvis { background: var(--blue); color: #fff; }
 
-.input-area {
-  padding: 16px 20px;
-  background: linear-gradient(90deg, #223366, #2a3d77);
-  border-top: 2px solid #4477cc;
-  display: flex;
-  gap: 10px;
-}
-.input-area input {
-  flex: 1;
-  padding: 12px 16px;
-  border-radius: 12px;
-  border: 2px solid var(--border);
-  background: var(--bg);
-  color: var(--text);
-  font-size: 14px;
-  font-family: 'Inter', sans-serif;
-  outline: none;
-}
-.input-area input:focus { border-color: var(--cyan); }
-.input-area button {
-  padding: 12px 24px;
-  border-radius: 12px;
-  border: none;
-  font-weight: 700;
-  font-size: 14px;
-  cursor: pointer;
-  font-family: 'Inter', sans-serif;
-  transition: all 0.15s;
-}
-.send-btn.bean-mode { background: var(--bean-orange); color: #000; }
-.send-btn.jarvis-mode { background: var(--jarvis-blue); color: #fff; }
-.voice-btn {
-  width: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255,255,255,0.05);
-  border: 2px solid var(--border);
-  border-radius: 12px;
-  font-size: 18px;
-  cursor: pointer;
-  color: var(--muted);
-}
-.voice-btn:hover { border-color: var(--cyan); color: var(--cyan); }
-.voice-btn.recording { background: rgba(255,68,68,0.2); border-color: var(--red); color: var(--red); animation: pulse-rec 1s infinite; }
-@keyframes pulse-rec {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(255,68,68,0.4); }
-  50% { box-shadow: 0 0 0 8px rgba(255,68,68,0); }
-}
-
-/* ═══════ TASKS VIEW ═══════ */
-.tasks-view {
-  padding: 20px;
-  overflow-y: auto;
-}
-.task-section {
-  margin-bottom: 24px;
-}
-.task-section-title {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--muted);
-  letter-spacing: 1px;
-  margin-bottom: 12px;
-}
+/* ═══ TASKS ═══ */
 .task-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  background: var(--card);
-  border: 2px solid var(--border);
-  border-radius: 12px;
-  margin-bottom: 8px;
-  cursor: pointer;
-  transition: all 0.15s;
+  display: flex; align-items: center; gap: 10px; padding: 12px 14px;
+  background: var(--card); border: 2px solid var(--border); border-radius: 14px;
+  margin-bottom: 8px; cursor: pointer; transition: all 0.15s;
 }
 .task-item:hover { border-color: var(--cyan); }
-.task-check {
-  width: 24px; height: 24px;
-  border-radius: 8px;
-  border: 2px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  flex-shrink: 0;
-  cursor: pointer;
-}
-.task-check.done { background: var(--green); border-color: var(--green); color: #000; }
-.task-info { flex: 1; }
+.task-check { width: 24px; height: 24px; border-radius: 8px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; }
+.task-check.done { background: var(--green); border-color: var(--green); }
 .task-title { font-size: 14px; font-weight: 600; }
-.task-due { font-size: 11px; color: var(--muted); margin-top: 2px; }
-.task-subject {
-  font-size: 10px;
-  font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 6px;
-  display: inline-block;
-}
-.subj-maths { background: rgba(68,136,255,0.2); color: var(--jarvis-blue); }
-.subj-english { background: rgba(232,164,68,0.2); color: var(--bean-orange); }
-.subj-science { background: rgba(46,204,64,0.2); color: var(--green); }
-.subj-history { background: rgba(200,49,42,0.2); color: var(--red); }
+.task-due { font-size: 11px; color: var(--muted); }
+.subj-tag { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 6px; }
 
-/* ═══════ SCHEDULE VIEW ═══════ */
-.schedule-view { padding: 20px; overflow-y: auto; }
-.time-block {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 12px;
-  align-items: flex-start;
+/* ═══ SCHEDULE ═══ */
+.time-block { display: flex; gap: 12px; margin-bottom: 10px; }
+.time-label { width: 60px; font-size: 12px; font-weight: 800; color: var(--muted); text-align: right; padding-top: 10px; flex-shrink: 0; }
+.time-card {
+  flex: 1; padding: 10px 14px; background: var(--card); border: 2px solid var(--border);
+  border-radius: 14px; display: flex; align-items: center; gap: 12px;
 }
-.time-label {
-  width: 70px;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--muted);
-  text-align: right;
-  padding-top: 12px;
-  flex-shrink: 0;
-}
-.time-content {
-  flex: 1;
-  padding: 12px 16px;
-  background: var(--card);
-  border: 2px solid var(--border);
-  border-radius: 12px;
-  font-size: 14px;
-}
-.time-content.active { border-color: var(--cyan); background: rgba(0,200,200,0.05); }
-.time-content .time-title { font-weight: 600; margin-bottom: 2px; }
-.time-content .time-desc { font-size: 12px; color: var(--muted); }
+.time-card img { width: 50px; height: 50px; border-radius: 10px; object-fit: cover; }
+.time-card.now { border-color: var(--cyan); background: rgba(51,221,221,0.08); }
 
-/* ═══════ BRAIN VIEW (Curiosity Mode) ═══════ */
-.brain-view { padding: 20px; overflow-y: auto; }
+/* ═══ BRAIN DUMP ═══ */
+.dump-input { display: flex; gap: 8px; margin-bottom: 14px; }
+.dump-input input {
+  flex: 1; padding: 12px 14px; border-radius: 14px; border: 2px solid var(--border);
+  background: var(--card); color: var(--white); font-size: 14px; font-family: 'Inter'; outline: none;
+}
+.dump-btn {
+  padding: 12px 18px; border-radius: 14px; border: none; background: var(--cyan);
+  color: #000; font-weight: 800; cursor: pointer; font-family: 'Inter';
+}
+
+/* ═══ XP ═══ */
+.xp-hero {
+  border-radius: 20px; overflow: hidden; position: relative; height: 200px;
+  margin-bottom: 16px;
+}
+.xp-hero img { width: 100%; height: 100%; object-fit: cover; }
+.xp-hero .xp-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(0deg, rgba(15,29,66,0.95) 30%, rgba(15,29,66,0.2) 100%);
+  display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; text-align: center;
+}
+.xp-title { font-family: 'Bangers', cursive; font-size: 32px; letter-spacing: 2px; }
+.xp-bar-wrap { height: 14px; background: rgba(255,255,255,0.08); border-radius: 7px; overflow: hidden; margin: 8px 0; }
+.xp-bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--cyan)); border-radius: 7px; transition: width 0.5s; }
+
+/* ═══ TOPIC CARD ═══ */
+.topic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .topic-card {
-  background: var(--card);
-  border: 2px solid var(--border);
-  border-radius: 16px;
-  padding: 20px;
-  margin-bottom: 12px;
-  cursor: pointer;
-  transition: all 0.2s;
+  border-radius: 16px; overflow: hidden; position: relative; height: 130px;
+  cursor: pointer; transition: transform 0.2s; border: 2px solid var(--border);
 }
-.topic-card:hover { border-color: var(--cyan); transform: translateY(-2px); }
-.topic-card .topic-emoji { font-size: 32px; margin-bottom: 8px; }
-.topic-card .topic-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
-.topic-card .topic-desc { font-size: 13px; color: var(--muted); }
+.topic-card:hover { transform: translateY(-3px); border-color: var(--cyan); }
+.topic-card img { width: 100%; height: 100%; object-fit: cover; }
+.topic-card .t-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(0deg, rgba(15,29,66,0.95) 20%, rgba(15,29,66,0) 70%);
+  display: flex; flex-direction: column; justify-content: flex-end; padding: 10px;
+  pointer-events: none;
+}
+.topic-card h4 { font-size: 14px; font-weight: 800; }
+.topic-card p { font-size: 10px; color: var(--muted); }
 
-/* ═══════ CLASS RECORDER ═══════ */
-.recorder-bar {
-  position: fixed;
-  top: 56px;
-  left: 260px;
-  right: 0;
-  height: 32px;
-  background: var(--card);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 16px;
-  z-index: 90;
-  font-size: 11px;
-}
-.recorder-bar.hidden { display: none; }
-.rec-left {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.rec-btn {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  border: 2px solid var(--border);
-  background: transparent;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-  font-size: 10px;
-  color: var(--muted);
-}
-.rec-btn:hover { border-color: var(--red); color: var(--red); }
-.rec-btn.recording {
-  border-color: var(--red);
-  background: var(--red);
-  color: white;
-  animation: rec-blink 1.5s infinite;
-}
-@keyframes rec-blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-.rec-status { color: var(--muted); font-weight: 500; }
-.rec-status.active { color: var(--red); font-weight: 700; }
-.rec-timer { font-family: monospace; color: var(--muted); font-size: 11px; }
-.rec-timer.active { color: var(--red); }
-.rec-right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.rec-save-btn {
-  padding: 3px 10px;
-  border-radius: 8px;
-  border: 1px solid var(--green);
-  background: rgba(46,204,64,0.1);
-  color: var(--green);
-  font-size: 10px;
-  font-weight: 700;
-  cursor: pointer;
-  font-family: 'Inter';
-  display: none;
-}
-.rec-save-btn.show { display: block; }
-.rec-count { color: var(--muted); font-size: 10px; }
-/* Discreet mode */
-body.discreet .recorder-bar { background: #fff; border-bottom: 1px solid #e0e0e0; }
-body.discreet .rec-status { color: #888; }
-body.discreet .rec-status.active { color: #cc0000; }
-body.discreet .rec-timer.active { color: #cc0000; }
-body.discreet .rec-btn.recording { background: #cc0000; border-color: #cc0000; }
-/* Responsive */
-@media (max-width: 600px) {
-  .recorder-bar { left: 0; }
-}
-
-/* ═══════ SOS BUTTON ═══════ */
+/* ═══ SOS ═══ */
 .sos-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: #ff2222;
-  border: 3px solid #ff6666;
-  color: white;
-  font-size: 12px;
-  font-weight: 900;
-  font-family: 'Inter', sans-serif;
-  cursor: pointer;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 20px rgba(255, 0, 0, 0.4);
-  animation: sos-pulse 3s infinite;
-  letter-spacing: 1px;
+  position: fixed; bottom: 16px; right: 16px; width: 52px; height: 52px;
+  border-radius: 50%; background: var(--red); border: 2px solid #ff8888;
+  color: white; font-size: 11px; font-weight: 900; cursor: pointer;
+  z-index: 9999; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 20px rgba(255,0,0,0.3); font-family: 'Inter';
 }
-.sos-btn:hover { transform: scale(1.1); }
-@keyframes sos-pulse {
-  0%, 100% { box-shadow: 0 4px 20px rgba(255, 0, 0, 0.3); }
-  50% { box-shadow: 0 4px 30px rgba(255, 0, 0, 0.6); }
-}
-body.discreet .sos-btn { background: #cc0000; border-color: #dd4444; }
+.sos-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:10000; align-items:center; justify-content:center; }
+.sos-overlay.active { display:flex; }
+.sos-modal { background:var(--card); border:3px solid var(--red); border-radius:24px; padding:28px; max-width:360px; width:90%; text-align:center; }
 
-/* SOS Modal */
-.sos-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.85);
-  z-index: 10000;
-  align-items: center;
-  justify-content: center;
-}
-.sos-overlay.active { display: flex; }
-.sos-modal {
-  background: #1a1a2e;
-  border: 3px solid #ff2222;
-  border-radius: 24px;
-  padding: 32px;
-  max-width: 380px;
-  width: 90%;
-  text-align: center;
-}
-body.discreet .sos-modal { background: #fff; border-color: #cc0000; color: #333; }
-.sos-modal h2 {
-  color: #ff2222;
-  font-size: 24px;
-  margin-bottom: 8px;
-}
-.sos-modal p {
-  color: #aaa;
-  font-size: 13px;
-  margin-bottom: 20px;
-}
-body.discreet .sos-modal p { color: #666; }
-.sos-contact {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-.sos-contact a {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  border-radius: 14px;
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 15px;
-  transition: all 0.15s;
-}
-.sos-call {
-  background: rgba(46,204,64,0.15);
-  border: 2px solid #2ECC40;
-  color: #2ECC40;
-}
-.sos-call:hover { background: rgba(46,204,64,0.3); }
-.sos-text {
-  background: rgba(68,136,255,0.15);
-  border: 2px solid #4488ff;
-  color: #4488ff;
-}
-.sos-text:hover { background: rgba(68,136,255,0.3); }
-.sos-email {
-  background: rgba(232,164,68,0.15);
-  border: 2px solid #E8A444;
-  color: #E8A444;
-}
-.sos-email:hover { background: rgba(232,164,68,0.3); }
-.sos-cancel {
-  padding: 10px 24px;
-  border-radius: 12px;
-  border: 2px solid #444;
-  background: transparent;
-  color: #888;
-  font-weight: 600;
-  font-size: 13px;
-  cursor: pointer;
-  font-family: 'Inter';
-}
-.sos-cancel:hover { border-color: #888; color: #ccc; }
-.sos-confirm-step { display: none; }
-.sos-confirm-step.active { display: block; }
+/* ═══ SCHOOL MODE ═══ */
+body.discreet { background: #f0f2f5; color: #333; }
+body.discreet .topbar { background: #fff; border-bottom: 1px solid #ddd; }
+body.discreet .topbar-title { color: #333; font-family: 'Inter'; font-size: 16px; }
+body.discreet .nav-tab { background: #fff; border-color: #ddd; color: #888; }
+body.discreet .nav-tab.active { background: #e3f2fd; color: #1976d2; border-color: #90caf9; }
+body.discreet .img-card, body.discreet .topic-card { display: none; }
+body.discreet .task-item { background: #fff; border-color: #ddd; }
+body.discreet .chat-bubble { background: #f5f5f5; border-color: #ddd; color: #333; }
+body.discreet .chat-input input { background: #fff; border-color: #ddd; color: #333; }
+body.discreet .sos-btn { background: #cc0000; }
 
-/* ═══════ FUN STUFF ═══════ */
-/* Floating characters in background */
-.floater {
-  position: fixed;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0;
-  animation: floatUp linear forwards;
-}
-@keyframes floatUp {
-  0% { transform: translateY(100vh) rotate(0deg) scale(0.8); opacity: 0; }
-  10% { opacity: 0.15; }
-  50% { transform: translateY(50vh) rotate(10deg) scale(1); opacity: 0.12; }
-  90% { opacity: 0.08; }
-  100% { transform: translateY(-100px) rotate(-5deg) scale(0.9); opacity: 0; }
-}
+/* ═══ FLOATERS ═══ */
+.floater { position:fixed; pointer-events:none; z-index:0; opacity:0; animation: floatUp 20s linear forwards; }
+@keyframes floatUp { 0%{transform:translateY(100vh) rotate(0);opacity:0;} 10%{opacity:0.12;} 90%{opacity:0.08;} 100%{transform:translateY(-80px) rotate(10deg);opacity:0;} }
 
-/* Animated gradient border on active card */
-.char-card.selected {
-  animation: borderGlow 3s ease-in-out infinite;
-}
-@keyframes borderGlow {
-  0%, 100% { box-shadow: 0 0 15px rgba(232,164,68,0.2); }
-  50% { box-shadow: 0 0 30px rgba(0,200,200,0.3); }
-}
-.char-card.jarvis.selected {
-  animation: borderGlowBlue 3s ease-in-out infinite;
-}
-@keyframes borderGlowBlue {
-  0%, 100% { box-shadow: 0 0 15px rgba(68,136,255,0.2); }
-  50% { box-shadow: 0 0 30px rgba(68,136,255,0.4); }
-}
-
-/* Fun hover effects on sidebar */
-.sidebar-btn:hover .icon {
-  display: inline-block;
-  animation: wiggle 0.5s ease;
-}
-@keyframes wiggle {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-10deg); }
-  75% { transform: rotate(10deg); }
-}
-
-/* Chat bubble animation */
-.chat-bubble {
-  animation: msgBounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-@keyframes msgBounce {
-  from { opacity: 0; transform: translateY(20px) scale(0.9); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-/* Task complete celebration */
-.task-item.celebrating {
-  animation: taskDone 0.6s ease;
-}
-@keyframes taskDone {
-  0% { transform: scale(1); }
-  30% { transform: scale(1.05); background: rgba(46,204,64,0.1); }
-  100% { transform: scale(1); }
-}
-
-/* XP popup */
-.xp-popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 32px;
-  font-weight: 900;
-  color: var(--green);
-  pointer-events: none;
-  z-index: 9998;
-  animation: xpPop 1.5s ease forwards;
-  text-shadow: 0 0 20px rgba(46,204,64,0.5);
-}
-@keyframes xpPop {
-  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
-  30% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
-  60% { opacity: 1; transform: translate(-50%, -60%) scale(1); }
-  100% { opacity: 0; transform: translate(-50%, -150%) scale(0.8); }
-}
-
-/* Confetti */
-@keyframes confettiBurst {
-  0% { opacity: 1; transform: translateY(0) translateX(0) rotate(0deg) scale(1); }
-  100% { opacity: 0; transform: translateY(-200px) translateX(calc(-100px + 200px * var(--r, 0.5))) rotate(360deg) scale(0.3); }
-}
-
-/* ═══════ RESPONSIVE (tablet/laptop) ═══════ */
-@media (max-width: 768px) {
-  .sidebar { width: 200px; }
-  .chat-bubble { max-width: 85%; }
-}
-@media (max-width: 600px) {
-  .sidebar { display: none; }
-  .top-bar .title { font-size: 14px; }
-}
+/* ═══ XP POPUP ═══ */
+.xp-popup { position:fixed; top:45%; left:50%; transform:translate(-50%,-50%); font-size:28px; font-weight:900; color:var(--green); pointer-events:none; z-index:9998; animation:xpPop 1.5s ease forwards; text-shadow:0 0 20px rgba(68,221,85,0.5); font-family:'Bangers',cursive; letter-spacing:2px; }
+@keyframes xpPop { 0%{opacity:0;transform:translate(-50%,-50%) scale(0.5);} 30%{opacity:1;transform:translate(-50%,-50%) scale(1.2);} 100%{opacity:0;transform:translate(-50%,-120%) scale(0.8);} }
 </style>
 </head>
 <body>
 
-<!-- ═══════ TOP BAR ═══════ -->
-<div class="top-bar">
-  <div class="title">🐻 William's HQ</div>
-  <div class="controls">
-    <button class="mode-toggle" onclick="toggleDiscreet()" id="discreetBtn">🏫 School Mode</button>
-    <span style="font-size: 12px; color: var(--muted);" id="clock"></span>
+<!-- ═══ TOP BAR ═══ -->
+<div class="topbar">
+  <div class="topbar-left">
+    <img src="assets/mrbean-avatar.jpg" id="topAvatar">
+    <div class="topbar-title">WILLIAM'S HQ</div>
+  </div>
+  <div class="topbar-right">
+    <button class="topbar-btn" onclick="toggleDiscreet()" id="modeBtn">🏫</button>
+    <span style="font-size:11px; color:var(--muted);" id="clock"></span>
   </div>
 </div>
 
-<!-- ═══════ HEALTH BAR ═══════ -->
-<div class="health-bar-container" id="healthBar">
-  <div class="health-bar-label"><span id="healthEmoji">🧠</span> Brain Energy</div>
-  <div class="health-bar-track">
-    <div class="health-bar-fill" id="healthFill" style="width: 100%; background: linear-gradient(90deg, #2ECC40, #40E050);"></div>
-  </div>
-  <div class="health-pct" id="healthPct" style="color: #2ECC40;">100%</div>
-  <div class="health-status" id="healthStatus" style="background: rgba(46,204,64,0.15); color: #2ECC40;">⚡ Sharp</div>
+<!-- ═══ HEALTH BAR ═══ -->
+<div class="health-slim">
+  <span class="hl">🧠</span>
+  <div class="hbar"><div class="hfill" id="healthFill"></div></div>
+  <span class="hpct" id="healthPct">100%</span>
 </div>
-<div class="health-tip" id="healthTip" style="display: none;"></div>
 
-<!-- ═══════ APP LAYOUT ═══════ -->
-<div class="app-layout">
+<!-- ═══ RECORDER ═══ -->
+<div class="rec-bar">
+  <div class="rec-dot" id="recDot"></div>
+  <span style="color:var(--muted);" id="recStatus">Ready</span>
+  <span style="color:var(--muted); margin-left:auto;" id="recWeek"></span>
+</div>
 
-  <!-- ═══════ SIDEBAR ═══════ -->
-  <div class="sidebar">
-    <!-- Character Select -->
-    <div class="sidebar-section">Talk To</div>
-    <div class="char-card bean selected" onclick="selectChar('bean'); switchToChat();" style="cursor: pointer; background-image: url('assets/mrbean-full.jpg'); background-size: cover; background-position: center; min-height: 140px; position: relative; overflow: hidden;">
-      <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.95) 30%, rgba(20,34,82,0.3) 100%); pointer-events: none;"></div>
-      <div style="position: relative; z-index: 1; margin-top: auto; padding-top: 60px; pointer-events: none;">
-        <div class="char-name" style="font-size: 18px;">Mr Bean</div>
-        <div class="char-desc">Your mate 🐻</div>
-      </div>
-    </div>
-    <div style="height: 8px;"></div>
-    <div class="char-card jarvis" onclick="selectChar('jarvis'); switchToChat();" style="cursor: pointer; background-image: url('assets/jarvis-avatar.jpg'); background-size: cover; background-position: center; min-height: 140px; position: relative; overflow: hidden;">
-      <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.95) 30%, rgba(20,34,82,0.3) 100%); pointer-events: none;"></div>
-      <div style="position: relative; z-index: 1; margin-top: auto; padding-top: 60px; pointer-events: none;">
-        <div class="char-name" style="font-size: 18px;">Jarvis</div>
-        <div class="char-desc">Your mentor 🤖</div>
-      </div>
-    </div>
+<!-- ═══ MAIN ═══ -->
+<div class="main">
 
-    <div class="sidebar-section" style="margin-top: 20px;">Navigate</div>
-    <button class="sidebar-btn active" data-view="chat"><span class="icon">💬</span> Chat</button>
-    <button class="sidebar-btn" data-view="tasks"><span class="icon">✅</span> My Tasks</button>
-    <button class="sidebar-btn" data-view="schedule"><span class="icon">📅</span> Today</button>
-    <button class="sidebar-btn" data-view="brain"><span class="icon">🧠</span> Brain Mode</button>
-    <button class="sidebar-btn" data-view="dump"><span class="icon">💭</span> Brain Dump</button>
-    <button class="sidebar-btn" data-view="xp"><span class="icon">🎮</span> My Level</button>
-    <button class="sidebar-btn" data-view="challenge"><span class="icon">⚡</span> Challenges</button>
+  <!-- NAV -->
+  <div class="nav-tabs">
+    <div class="nav-tab active" data-view="home">🏠 Home</div>
+    <div class="nav-tab" data-view="chat">💬 Chat</div>
+    <div class="nav-tab" data-view="tasks">✅ Tasks</div>
+    <div class="nav-tab" data-view="schedule">📅 Today</div>
+    <div class="nav-tab" data-view="brain">🧠 Brain</div>
+    <div class="nav-tab" data-view="dump">💭 Dump</div>
+    <div class="nav-tab" data-view="xp">🎮 Level</div>
+    <div class="nav-tab" data-view="games">⚡ Games</div>
   </div>
 
-  <!-- ═══════ MAIN AREA ═══════ -->
-  <div class="main-area">
+  <!-- ═══ HOME VIEW ═══ -->
+  <div class="view active" id="view-home">
+    <div class="home-grid">
+      <!-- Hero: Talk to Mr Bean -->
+      <div class="img-card wide" style="height:180px;" onclick="goChat('bean')">
+        <img src="assets/mrbean-onepiece-captain.jpg">
+        <div class="overlay">
+          <h3>💬 Talk to Mr Bean</h3>
+          <p>Your mate. Ask anything. Get help. Have fun.</p>
+        </div>
+      </div>
+      <!-- Talk to Jarvis -->
+      <div class="img-card" style="height:160px;" onclick="goChat('jarvis')">
+        <img src="assets/jarvis-avatar.jpg">
+        <div class="overlay">
+          <h3>🤖 Jarvis</h3>
+          <p>Your mentor</p>
+        </div>
+      </div>
+      <!-- Brain Games -->
+      <div class="img-card" style="height:160px;" onclick="goView('games')">
+        <img src="assets/mrbean-superbean.jpg">
+        <div class="overlay">
+          <h3>⚡ Brain Games</h3>
+          <p>Train your brain</p>
+        </div>
+      </div>
+      <!-- Today's Schedule -->
+      <div class="img-card" style="height:140px;" onclick="goView('schedule')">
+        <img src="assets/mrbean-bike.jpg">
+        <div class="overlay">
+          <h3>📅 Today</h3>
+          <p>Your schedule</p>
+        </div>
+      </div>
+      <!-- Tasks -->
+      <div class="img-card" style="height:140px;" onclick="goView('tasks')">
+        <img src="assets/mrbean-maths.jpg">
+        <div class="overlay">
+          <h3>✅ Tasks</h3>
+          <p>Homework & chores</p>
+        </div>
+      </div>
+      <!-- Brain Dump -->
+      <div class="img-card" onclick="goView('dump')">
+        <img src="assets/mrbean-comic-artist.jpg">
+        <div class="overlay">
+          <h3>💭 Brain Dump</h3>
+          <p>Quick thoughts</p>
+        </div>
+      </div>
+      <!-- My Level -->
+      <div class="img-card" onclick="goView('xp')">
+        <img src="assets/mrbean-pirate-captain.jpg">
+        <div class="overlay">
+          <h3>🎮 My Level</h3>
+          <p>XP & streaks</p>
+        </div>
+      </div>
+      <!-- Brain Mode -->
+      <div class="img-card wide" style="height:140px;" onclick="goView('brain')">
+        <img src="assets/mrbean-onepiece.jpg">
+        <div class="overlay">
+          <h3>🧠 Brain Mode</h3>
+          <p>Curious about something? Explore it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <!-- ═══════ CHAT VIEW ═══════ -->
-    <div class="view active" id="view-chat">
-      <div class="chat-messages" id="chatMessages">
-        <div style="display: flex; gap: 10px; align-items: flex-start;">
-          <img src="assets/mrbean-avatar.jpg" style="width: 36px; height: 36px; border-radius: 10px; object-fit: cover; border: 2px solid var(--bean-orange); flex-shrink: 0;">
+  <!-- ═══ CHAT VIEW ═══ -->
+  <div class="view" id="view-chat">
+    <div style="display:flex; gap:8px; margin-bottom:12px;">
+      <div class="img-card" style="flex:1; height:70px;" onclick="selectChar('bean')" id="chatBean">
+        <img src="assets/mrbean-avatar.jpg"><div class="overlay"><h3 style="font-size:16px;">🐻 Mr Bean</h3></div>
+      </div>
+      <div class="img-card" style="flex:1; height:70px;" onclick="selectChar('jarvis')" id="chatJarvis">
+        <img src="assets/jarvis-avatar.jpg"><div class="overlay"><h3 style="font-size:16px;">🤖 Jarvis</h3></div>
+      </div>
+    </div>
+    <div class="chat-wrap">
+      <div class="chat-msgs" id="chatMessages">
+        <div class="chat-row">
+          <img src="assets/mrbean-avatar.jpg" class="chat-avatar" style="border:2px solid var(--gold);">
           <div class="chat-bubble bean">
             <div class="chat-sender">🐻 Mr Bean</div>
-            Hey William 👋 I'm Mr Bean — your AI. I'm here to help you remember stuff, answer questions, and make sure things don't get missed. Think of me as your brain backup. What's going on today?
+            Hey William 👋 What's going on?
           </div>
         </div>
       </div>
-      <div class="input-area">
-        <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()">🎤</button>
+      <div class="chat-input">
         <input type="text" id="msgInput" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter')sendMsg()">
-        <button class="send-btn bean-mode" id="sendBtn" onclick="sendMsg()">Send</button>
+        <button class="send-bean" id="sendBtn" onclick="sendMsg()">Send</button>
       </div>
     </div>
-
-    <!-- ═══════ TASKS VIEW ═══════ -->
-    <div class="view" id="view-tasks">
-      <div class="tasks-view">
-        <!-- Subject banner -->
-        <div style="border-radius: 16px; overflow: hidden; margin-bottom: 16px; position: relative; height: 100px; background-image: url('assets/mrbean-maths.jpg'); background-size: cover; background-position: center top;">
-          <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.95) 15%, rgba(20,34,82,0.2) 100%); display: flex; align-items: flex-end; padding: 14px;">
-            <div style="font-size: 18px; font-weight: 900;">✅ My Tasks</div>
-          </div>
-        </div>
-
-        <div class="task-section">
-          <div class="task-section-title">📚 DUE TODAY</div>
-          <div class="task-item" onclick="toggleTask(this)">
-            <div class="task-check">⬜</div>
-            <div class="task-info">
-              <div class="task-title">Maths — Fractions Worksheet</div>
-              <div class="task-due">Due: Tomorrow morning</div>
-            </div>
-            <div class="task-subject subj-maths">MATHS</div>
-          </div>
-        </div>
-        <div class="task-section">
-          <div class="task-section-title">📋 DUE THIS WEEK</div>
-          <div class="task-item" onclick="toggleTask(this)">
-            <div class="task-check">⬜</div>
-            <div class="task-info">
-              <div class="task-title">English — Narrative Draft</div>
-              <div class="task-due">Due: Wednesday</div>
-            </div>
-            <div class="task-subject subj-english">ENGLISH</div>
-          </div>
-          <div class="task-item" onclick="toggleTask(this)">
-            <div class="task-check">⬜</div>
-            <div class="task-info">
-              <div class="task-title">Science — Lab Report</div>
-              <div class="task-due">Due: Friday</div>
-            </div>
-            <div class="task-subject subj-science">SCIENCE</div>
-          </div>
-          <div class="task-item" onclick="toggleTask(this)">
-            <div class="task-check">⬜</div>
-            <div class="task-info">
-              <div class="task-title">History — Ancient Egypt Questions</div>
-              <div class="task-due">Due: Thursday</div>
-            </div>
-            <div class="task-subject subj-history">HISTORY</div>
-          </div>
-        </div>
-        <div class="task-section">
-          <div class="task-section-title">🏠 HOME</div>
-          <div class="task-item" onclick="toggleTask(this)">
-            <div class="task-check">⬜</div>
-            <div class="task-info">
-              <div class="task-title">Clean room</div>
-              <div class="task-due">Before dinner</div>
-            </div>
-          </div>
-        </div>
-        <div style="text-align: center; color: var(--muted); font-size: 12px; margin-top: 20px; padding: 16px; border: 1px dashed var(--border); border-radius: 12px;">
-          Tasks will sync with Mr Bean & Jarvis once connected.<br>Tell Mr Bean when you finish something!
-        </div>
-      </div>
-    </div>
-
-    <!-- ═══════ SCHEDULE VIEW ═══════ -->
-    <div class="view" id="view-schedule">
-      <div class="schedule-view">
-        <div style="border-radius: 16px; overflow: hidden; margin-bottom: 16px; position: relative; height: 120px; background-image: url('assets/mrbean-onepiece-captain.jpg'); background-size: cover; background-position: center;">
-          <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.95) 20%, rgba(20,34,82,0.2) 100%); display: flex; align-items: flex-end; padding: 16px;">
-            <div style="font-size: 20px; font-weight: 900;">📅 Today's Schedule</div>
-          </div>
-        </div>
-        <div class="time-block">
-          <div class="time-label">5:30am</div>
-          <div class="time-content">
-            <div class="time-title">🌅 Wake Up + Morning Brain</div>
-            <div class="time-desc">Ask Mr Bean anything on your mind. Day brief incoming.</div>
-          </div>
-        </div>
-        <div class="time-block">
-          <div class="time-label">7:30am</div>
-          <div class="time-content">
-            <div class="time-title">🏫 School</div>
-            <div class="time-desc">Subjects TBC from Simon's timetable</div>
-          </div>
-        </div>
-        <div class="time-block">
-          <div class="time-label">3:30pm</div>
-          <div class="time-content active">
-            <div class="time-title">🏠 Home — 30 Min Free Time</div>
-            <div class="time-desc">Relax, YouTube, snack. Then Mr Bean checks in.</div>
-          </div>
-        </div>
-        <div class="time-block">
-          <div class="time-label">4:00pm</div>
-          <div class="time-content">
-            <div class="time-title">📚 Homework Time</div>
-            <div class="time-desc">Mr Bean guides. One thing at a time. You've got this.</div>
-          </div>
-        </div>
-        <div class="time-block">
-          <div class="time-label">6:00pm</div>
-          <div class="time-content">
-            <div class="time-title">🍽️ Dinner + Free Time</div>
-            <div class="time-desc">You earned it.</div>
-          </div>
-        </div>
-        <div class="time-block">
-          <div class="time-label">8:00pm</div>
-          <div class="time-content">
-            <div class="time-title">🤖 Jarvis Check-in</div>
-            <div class="time-desc">Quick goal review. What went well? What's tomorrow?</div>
-          </div>
-        </div>
-        <div class="time-block">
-          <div class="time-label">8:30pm</div>
-          <div class="time-content">
-            <div class="time-title">🌙 Wind Down</div>
-            <div class="time-desc">Screen off. Rest up.</div>
-          </div>
-        </div>
-        <div style="text-align: center; color: var(--muted); font-size: 12px; margin-top: 20px; padding: 16px; border: 1px dashed var(--border); border-radius: 12px;">
-          Times will be confirmed by Simon. This is a template.
-        </div>
-      </div>
-    </div>
-
-    <!-- ═══════ CHALLENGES VIEW ═══════ -->
-    <div class="view" id="view-challenge">
-      <div style="padding: 20px; overflow-y: auto; height: 100%;">
-        <div style="border-radius: 16px; overflow: hidden; margin-bottom: 12px; position: relative; height: 100px; background-image: url('assets/mrbean-superbean.jpg'); background-size: cover; background-position: center top;">
-          <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.95) 15%, rgba(20,34,82,0.2) 100%); display: flex; align-items: flex-end; padding: 14px;">
-            <div style="font-size: 18px; font-weight: 800;">⚡ Daily Challenges</div>
-          </div>
-        </div>
-        <div style="font-size: 13px; color: var(--muted); margin-bottom: 20px;">Train your brain. Level up. Become Pirate King.</div>
-
-        <!-- Today's Challenges -->
-        <div id="challengeCards"></div>
-
-        <!-- Mini Games -->
-        <div style="font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 1px; margin-bottom: 12px; margin-top: 20px;">🎮 BRAIN GAMES</div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px;">
-          <a href="games/memory-grid.html" style="text-decoration: none; background: var(--card); border: 2px solid var(--border); border-radius: 14px; padding: 16px; text-align: center; transition: all 0.2s; display: block;" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)'">
-            <div style="font-size: 28px; margin-bottom: 6px;">🧩</div>
-            <div style="font-size: 13px; font-weight: 700; color: var(--text);">Memory Grid</div>
-            <div style="font-size: 10px; color: var(--muted); margin-top: 2px;">Pattern recall</div>
-          </a>
-          <a href="games/speed-match.html" style="text-decoration: none; background: var(--card); border: 2px solid var(--border); border-radius: 14px; padding: 16px; text-align: center; transition: all 0.2s; display: block;" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)'">
-            <div style="font-size: 28px; margin-bottom: 6px;">⚡</div>
-            <div style="font-size: 13px; font-weight: 700; color: var(--text);">Speed Match</div>
-            <div style="font-size: 10px; color: var(--muted); margin-top: 2px;">Processing speed</div>
-          </a>
-          <a href="games/colour-switch.html" style="text-decoration: none; background: var(--card); border: 2px solid var(--border); border-radius: 14px; padding: 16px; text-align: center; transition: all 0.2s; display: block;" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)'">
-            <div style="font-size: 28px; margin-bottom: 6px;">🎨</div>
-            <div style="font-size: 13px; font-weight: 700; color: var(--text);">Colour Switch</div>
-            <div style="font-size: 10px; color: var(--muted); margin-top: 2px;">Focus & inhibition</div>
-          </a>
-        </div>
-
-        <!-- Stats -->
-        <div style="background: var(--card); border: 2px solid var(--border); border-radius: 16px; padding: 16px; margin-top: 16px;">
-          <div style="font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 1px; margin-bottom: 8px;">YOUR BRAIN STATS</div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <div style="text-align: center; padding: 12px; background: var(--bg); border-radius: 10px;">
-              <div style="font-size: 20px; font-weight: 900; color: var(--cyan);" id="statChallenges">0</div>
-              <div style="font-size: 10px; color: var(--muted);">Challenges Done</div>
-            </div>
-            <div style="text-align: center; padding: 12px; background: var(--bg); border-radius: 10px;">
-              <div style="font-size: 20px; font-weight: 900; color: var(--green);" id="statAccuracy">-%</div>
-              <div style="font-size: 10px; color: var(--muted);">Accuracy</div>
-            </div>
-            <div style="text-align: center; padding: 12px; background: var(--bg); border-radius: 10px;">
-              <div style="font-size: 20px; font-weight: 900; color: var(--bean-orange);" id="statStreak">0</div>
-              <div style="font-size: 10px; color: var(--muted);">Day Streak</div>
-            </div>
-            <div style="text-align: center; padding: 12px; background: var(--bg); border-radius: 10px;">
-              <div style="font-size: 20px; font-weight: 900; color: var(--jarvis-blue);" id="statBest">-</div>
-              <div style="font-size: 10px; color: var(--muted);">Best Category</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ═══════ XP / LEVEL VIEW ═══════ -->
-    <div class="view" id="view-xp">
-      <div style="padding: 20px; overflow-y: auto; height: 100%;">
-        <!-- Level Card -->
-        <div style="text-align: center; padding: 24px; background: var(--card); border: 2px solid var(--border); border-radius: 20px; margin-bottom: 16px;">
-          <div style="width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 8px; overflow: hidden; border: 3px solid var(--bean-orange);"><img src="assets/mrbean-pirate-captain.jpg" style="width: 100%; height: 100%; object-fit: cover;"></div>
-          <div style="font-size: 28px; font-weight: 900;" id="xpTitle">Recruit</div>
-          <div style="font-size: 14px; color: var(--muted); margin-top: 4px;">Level <span id="xpLevel">1</span></div>
-          <div style="margin: 16px auto; max-width: 300px;">
-            <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 4px;">
-              <span id="xpCurrent">0 XP</span>
-              <span id="xpNext">100 XP to next</span>
-            </div>
-            <div style="height: 16px; background: rgba(255,255,255,0.06); border-radius: 8px; overflow: hidden;">
-              <div id="xpBar" style="height: 100%; background: linear-gradient(90deg, var(--bean-orange), var(--cyan)); border-radius: 8px; transition: width 0.5s; width: 0%;"></div>
-            </div>
-          </div>
-          <div style="font-size: 12px; color: var(--cyan);" id="xpToday">+0 XP today</div>
-        </div>
-
-        <!-- Streaks -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px;">
-          <div style="background: var(--card); border: 2px solid var(--border); border-radius: 14px; padding: 14px; text-align: center;">
-            <div style="font-size: 24px;">🔥</div>
-            <div style="font-size: 22px; font-weight: 900;" id="streakHomework">0</div>
-            <div style="font-size: 10px; color: var(--muted);">Homework Streak</div>
-          </div>
-          <div style="background: var(--card); border: 2px solid var(--border); border-radius: 14px; padding: 14px; text-align: center;">
-            <div style="font-size: 24px;">🐻</div>
-            <div style="font-size: 22px; font-weight: 900;" id="streakMorning">0</div>
-            <div style="font-size: 10px; color: var(--muted);">Morning Streak</div>
-          </div>
-          <div style="background: var(--card); border: 2px solid var(--border); border-radius: 14px; padding: 14px; text-align: center;">
-            <div style="font-size: 24px;">🤖</div>
-            <div style="font-size: 22px; font-weight: 900;" id="streakJarvis">0</div>
-            <div style="font-size: 10px; color: var(--muted);">Jarvis Streak</div>
-          </div>
-        </div>
-
-        <!-- Level Map -->
-        <div style="background: var(--card); border: 2px solid var(--border); border-radius: 16px; padding: 16px;">
-          <div style="font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 1px; margin-bottom: 12px;">THE GRAND LINE 🌊</div>
-          <div id="levelMap"></div>
-        </div>
-
-        <!-- Recent XP -->
-        <div style="background: var(--card); border: 2px solid var(--border); border-radius: 16px; padding: 16px; margin-top: 16px;">
-          <div style="font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 1px; margin-bottom: 12px;">RECENT XP</div>
-          <div id="xpHistory" style="font-size: 13px; color: var(--muted);">Complete tasks to earn XP!</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ═══════ BRAIN DUMP ═══════ -->
-    <div class="view" id="view-dump">
-      <div style="padding: 20px; display: flex; flex-direction: column; height: 100%;">
-        <div style="border-radius: 16px; overflow: hidden; margin-bottom: 12px; position: relative; height: 90px; background-image: url('assets/mrbean-comic-artist.jpg'); background-size: cover; background-position: center;">
-          <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.95) 15%, rgba(20,34,82,0.2) 100%); display: flex; align-items: flex-end; padding: 14px;">
-            <div style="font-size: 18px; font-weight: 800;">💭 Brain Dump</div>
-          </div>
-        </div>
-        <div style="font-size: 13px; color: var(--muted); margin-bottom: 16px;">Random thought? Question? Idea? Type it here. Mr Bean and Jarvis will see it when you get home.</div>
-        
-        <div style="display: flex; gap: 8px; margin-bottom: 16px;">
-          <input type="text" id="dumpInput" placeholder="What's on your mind?" style="flex: 1; padding: 12px 16px; border-radius: 12px; border: 2px solid var(--border); background: var(--bg); color: var(--text); font-size: 14px; font-family: 'Inter'; outline: none;" onkeydown="if(event.key==='Enter')addDump()">
-          <button onclick="addDump()" style="padding: 12px 20px; border-radius: 12px; border: none; background: var(--cyan); color: #000; font-weight: 700; font-size: 14px; cursor: pointer; font-family: 'Inter'; white-space: nowrap;">💭 Dump</button>
-        </div>
-        
-        <div id="dumpList" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;"></div>
-        
-        <div style="text-align: center; color: var(--muted); font-size: 11px; margin-top: 12px; padding: 8px;" id="dumpHint">
-          💡 Quick dump during class — Mr Bean will ask about these when you get home
-        </div>
-      </div>
-    </div>
-
-    <!-- ═══════ BRAIN MODE ═══════ -->
-    <div class="view" id="view-brain">
-      <div class="brain-view">
-        <div style="border-radius: 16px; overflow: hidden; margin-bottom: 12px; position: relative; height: 100px; background-image: url('assets/mrbean-robotics.jpg'); background-size: cover; background-position: center;">
-          <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.95) 20%, rgba(20,34,82,0.2) 100%); display: flex; align-items: flex-end; padding: 14px;">
-            <div style="font-size: 18px; font-weight: 800;">🧠 Brain Mode</div>
-          </div>
-        </div>
-        <div style="font-size: 13px; color: var(--muted); margin-bottom: 20px;">Curious about something? Pick a topic or just ask Mr Bean anything.</div>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-          <div class="topic-card" onclick="askAbout('space')" style="background-image: url('assets/mrbean-onepiece-sea-king.jpg'); background-size: cover; background-position: center; position: relative; overflow: hidden;">
-            <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.9) 30%, rgba(20,34,82,0.3) 100%); pointer-events: none;"></div>
-            <div style="position: relative; z-index: 1;">
-              <div class="topic-title">Space & Universe</div>
-              <div class="topic-desc">Black holes, planets, stars, galaxies</div>
-            </div>
-          </div>
-          <div class="topic-card" onclick="askAbout('animals')" style="background-image: url('assets/mrbean-golden-retriever.jpg'); background-size: cover; background-position: center; position: relative; overflow: hidden;">
-            <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.9) 30%, rgba(20,34,82,0.3) 100%); pointer-events: none;"></div>
-            <div style="position: relative; z-index: 1;">
-              <div class="topic-title">Animals & Nature</div>
-              <div class="topic-desc">Wild animals, ocean life, evolution</div>
-            </div>
-          </div>
-          <div class="topic-card" onclick="askAbout('tech')" style="background-image: url('assets/mrbean-robotics.jpg'); background-size: cover; background-position: center; position: relative; overflow: hidden;">
-            <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.9) 30%, rgba(20,34,82,0.3) 100%); pointer-events: none;"></div>
-            <div style="position: relative; z-index: 1;">
-              <div class="topic-title">Technology & AI</div>
-              <div class="topic-desc">How things work, robots, gaming tech</div>
-            </div>
-          </div>
-          <div class="topic-card" onclick="askAbout('history')" style="background-image: url('assets/mrbean-pirate-captain.jpg'); background-size: cover; background-position: center; position: relative; overflow: hidden;">
-            <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.9) 30%, rgba(20,34,82,0.3) 100%); pointer-events: none;"></div>
-            <div style="position: relative; z-index: 1;">
-              <div class="topic-title">History & Ancient World</div>
-              <div class="topic-desc">Egypt, Rome, warriors, civilisations</div>
-            </div>
-          </div>
-          <div class="topic-card" onclick="askAbout('science')" style="background-image: url('assets/mrbean-compounding.jpg'); background-size: cover; background-position: center; position: relative; overflow: hidden;">
-            <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.9) 30%, rgba(20,34,82,0.3) 100%); pointer-events: none;"></div>
-            <div style="position: relative; z-index: 1;">
-              <div class="topic-title">Science & Experiments</div>
-              <div class="topic-desc">Chemistry, physics, biology, cool facts</div>
-            </div>
-          </div>
-          <div class="topic-card" onclick="askAbout('random')" style="background-image: url('assets/mrbean-onepiece.jpg'); background-size: cover; background-position: center; position: relative; overflow: hidden;">
-            <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.9) 30%, rgba(20,34,82,0.3) 100%); pointer-events: none;"></div>
-            <div style="position: relative; z-index: 1;">
-              <div class="topic-title">Random Question</div>
-              <div class="topic-desc">Ask literally anything</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </div>
+
+  <!-- ═══ TASKS VIEW ═══ -->
+  <div class="view" id="view-tasks">
+    <div class="img-card wide" style="height:100px; margin-bottom:14px;">
+      <img src="assets/mrbean-maths.jpg"><div class="overlay"><h3>✅ My Tasks</h3></div>
+    </div>
+    <div style="font-size:12px; font-weight:800; color:var(--muted); letter-spacing:1px; margin-bottom:8px;">DUE TODAY</div>
+    <div class="task-item" onclick="toggleTask(this)">
+      <div class="task-check">⬜</div>
+      <div style="flex:1;"><div class="task-title">Maths — Fractions Worksheet</div><div class="task-due">Due: Tomorrow</div></div>
+      <div class="subj-tag" style="background:rgba(85,170,255,0.2);color:var(--blue);">MATHS</div>
+    </div>
+    <div style="font-size:12px; font-weight:800; color:var(--muted); letter-spacing:1px; margin:14px 0 8px;">THIS WEEK</div>
+    <div class="task-item" onclick="toggleTask(this)">
+      <div class="task-check">⬜</div>
+      <div style="flex:1;"><div class="task-title">English — Narrative Draft</div><div class="task-due">Due: Wednesday</div></div>
+      <div class="subj-tag" style="background:rgba(255,153,51,0.2);color:var(--gold);">ENGLISH</div>
+    </div>
+    <div class="task-item" onclick="toggleTask(this)">
+      <div class="task-check">⬜</div>
+      <div style="flex:1;"><div class="task-title">Science — Lab Report</div><div class="task-due">Due: Friday</div></div>
+      <div class="subj-tag" style="background:rgba(68,221,85,0.2);color:var(--green);">SCIENCE</div>
+    </div>
+    <div class="task-item" onclick="toggleTask(this)">
+      <div class="task-check">⬜</div>
+      <div style="flex:1;"><div class="task-title">History — Ancient Egypt</div><div class="task-due">Due: Thursday</div></div>
+      <div class="subj-tag" style="background:rgba(255,119,153,0.2);color:var(--pink);">HISTORY</div>
+    </div>
+  </div>
+
+  <!-- ═══ SCHEDULE VIEW ═══ -->
+  <div class="view" id="view-schedule">
+    <div class="img-card wide" style="height:100px; margin-bottom:14px;">
+      <img src="assets/mrbean-onepiece-captain.jpg"><div class="overlay"><h3>📅 Today's Schedule</h3></div>
+    </div>
+    <div class="time-block"><div class="time-label">5:30am</div><div class="time-card"><img src="assets/mrbean-cooking.jpg"><div><div class="task-title">🌅 Morning Brain</div><div class="task-due">Ask Mr Bean anything</div></div></div></div>
+    <div class="time-block"><div class="time-label">7:50am</div><div class="time-card"><img src="assets/mrbean-maths.jpg"><div><div class="task-title">🏫 School</div><div class="task-due">Auto-recording active</div></div></div></div>
+    <div class="time-block"><div class="time-label">3:00pm</div><div class="time-card"><img src="assets/mrbean-golden-retriever.jpg"><div><div class="task-title">🏠 Free Time</div><div class="task-due">Relax. Walk the dog. You earned it.</div></div></div></div>
+    <div class="time-block"><div class="time-label">3:30pm</div><div class="time-card"><img src="assets/mrbean-avatar.jpg"><div><div class="task-title">🐻 Check-in</div><div class="task-due">Mr Bean: "What's happening?"</div></div></div></div>
+    <div class="time-block"><div class="time-label">4:00pm</div><div class="time-card"><img src="assets/mrbean-maths.jpg"><div><div class="task-title">📚 Homework</div><div class="task-due">One thing at a time. You got this.</div></div></div></div>
+    <div class="time-block"><div class="time-label">8:00pm</div><div class="time-card"><img src="assets/jarvis-avatar.jpg"><div><div class="task-title">🤖 Jarvis Check-in</div><div class="task-due">What went well? What's tomorrow?</div></div></div></div>
+    <div class="time-block"><div class="time-label">8:30pm</div><div class="time-card"><img src="assets/mrbean-70s80s-vinyl.jpg"><div><div class="task-title">🌙 Wind Down</div><div class="task-due">Music, chill, prep for tomorrow</div></div></div></div>
+  </div>
+
+  <!-- ═══ BRAIN MODE ═══ -->
+  <div class="view" id="view-brain">
+    <div class="img-card wide" style="height:100px; margin-bottom:14px;">
+      <img src="assets/mrbean-robotics.jpg"><div class="overlay"><h3>🧠 Brain Mode</h3><p>Tap a topic. Explore with Mr Bean.</p></div>
+    </div>
+    <div class="topic-grid">
+      <div class="topic-card" onclick="askTopic('space')"><img src="assets/mrbean-onepiece-sea-king.jpg"><div class="t-overlay"><h4>🚀 Space</h4><p>Black holes, stars, galaxies</p></div></div>
+      <div class="topic-card" onclick="askTopic('animals')"><img src="assets/mrbean-golden-retriever.jpg"><div class="t-overlay"><h4>🐕 Animals</h4><p>Your dog, wildlife, ocean</p></div></div>
+      <div class="topic-card" onclick="askTopic('tech')"><img src="assets/mrbean-3dprinting.jpg"><div class="t-overlay"><h4>🤖 Tech</h4><p>Robots, gaming, coding</p></div></div>
+      <div class="topic-card" onclick="askTopic('history')"><img src="assets/mrbean-pirate-captain.jpg"><div class="t-overlay"><h4>⚔️ History</h4><p>Ancient world, pirates</p></div></div>
+      <div class="topic-card" onclick="askTopic('science')"><img src="assets/mrbean-compounding.jpg"><div class="t-overlay"><h4>🔬 Science</h4><p>Chemistry, experiments</p></div></div>
+      <div class="topic-card" onclick="askTopic('cooking')"><img src="assets/mrbean-cooking.jpg"><div class="t-overlay"><h4>🍳 Cooking</h4><p>Recipes, food science</p></div></div>
+      <div class="topic-card" onclick="askTopic('art')"><img src="assets/mrbean-art.jpg"><div class="t-overlay"><h4>🎨 Art</h4><p>Drawing, comics, design</p></div></div>
+      <div class="topic-card" onclick="askTopic('random')"><img src="assets/mrbean-onepiece.jpg"><div class="t-overlay"><h4>🎲 Random</h4><p>Hit me with anything!</p></div></div>
+    </div>
+  </div>
+
+  <!-- ═══ BRAIN DUMP ═══ -->
+  <div class="view" id="view-dump">
+    <div class="img-card wide" style="height:90px; margin-bottom:14px;">
+      <img src="assets/mrbean-comic-artist.jpg"><div class="overlay"><h3>💭 Brain Dump</h3><p>Drop a thought. Mr Bean will find it later.</p></div>
+    </div>
+    <div class="dump-input">
+      <input type="text" id="dumpInput" placeholder="What's on your mind?" onkeydown="if(event.key==='Enter')addDump()">
+      <button class="dump-btn" onclick="addDump()">💭</button>
+    </div>
+    <div id="dumpList"></div>
+  </div>
+
+  <!-- ═══ XP / LEVEL ═══ -->
+  <div class="view" id="view-xp">
+    <div class="xp-hero">
+      <img src="assets/mrbean-pirate-captain.jpg">
+      <div class="xp-overlay">
+        <div class="xp-title" id="xpTitle">Recruit</div>
+        <div style="font-size:13px; color:var(--muted);">Level <span id="xpLevel">1</span></div>
+        <div class="xp-bar-wrap"><div class="xp-bar-fill" id="xpBar" style="width:0%;"></div></div>
+        <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--muted);"><span id="xpCurrent">0 XP</span><span id="xpNext">100 XP to next</span></div>
+      </div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:14px;">
+      <div style="background:var(--card); border:2px solid var(--border); border-radius:14px; padding:12px; text-align:center;">
+        <div style="font-size:22px; font-weight:900;" id="streakHomework">0</div><div style="font-size:10px; color:var(--muted);">🔥 Homework</div>
+      </div>
+      <div style="background:var(--card); border:2px solid var(--border); border-radius:14px; padding:12px; text-align:center;">
+        <div style="font-size:22px; font-weight:900;" id="streakMorning">0</div><div style="font-size:10px; color:var(--muted);">🐻 Morning</div>
+      </div>
+      <div style="background:var(--card); border:2px solid var(--border); border-radius:14px; padding:12px; text-align:center;">
+        <div style="font-size:22px; font-weight:900;" id="streakJarvis">0</div><div style="font-size:10px; color:var(--muted);">🤖 Jarvis</div>
+      </div>
+    </div>
+    <div style="background:var(--card); border:2px solid var(--border); border-radius:16px; padding:14px;">
+      <div style="font-size:11px; font-weight:800; color:var(--muted); letter-spacing:1px; margin-bottom:8px;">THE GRAND LINE 🌊</div>
+      <div id="levelMap"></div>
+    </div>
+  </div>
+
+  <!-- ═══ GAMES ═══ -->
+  <div class="view" id="view-games">
+    <div class="img-card wide" style="height:100px; margin-bottom:14px;">
+      <img src="assets/mrbean-superbean.jpg"><div class="overlay"><h3>⚡ Brain Games</h3><p>Train like a pirate. Think like a navigator.</p></div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
+      <a href="games/memory-grid.html" class="img-card" style="height:150px; text-decoration:none;">
+        <img src="assets/mrbean-art.jpg"><div class="overlay"><h3>🧩 Memory</h3><p>Pattern recall</p></div>
+      </a>
+      <a href="games/speed-match.html" class="img-card" style="height:150px; text-decoration:none;">
+        <img src="assets/mrbean-jiujitsu.jpg"><div class="overlay"><h3>⚡ Speed</h3><p>Quick matching</p></div>
+      </a>
+      <a href="games/colour-switch.html" class="img-card" style="height:150px; text-decoration:none;">
+        <img src="assets/mrbean-music-cooking.jpg"><div class="overlay"><h3>🎨 Colour</h3><p>Focus training</p></div>
+      </a>
+    </div>
+  </div>
+
 </div>
 
-<!-- ═══════ CLASS RECORDER BAR ═══════ -->
-<div class="recorder-bar" id="recorderBar">
-  <div class="rec-left">
-    <button class="rec-btn" id="recBtn" onclick="toggleRecording()" title="Record class">●</button>
-    <span class="rec-status" id="recStatus">Starting...</span>
-    <span class="rec-timer" id="recTimer">00:00</span>
-  </div>
-  <div class="rec-right">
-    <span class="rec-count" id="recCount"></span>
-    <span style="font-size: 10px; color: var(--muted);" id="recWeek"></span>
-  </div>
-</div>
-
-<!-- ═══════ SOS BUTTON ═══════ -->
-<button class="sos-btn" onclick="openSOS()" title="Emergency">SOS</button>
-
-<!-- ═══════ SOS MODAL ═══════ -->
+<!-- ═══ SOS ═══ -->
+<button class="sos-btn" onclick="openSOS()">SOS</button>
 <div class="sos-overlay" id="sosOverlay">
   <div class="sos-modal">
-    <!-- Step 1: Confirm -->
-    <div class="sos-confirm-step active" id="sosStep1">
-      <h2>🚨 SOS</h2>
-      <p>This will contact your parents and Uncle Adam.<br><strong>Only use for real emergencies.</strong></p>
-      <div style="display: flex; gap: 12px; justify-content: center;">
-        <button onclick="activateSOS()" style="padding: 14px 32px; border-radius: 14px; border: none; background: #ff2222; color: white; font-weight: 800; font-size: 16px; cursor: pointer; font-family: 'Inter';">🚨 YES, I NEED HELP</button>
-        <button class="sos-cancel" onclick="closeSOS()">Cancel</button>
+    <div id="sosStep1">
+      <div style="font-size:28px; font-weight:900; color:var(--red);">🚨 SOS</div>
+      <p style="color:var(--muted); font-size:13px; margin:12px 0;">This contacts your parents and Uncle Adam.<br><strong>Real emergencies only.</strong></p>
+      <div style="display:flex; gap:10px; justify-content:center;">
+        <button onclick="activateSOS()" style="padding:14px 28px; border-radius:14px; border:none; background:var(--red); color:#fff; font-weight:900; font-size:15px; cursor:pointer; font-family:'Inter';">🚨 I NEED HELP</button>
+        <button onclick="closeSOS()" style="padding:14px 20px; border-radius:14px; border:2px solid var(--border); background:transparent; color:var(--muted); font-weight:600; cursor:pointer; font-family:'Inter';">Cancel</button>
       </div>
     </div>
-    <!-- Step 2: Contacts -->
-    <div class="sos-confirm-step" id="sosStep2">
-      <h2>🚨 Help is coming</h2>
-      <p>Tap to call, text, or email. Everyone has been notified.</p>
-      <div class="sos-contact">
-        <a href="tel:0433296915" class="sos-call">📞 Call Dad (Simon)</a>
-        <a href="tel:ANNETTE_PHONE" class="sos-call">📞 Call Mum (Annette)</a>
-        <a href="tel:ADAM_PHONE" class="sos-call">📞 Call Uncle Adam</a>
-        <a href="tel:0299694151" class="sos-call">📞 Call Pharmacy (TCPA)</a>
+    <div id="sosStep2" style="display:none;">
+      <div style="font-size:20px; font-weight:900; color:var(--red); margin-bottom:12px;">🚨 Help is coming</div>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <a href="tel:0433296915" style="display:block; padding:12px; border-radius:12px; background:rgba(68,221,85,0.15); border:2px solid var(--green); color:var(--green); text-decoration:none; font-weight:800; text-align:center;">📞 Call Dad</a>
+        <a href="tel:ANNETTE_PHONE" style="display:block; padding:12px; border-radius:12px; background:rgba(68,221,85,0.15); border:2px solid var(--green); color:var(--green); text-decoration:none; font-weight:800; text-align:center;">📞 Call Mum</a>
+        <a href="tel:ADAM_PHONE" style="display:block; padding:12px; border-radius:12px; background:rgba(85,170,255,0.15); border:2px solid var(--blue); color:var(--blue); text-decoration:none; font-weight:800; text-align:center;">📞 Call Uncle Adam</a>
+        <a href="mailto:info@tcpa.com.au?subject=SOS%20from%20William&body=Emergency%20alert" style="display:block; padding:12px; border-radius:12px; background:rgba(255,153,51,0.15); border:2px solid var(--gold); color:var(--gold); text-decoration:none; font-weight:800; text-align:center;">📧 Email Pharmacy</a>
       </div>
-      <div class="sos-contact">
-        <a href="sms:0433296915&body=SOS%20from%20William%20-%20I%20need%20help%20right%20now" class="sos-text">📱 Text Dad</a>
-        <a href="sms:ANNETTE_PHONE&body=SOS%20from%20William%20-%20I%20need%20help%20right%20now" class="sos-text">📱 Text Mum</a>
-        <a href="sms:ADAM_PHONE&body=SOS%20from%20William%20-%20I%20need%20help%20right%20now" class="sos-text">📱 Text Uncle Adam</a>
+      <div style="margin-top:12px; padding:10px; background:rgba(68,221,85,0.1); border:1px solid var(--green); border-radius:10px; font-size:12px; color:var(--green);">
+        Danger? Call <a href="tel:000" style="color:var(--green); font-weight:900;">000</a>
       </div>
-      <div class="sos-contact">
-        <a href="mailto:info@tcpa.com.au?subject=SOS%20from%20William%20Reinhard&body=William%20pressed%20the%20emergency%20SOS%20button.%20Please%20check%20on%20him%20immediately.%20This%20is%20an%20automated%20alert." class="sos-email">📧 Email Pharmacy (TCPA)</a>
-      </div>
-      <div style="margin-top: 16px; padding: 12px; background: rgba(46,204,64,0.1); border: 1px solid #2ECC40; border-radius: 10px; font-size: 12px; color: #2ECC40;">
-        ✅ If you're in danger, call <a href="tel:000" style="color: #2ECC40; font-weight: 800;">000</a> (police/ambulance/fire)
-      </div>
-      <button class="sos-cancel" onclick="closeSOS()" style="margin-top: 16px;">Close</button>
+      <button onclick="closeSOS()" style="margin-top:12px; padding:8px 20px; border-radius:10px; border:1px solid var(--border); background:transparent; color:var(--muted); cursor:pointer; font-family:'Inter';">Close</button>
     </div>
   </div>
 </div>
 
 <script>
-// ═══ FUN: Floating characters ═══
-const FUN_FLOATERS = ['🐻','🧸','👒','🍖','🦌','🏴‍☠️','⚓','🌊','🍳','🎵','🐕','🎹','🎨','🥋','🗡️','🎯','🔧','📖','⭐','🌟'];
-function spawnFloater() {
-  const el = document.createElement('div');
-  el.className = 'floater';
-  el.textContent = FUN_FLOATERS[Math.floor(Math.random() * FUN_FLOATERS.length)];
-  el.style.left = (5 + Math.random() * 85) + 'vw';
-  el.style.fontSize = (24 + Math.random() * 20) + 'px';
-  const d = 15 + Math.random() * 15;
-  el.style.animationDuration = d + 's';
-  document.body.appendChild(el);
-  setTimeout(() => el.remove(), d * 1000);
-}
-setInterval(spawnFloater, 5000 + Math.random() * 4000);
-setTimeout(spawnFloater, 2000);
-setTimeout(spawnFloater, 4000);
+// First launch
+if (!localStorage.getItem('welcomeSeen')) { window.location.href = 'welcome.html'; }
 
-// XP popup effect
-function showXPPopup(amount) {
-  const el = document.createElement('div');
-  el.className = 'xp-popup';
-  el.textContent = '+' + amount + ' XP ⚡';
-  document.body.appendChild(el);
-  setTimeout(() => el.remove(), 1600);
-}
-
-// First launch → welcome experience
-if (!localStorage.getItem('welcomeSeen')) {
-  window.location.href = 'welcome.html';
-}
-
-let currentChar = 'bean';
-let isDiscreet = false;
-let healthLevel = 100;
-let messageCount = 0;
-
-// ═══════ HEALTH BAR SYSTEM ═══════
-// Simulates context window usage. In production, this reads from OpenClaw API.
-function updateHealthBar(level) {
-  healthLevel = Math.max(0, Math.min(100, level));
-  const fill = document.getElementById('healthFill');
-  const pct = document.getElementById('healthPct');
-  const status = document.getElementById('healthStatus');
-  const emoji = document.getElementById('healthEmoji');
-  const tip = document.getElementById('healthTip');
-  
-  fill.style.width = healthLevel + '%';
-  pct.textContent = healthLevel + '%';
-  
-  if (healthLevel > 70) {
-    // GREEN — Sharp
-    fill.style.background = 'linear-gradient(90deg, #2ECC40, #40E050)';
-    pct.style.color = '#2ECC40';
-    status.style.background = 'rgba(46,204,64,0.15)';
-    status.style.color = '#2ECC40';
-    status.textContent = '⚡ Sharp';
-    emoji.textContent = '🧠';
-    tip.style.display = 'none';
-  } else if (healthLevel > 40) {
-    // ORANGE — Getting Tired
-    fill.style.background = 'linear-gradient(90deg, #E8A444, #FFB830)';
-    pct.style.color = '#E8A444';
-    status.style.background = 'rgba(232,164,68,0.15)';
-    status.style.color = '#E8A444';
-    status.textContent = '😴 Tired';
-    emoji.textContent = '😴';
-    tip.style.display = 'block';
-    tip.textContent = '💡 Brain is getting full! Answers might be shorter. If things get weird, type "fresh start" to reset.';
-  } else if (healthLevel > 15) {
-    // RED — Running Low
-    fill.style.background = 'linear-gradient(90deg, #ff4444, #ff6666)';
-    pct.style.color = '#ff4444';
-    status.style.background = 'rgba(255,68,68,0.15)';
-    status.style.color = '#ff4444';
-    status.textContent = '🔋 Low';
-    emoji.textContent = '🥱';
-    tip.style.display = 'block';
-    tip.textContent = '⚠️ Brain is almost full. Might forget things or give weird answers. Type "fresh start" to reboot me!';
-  } else {
-    // CRITICAL — Needs Reset
-    fill.style.background = 'linear-gradient(90deg, #cc0000, #ff2222)';
-    pct.style.color = '#ff2222';
-    status.style.background = 'rgba(255,0,0,0.2)';
-    status.style.color = '#ff2222';
-    status.textContent = '💀 Empty';
-    emoji.textContent = '💀';
-    tip.style.display = 'block';
-    tip.textContent = '🚨 Brain is full! I need a reset. Type "fresh start" and I\'ll come back good as new.';
-  }
-}
-
-// Drain health as conversation goes on (simulate context usage)
-function drainHealth() {
-  messageCount++;
-  // Each exchange uses roughly 2-3% of context
-  // Long conversations = degraded performance
-  const drain = 2 + Math.random() * 1.5;
-  updateHealthBar(healthLevel - drain);
-}
-
-// Clock
-function updateClock() {
-  const now = new Date();
-  document.getElementById('clock').textContent = now.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
-}
-updateClock();
-setInterval(updateClock, 30000);
-
-// Navigation
-document.querySelectorAll('.sidebar-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+// ═══ NAV ═══
+document.querySelectorAll('.nav-tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.nav-tab').forEach(x => x.classList.remove('active'));
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('view-' + btn.dataset.view).classList.add('active');
+    t.classList.add('active');
+    document.getElementById('view-' + t.dataset.view).classList.add('active');
   });
 });
-
-// Switch to chat view
-function switchToChat() {
-  document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.querySelector('[data-view="chat"]').classList.add('active');
-  document.getElementById('view-chat').classList.add('active');
-  document.getElementById('msgInput').focus();
+function goView(v) {
+  document.querySelectorAll('.nav-tab').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(x => x.classList.remove('active'));
+  const tab = document.querySelector('[data-view="'+v+'"]');
+  if (tab) tab.classList.add('active');
+  document.getElementById('view-' + v).classList.add('active');
 }
+function goChat(char) { selectChar(char); goView('chat'); }
 
-// Character select
+// ═══ CHAR SELECT ═══
+let currentChar = 'bean';
 function selectChar(char) {
   currentChar = char;
-  document.querySelectorAll('.char-card').forEach(c => c.classList.remove('selected'));
-  document.querySelector('.char-card.' + char).classList.add('selected');
-  
-  const sendBtn = document.getElementById('sendBtn');
-  sendBtn.className = 'send-btn ' + char + '-mode';
-  
-  // Update placeholder
-  if (char === 'bean') {
-    document.getElementById('msgInput').placeholder = 'Ask Mr Bean anything...';
-  } else {
-    document.getElementById('msgInput').placeholder = 'Talk to Jarvis...';
-  }
+  document.getElementById('topAvatar').src = char === 'bean' ? 'assets/mrbean-avatar.jpg' : 'assets/jarvis-avatar.jpg';
+  document.getElementById('sendBtn').className = char === 'bean' ? 'send-bean' : 'send-jarvis';
+  document.getElementById('msgInput').placeholder = char === 'bean' ? 'Ask Mr Bean anything...' : 'Talk to Jarvis...';
 }
 
-// Send message
+// ═══ CHAT ═══
 function sendMsg() {
   const input = document.getElementById('msgInput');
   const text = input.value.trim();
   if (!text) return;
-  
-  const messages = document.getElementById('chatMessages');
-  
-  // User bubble
-  const userBubble = document.createElement('div');
-  userBubble.className = 'chat-bubble user';
-  userBubble.textContent = text;
-  messages.appendChild(userBubble);
-  
+  const msgs = document.getElementById('chatMessages');
+  // User msg
+  const row = document.createElement('div');
+  row.className = 'chat-row user';
+  row.innerHTML = '<div class="chat-bubble user-msg">' + text + '</div>';
+  msgs.appendChild(row);
   input.value = '';
-  
-  // Drain health on each exchange
-  drainHealth();
-  
-  // Check for reset command
-  if (text.toLowerCase().includes('fresh start')) {
-    setTimeout(() => {
-      const resp = document.createElement('div');
-      resp.className = 'chat-bubble ' + currentChar;
-      if (currentChar === 'bean') {
-        resp.innerHTML = '<div class="chat-sender">🐻 Mr Bean</div>🔄 Rebooting brain... *whirring noises* ... I\'m back! Fresh and sharp. What were we doing? 🐻';
-      } else {
-        resp.innerHTML = '<div class="chat-sender">🤖 Jarvis</div>🔄 Systems refreshed. Full capacity restored. Where were we, William?';
-      }
-      messages.appendChild(resp);
-      messages.scrollTop = messages.scrollHeight;
-      healthLevel = 100;
-      messageCount = 0;
-      updateHealthBar(100);
-    }, 500);
-    return;
-  }
-  
-  // Simulated response
+  msgs.scrollTop = msgs.scrollHeight;
+  // Response
   setTimeout(() => {
-    const wrapper = document.createElement('div');
-    wrapper.style.cssText = 'display: flex; gap: 10px; align-items: flex-start;';
-    const avatar = document.createElement('img');
-    avatar.style.cssText = 'width: 36px; height: 36px; border-radius: 10px; object-fit: cover; flex-shrink: 0;';
-    const resp = document.createElement('div');
-    resp.className = 'chat-bubble ' + currentChar;
-    if (currentChar === 'bean') {
-      avatar.src = 'assets/mrbean-avatar.jpg';
-      avatar.style.border = '2px solid var(--bean-orange)';
-      resp.innerHTML = '<div class="chat-sender">🐻 Mr Bean</div>Good question, William. Let me think about that... This is where the real Mr Bean AI will respond via OpenClaw. For now I\'m just the UI shell! 🐻';
-    } else {
-      avatar.src = 'assets/jarvis-avatar.jpg';
-      avatar.style.border = '2px solid var(--jarvis-blue)';
-      resp.innerHTML = '<div class="chat-sender">🤖 Jarvis</div>Noted. This is where the real Jarvis AI will respond via OpenClaw. The interface is ready — the intelligence comes next.';
-    }
-    wrapper.appendChild(avatar);
-    wrapper.appendChild(resp);
-    messages.appendChild(wrapper);
-    messages.scrollTop = messages.scrollHeight;
-  }, 800);
-  
-  messages.scrollTop = messages.scrollHeight;
+    const r = document.createElement('div');
+    r.className = 'chat-row';
+    const avatar = currentChar === 'bean' ? 'assets/mrbean-avatar.jpg' : 'assets/jarvis-avatar.jpg';
+    const border = currentChar === 'bean' ? 'var(--gold)' : 'var(--blue)';
+    const cls = currentChar === 'bean' ? 'bean' : 'jarvis';
+    const name = currentChar === 'bean' ? '🐻 Mr Bean' : '🤖 Jarvis';
+    const reply = currentChar === 'bean'
+      ? "Good question! This is where the real Mr Bean answers via OpenClaw. For now I'm the shell! 🐻"
+      : "Noted. The real Jarvis will respond here once connected to OpenClaw.";
+    r.innerHTML = '<img src="'+avatar+'" class="chat-avatar" style="border:2px solid '+border+';"><div class="chat-bubble '+cls+'"><div class="chat-sender">'+name+'</div>'+reply+'</div>';
+    msgs.appendChild(r);
+    msgs.scrollTop = msgs.scrollHeight;
+  }, 600);
 }
 
-// Voice toggle
-function toggleVoice() {
-  const btn = document.getElementById('voiceBtn');
-  btn.classList.toggle('recording');
-  if (btn.classList.contains('recording')) {
-    btn.textContent = '🔴';
-  } else {
-    btn.textContent = '🎤';
-  }
-}
-
-// Discreet mode
-function toggleDiscreet() {
-  isDiscreet = !isDiscreet;
-  document.body.classList.toggle('discreet');
-  const btn = document.getElementById('discreetBtn');
-  if (isDiscreet) {
-    btn.textContent = '🌙 Dark Mode';
-    btn.classList.add('active');
-    document.querySelector('.top-bar .title').textContent = '📝 Study Helper';
-  } else {
-    btn.textContent = '🏫 School Mode';
-    btn.classList.remove('active');
-    document.querySelector('.top-bar .title').textContent = '🐻 William\'s HQ';
-  }
-}
-
-// Task toggle with celebration
+// ═══ TASKS ═══
 function toggleTask(el) {
-  const check = el.querySelector('.task-check');
-  if (check.classList.contains('done')) {
-    check.classList.remove('done');
-    check.textContent = '⬜';
-    el.style.opacity = '1';
-    el.classList.remove('celebrating');
-  } else {
-    check.classList.add('done');
-    check.textContent = '✅';
-    el.style.opacity = '0.6';
-    el.classList.add('celebrating');
-    
-    // XP for completing a task!
-    addXP(15, '✅ Task completed');
-    
-    // Confetti burst!
-    for (let i = 0; i < 8; i++) {
-      setTimeout(() => {
-        const conf = document.createElement('div');
-        conf.style.cssText = 'position:fixed;font-size:' + (16+Math.random()*16) + 'px;pointer-events:none;z-index:9999;';
-        conf.style.left = (30 + Math.random() * 40) + 'vw';
-        conf.style.top = '40vh';
-        conf.textContent = ['⭐','🎉','🎊','⚡','🔥','🌟','💪','🐻'][i];
-        conf.style.animation = 'confettiBurst 1.2s ease forwards';
-        document.body.appendChild(conf);
-        setTimeout(() => conf.remove(), 1300);
-      }, i * 60);
-    }
-  }
+  const c = el.querySelector('.task-check');
+  if (c.classList.contains('done')) { c.classList.remove('done'); c.textContent='⬜'; el.style.opacity='1'; }
+  else { c.classList.add('done'); c.textContent='✅'; el.style.opacity='0.6'; addXP(15,'✅ Task done'); }
 }
 
-// ═══════ AUTO CLASS RECORDER ═══════
-// Records automatically based on timetable. No manual input needed.
-
-let mediaRecorder = null;
-let audioChunks = [];
-let recordingStart = null;
-let recTimerInterval = null;
-let currentPeriodLabel = '';
-let recordings = JSON.parse(localStorage.getItem('classRecordings') || '[]');
-let micStream = null;
-
-// ========= TIMETABLE DATA =========
-// Week reference date: set this to a known Monday of Week A
-// Adjust when Simon confirms which week is which
-const WEEK_A_REFERENCE = new Date('2026-04-06'); // Mon Apr 6 = Week A (adjust if needed)
-
-const PERIOD_TIMES = [
-  { id: 'P1', start: '08:00', end: '08:50' },
-  { id: 'P2', start: '08:50', end: '09:55' },
-  // RECESS 09:55-10:15
-  { id: 'P3', start: '10:15', end: '11:05' },
-  { id: 'P4', start: '11:05', end: '12:05' },
-  // LUNCH 12:05-12:50
-  { id: 'P5', start: '12:50', end: '13:40' },
-  { id: 'P6', start: '13:40', end: '14:35' },
-];
-
-const TIMETABLE = {
-  A: {
-    1: ['Art','Technology','Computing','Science','Maths','English'],
-    2: ['English','English','PE','PE','Sport','Sport'],
-    3: ['English','Computing','Science','Science','History','Technology'],
-    4: ['PE','Technology','Maths','Art','Music','History'],
-    5: ['Maths','Maths','Pastoral Care','Science','English','Computing'],
-  },
-  B: {
-    1: ['Maths','History','Technology','Computing','Music','Science'],
-    2: ['PE','Science','English','Sport','Sport',''],
-    3: ['History','History','Technology','Maths','English','Music'],
-    4: ['Art','Music','Maths','Technology','Art','PE'],
-    5: ['PE','Maths','Pastoral Care','English','History','Science'],
-  }
-};
-
-function getCurrentWeek() {
-  const now = new Date();
-  const ref = new Date(WEEK_A_REFERENCE);
-  const diffDays = Math.floor((now - ref) / 86400000);
-  const weekNum = Math.floor(diffDays / 7);
-  return weekNum % 2 === 0 ? 'A' : 'B';
-}
-
-function getDayIndex() {
-  const d = new Date().getDay(); // 0=Sun, 1=Mon..5=Fri
-  return d >= 1 && d <= 5 ? d : 0; // 0 = not a school day
-}
-
-function getCurrentPeriod() {
-  const now = new Date();
-  const hhmm = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-  
-  for (let i = 0; i < PERIOD_TIMES.length; i++) {
-    if (hhmm >= PERIOD_TIMES[i].start && hhmm < PERIOD_TIMES[i].end) {
-      const week = getCurrentWeek();
-      const day = getDayIndex();
-      if (day === 0) return null; // weekend
-      const subjects = TIMETABLE[week][day];
-      if (!subjects) return null;
-      const subject = subjects[i] || 'Class';
-      return {
-        period: i + 1,
-        subject: subject,
-        end: PERIOD_TIMES[i].end,
-        id: PERIOD_TIMES[i].id
-      };
-    }
-  }
-  return null; // break time or outside school
-}
-
-function isBreakTime() {
-  const now = new Date();
-  const hhmm = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-  return (hhmm >= '09:55' && hhmm < '10:15') || (hhmm >= '12:05' && hhmm < '12:50');
-}
-
-function isSchoolHours() {
-  const now = new Date();
-  const hhmm = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-  const day = now.getDay();
-  return day >= 1 && day <= 5 && hhmm >= '07:50' && hhmm < '14:35';
-}
-
-// ========= RECORDING ENGINE =========
-
-async function startAutoRecording(label) {
-  if (mediaRecorder && mediaRecorder.state === 'recording') return; // already recording
-  
-  try {
-    if (!micStream || !micStream.active) {
-      micStream = await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation: true, noiseSuppression: true, channelCount: 1 }
-      });
-    }
-    
-    audioChunks = [];
-    mediaRecorder = new MediaRecorder(micStream, { mimeType: 'audio/webm;codecs=opus' });
-    
-    mediaRecorder.ondataavailable = (e) => {
-      if (e.data.size > 0) audioChunks.push(e.data);
-    };
-    
-    mediaRecorder.start(30000); // chunk every 30s
-    recordingStart = Date.now();
-    currentPeriodLabel = label;
-    
-    // Start noise monitor on first recording
-    if (!isAudioActive) startNoiseMonitor();
-    
-    // UI
-    document.getElementById('recBtn').classList.add('recording');
-    document.getElementById('recBtn').textContent = '■';
-    document.getElementById('recStatus').classList.add('active');
-    document.getElementById('recStatus').textContent = label;
-    document.getElementById('recTimer').classList.add('active');
-    
-    if (recTimerInterval) clearInterval(recTimerInterval);
-    recTimerInterval = setInterval(updateRecTimer, 1000);
-    
-    console.log('AUTO-REC START:', label, new Date().toLocaleTimeString());
-  } catch (err) {
-    console.error('Mic access denied:', err);
-    document.getElementById('recStatus').textContent = 'Mic blocked';
-  }
-}
-
-function stopAutoRecording() {
-  if (!mediaRecorder || mediaRecorder.state !== 'recording') return;
-  
-  mediaRecorder.stop();
-  clearInterval(recTimerInterval);
-  
-  // Auto-save
-  setTimeout(() => autoSaveRecording(), 500);
-  
-  // UI
-  document.getElementById('recBtn').classList.remove('recording');
-  document.getElementById('recBtn').textContent = '●';
-  document.getElementById('recStatus').classList.remove('active');
-  document.getElementById('recTimer').classList.remove('active');
-  
-  console.log('AUTO-REC STOP:', currentPeriodLabel, new Date().toLocaleTimeString());
-}
-
-function autoSaveRecording() {
-  if (audioChunks.length === 0) return;
-  
-  const blob = new Blob(audioChunks, { type: 'audio/webm' });
-  const now = new Date();
-  const dateStr = now.toISOString().slice(0, 10);
-  const week = getCurrentWeek();
-  const safeLabel = currentPeriodLabel.replace(/[^a-zA-Z0-9]/g, '-');
-  const filename = `${dateStr}-W${week}-${safeLabel}.webm`;
-  
-  // Auto-download
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
-  
-  // Track
-  const duration = recordingStart ? Math.floor((Date.now() - recordingStart) / 1000) : 0;
-  recordings.push({
-    filename, label: currentPeriodLabel,
-    date: now.toISOString(), duration,
-    sizeMB: (blob.size / 1024 / 1024).toFixed(1),
-    week: week
-  });
-  localStorage.setItem('classRecordings', JSON.stringify(recordings));
-  updateRecCount();
-  
-  audioChunks = [];
-  document.getElementById('recStatus').textContent = 'Saved ✓';
-  setTimeout(() => { document.getElementById('recStatus').textContent = 'Break'; }, 2000);
-}
-
-function updateRecTimer() {
-  if (!recordingStart) return;
-  const elapsed = Math.floor((Date.now() - recordingStart) / 1000);
-  const mins = String(Math.floor(elapsed / 60)).padStart(2, '0');
-  const secs = String(elapsed % 60).padStart(2, '0');
-  document.getElementById('recTimer').textContent = mins + ':' + secs;
-}
-
-function updateRecCount() {
-  const today = new Date().toISOString().slice(0, 10);
-  const todayRecs = recordings.filter(r => r.date && r.date.startsWith(today));
-  const el = document.getElementById('recCount');
-  if (el) el.textContent = todayRecs.length > 0 ? todayRecs.length + '/6 classes' : '';
-}
-
-// Manual override — tap to force start/stop
-function toggleRecording() {
-  if (mediaRecorder && mediaRecorder.state === 'recording') {
-    stopAutoRecording();
-  } else {
-    const period = getCurrentPeriod();
-    startAutoRecording(period ? `P${period.period}-${period.subject}` : 'Manual');
-  }
-}
-
-// ========= SMART DETECTION: Is William in class? =========
-let isLaptopActive = true;
-let isAudioActive = false;
-let silenceCount = 0;
-
-// Lid open/closed detection
-document.addEventListener('visibilitychange', () => {
-  isLaptopActive = !document.hidden;
-  if (document.hidden) {
-    // Lid closed or tab hidden — pause recording
-    if (mediaRecorder && mediaRecorder.state === 'recording') {
-      console.log('SMART: Lid closed / tab hidden — pausing');
-      stopAutoRecording();
-      document.getElementById('recStatus').textContent = 'Paused (closed)';
-    }
-  } else {
-    // Lid opened — check if should resume
-    console.log('SMART: Lid opened — checking timetable');
-    setTimeout(autoRecordCheck, 1000);
-  }
-});
-
-// Noise gate: monitor ambient audio level
-function startNoiseMonitor() {
-  if (!micStream || !micStream.active) return;
-  
-  try {
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const source = audioCtx.createMediaStreamSource(micStream);
-    const analyser = audioCtx.createAnalyser();
-    analyser.fftSize = 256;
-    source.connect(analyser);
-    
-    const dataArray = new Uint8Array(analyser.frequencyBinCount);
-    
-    setInterval(() => {
-      analyser.getByteFrequencyData(dataArray);
-      const avg = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
-      
-      // avg < 5 = near silence (laptop in bag, between classes)
-      // avg > 5 = some audio activity (classroom)
-      if (avg < 3) {
-        silenceCount++;
-      } else {
-        silenceCount = 0;
-        isAudioActive = true;
-      }
-      
-      // 60 seconds of near-silence while supposedly recording = probably in bag
-      if (silenceCount > 12 && mediaRecorder && mediaRecorder.state === 'recording') {
-        console.log('SMART: Extended silence detected — likely in bag');
-        // Don't stop, just flag it. Audio is cheap, missing class audio isn't.
-        document.getElementById('recStatus').textContent = currentPeriodLabel + ' (quiet)';
-      }
-    }, 5000); // check every 5 seconds
-  } catch(e) {
-    console.log('Noise monitor unavailable:', e);
-  }
-}
-
-// ========= MOTION DETECTION (Accelerometer) =========
-let isMoving = false;
-let motionSamples = [];
-
-function startMotionDetector() {
-  if (window.DeviceMotionEvent) {
-    // Check if permission is needed (iOS 13+)
-    if (typeof DeviceMotionEvent.requestPermission === 'function') {
-      DeviceMotionEvent.requestPermission().then(state => {
-        if (state === 'granted') window.addEventListener('devicemotion', handleMotion);
-      }).catch(console.log);
-    } else {
-      window.addEventListener('devicemotion', handleMotion);
-    }
-  }
-}
-
-function handleMotion(event) {
-  const acc = event.accelerationIncludingGravity;
-  if (!acc) return;
-  
-  // Calculate total acceleration change
-  const magnitude = Math.sqrt(acc.x * acc.x + acc.y * acc.y + acc.z * acc.z);
-  motionSamples.push(magnitude);
-  
-  // Keep last 20 samples (~2 seconds at 10Hz)
-  if (motionSamples.length > 20) motionSamples.shift();
-  
-  // Calculate variance — high variance = movement/walking
-  if (motionSamples.length >= 10) {
-    const avg = motionSamples.reduce((a, b) => a + b, 0) / motionSamples.length;
-    const variance = motionSamples.reduce((sum, v) => sum + Math.pow(v - avg, 2), 0) / motionSamples.length;
-    
-    // variance > 2 = walking/moving, < 0.5 = sitting still at desk
-    const wasMoving = isMoving;
-    isMoving = variance > 2;
-    
-    if (isMoving && !wasMoving) {
-      console.log('SMART: Motion detected — likely walking between classes');
-    } else if (!isMoving && wasMoving) {
-      console.log('SMART: Stationary — likely at desk, checking timetable');
-      setTimeout(autoRecordCheck, 2000);
-    }
-  }
-}
-
-// Start motion detector
-startMotionDetector();
-
-// ========= AUTO-PILOT: Check every 30 seconds =========
-function autoRecordCheck() {
-  if (!isLaptopActive) return; // lid closed, don't start
-  if (isMoving) return; // walking between classes, don't start
-  
-  const period = getCurrentPeriod();
-  const isRecording = mediaRecorder && mediaRecorder.state === 'recording';
-  
-  if (period && period.subject && period.subject !== 'Sport' && period.subject !== '') {
-    // Should be recording
-    const label = `P${period.period}-${period.subject}`;
-    if (!isRecording) {
-      startAutoRecording(label);
-    } else if (currentPeriodLabel !== label) {
-      // Period changed — save old, start new
-      stopAutoRecording();
-      setTimeout(() => startAutoRecording(label), 1000);
-    }
-  } else {
-    // Break, lunch, Sport, weekend, or outside school
-    if (isRecording) {
-      stopAutoRecording();
-    }
-    if (isBreakTime()) {
-      document.getElementById('recStatus').textContent = 'Break';
-    } else if (!isSchoolHours()) {
-      document.getElementById('recStatus').textContent = getDayIndex() === 0 ? 'Weekend' : 'After school';
-    }
-  }
-}
-
-// Run auto-check every 30 seconds
-setInterval(autoRecordCheck, 30000);
-// Run once on load
-setTimeout(autoRecordCheck, 2000);
-// Show current week
-const weekEl = document.getElementById('recWeek');
-if (weekEl) weekEl.textContent = 'Week ' + getCurrentWeek();
-
-// ═══════ DAILY CHALLENGES ═══════
-const CHALLENGE_TYPES = {
-  pattern: {
-    icon: '🧩', name: 'Pattern',
-    generate: (lvl) => {
-      const patterns = [
-        { q: 'What comes next? ⭐🌙⭐🌙⭐...', a: '🌙', options: ['⭐','🌙','☀️','🌟'] },
-        { q: 'What comes next? 🔵🔵🔴🔵🔵🔴...', a: '🔵', options: ['🔴','🔵','🟢','🟡'] },
-        { q: 'What comes next? 1, 2, 4, 8, ...', a: '16', options: ['10','12','16','20'] },
-        { q: 'What comes next? A, C, E, G, ...', a: 'I', options: ['H','I','J','K'] },
-        { q: 'What comes next? ▲■▲■■▲■■■...', a: '▲', options: ['▲','■','●','◆'] },
-        { q: '2, 6, 12, 20, ...', a: '30', options: ['24','28','30','32'] },
-        { q: '🐈🐕🐈🐕🐈🐕🐈...', a: '🐕', options: ['🐈','🐕','🐇','🐹'] },
-        { q: '3, 6, 9, 12, ...', a: '15', options: ['13','14','15','16'] },
-      ];
-      return patterns[Math.floor(Math.random() * patterns.length)];
-    }, xp: 25
-  },
-  memory: {
-    icon: '🔢', name: 'Memory',
-    generate: (lvl) => {
-      const items = ['🍎','🍊','🍌','🍓','🍇','🍉','🍒','🥝','🍑','🍐'];
-      const count = Math.min(2 + Math.floor(lvl / 3), 5);
-      const selected = [];
-      for (let i = 0; i < count; i++) {
-        selected.push(items[Math.floor(Math.random() * items.length)]);
-      }
-      return { q: 'Remember these in order (they will disappear):', sequence: selected, xp: 15 + count * 5 };
-    }, xp: 20
-  },
-  speed: {
-    icon: '⚡', name: 'Speed Round',
-    generate: (lvl) => {
-      const challenges = [
-        { q: 'How many 🔵? 🔵🔴🔵🔵🔴🔵', a: '4', options: ['3','4','5','6'] },
-        { q: 'Which is different? 🐶🐶🐱🐶🐶', a: '🐱', options: ['🐶','🐱','None','All'] },
-        { q: '7 + 8 = ?', a: '15', options: ['13','14','15','16'] },
-        { q: '12 - 5 = ?', a: '7', options: ['6','7','8','5'] },
-        { q: 'How many sides on a hexagon?', a: '6', options: ['5','6','7','8'] },
-        { q: 'Biggest? 0.5, 0.25, 0.75, 0.1', a: '0.75', options: ['0.5','0.25','0.75','0.1'] },
-        { q: 'How many ⭐? ⭐🌙⭐⭐🌙⭐🌙⭐', a: '5', options: ['4','5','6','3'] },
-      ];
-      return challenges[Math.floor(Math.random() * challenges.length)];
-    }, xp: 10
-  },
-  logic: {
-    icon: '🧠', name: 'Logic',
-    generate: (lvl) => {
-      const puzzles = [
-        { q: 'If all cats are animals, and Teddy is a cat, is Teddy an animal?', a: 'Yes', options: ['Yes','No','Maybe','Teddy is a bear'] },
-        { q: 'I have 3 apples. I give away 1 and eat 1. How many left?', a: '1', options: ['0','1','2','3'] },
-        { q: 'Tom is taller than Sam. Sam is taller than Jo. Who is shortest?', a: 'Jo', options: ['Tom','Sam','Jo','Same height'] },
-        { q: 'If it takes 5 machines 5 minutes to make 5 widgets, how long for 100 machines to make 100?', a: '5 minutes', options: ['5 minutes','100 minutes','50 minutes','1 minute'] },
-        { q: 'A farmer has 17 sheep. All but 9 run away. How many are left?', a: '9', options: ['8','9','17','0'] },
-        { q: 'What has keys but no locks, space but no room?', a: 'Keyboard', options: ['House','Keyboard','Car','Map'] },
-      ];
-      return puzzles[Math.floor(Math.random() * puzzles.length)];
-    }, xp: 30
-  },
-  cooking: {
-    icon: '🍳', name: 'Cooking Maths',
-    generate: (lvl) => {
-      const problems = [
-        { q: 'Recipe needs 2 cups flour for 4 people. How much for 8 people?', a: '4 cups', options: ['2 cups','3 cups','4 cups','6 cups'] },
-        { q: 'Karaage fries at 180°C for 8 min. You put it in at 4:15. When done?', a: '4:23', options: ['4:20','4:23','4:25','4:30'] },
-        { q: 'Rice needs 1.5x water to rice. You have 2 cups rice. How much water?', a: '3 cups', options: ['2 cups','2.5 cups','3 cups','4 cups'] },
-        { q: 'Mash needs 4 potatoes per person. Cooking for 3 people. How many potatoes?', a: '12', options: ['8','10','12','16'] },
-        { q: 'Meat pie takes 25 min. You need it ready at 6:00pm. Latest start time?', a: '5:35pm', options: ['5:25pm','5:30pm','5:35pm','5:45pm'] },
-      ];
-      return problems[Math.floor(Math.random() * problems.length)];
-    }, xp: 20
-  }
-};
-
-let challengeState = JSON.parse(localStorage.getItem('challengeState') || JSON.stringify({
-  completed: 0, correct: 0, streak: 0, todayDone: [], todayDate: ''
-}));
-
-function renderChallenges() {
-  const el = document.getElementById('challengeCards');
-  if (!el) return;
-  
-  const today = new Date().toISOString().slice(0, 10);
-  if (challengeState.todayDate !== today) {
-    challengeState.todayDone = [];
-    challengeState.todayDate = today;
-  }
-  
-  const dayOfWeek = new Date().getDay();
-  // Rotate challenge types by day
-  const daySchedule = {
-    1: ['pattern','memory','cooking'],     // Mon
-    2: ['speed','logic','pattern'],         // Tue
-    3: ['pattern','memory','logic'],        // Wed
-    4: ['speed','cooking','logic'],         // Thu
-    5: ['pattern','speed','memory'],        // Fri
-    6: ['cooking','logic','pattern'],       // Sat
-    0: ['logic','cooking','speed'],         // Sun
-  };
-  
-  const todayTypes = daySchedule[dayOfWeek] || ['pattern','speed','logic'];
-  
-  el.innerHTML = todayTypes.map((type, i) => {
-    const ct = CHALLENGE_TYPES[type];
-    const done = challengeState.todayDone.includes(type);
-    return `
-      <div style="background: var(--card); border: 2px solid ${done ? 'var(--green)' : 'var(--border)'}; border-radius: 16px; padding: 20px; margin-bottom: 12px; ${done ? 'opacity: 0.6;' : ''}">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-          <div style="font-size: 16px; font-weight: 700;">${ct.icon} ${ct.name} Challenge</div>
-          <div style="font-size: 12px; color: ${done ? 'var(--green)' : 'var(--cyan)'}; font-weight: 700;">${done ? '✅ Done' : '+' + ct.xp + ' XP'}</div>
-        </div>
-        ${done ? '<div style="color: var(--green); font-size: 13px;">Completed! Come back tomorrow for a new one.</div>' : 
-          `<button onclick="startChallenge('${type}')" style="width: 100%; padding: 12px; border-radius: 12px; border: 2px solid var(--cyan); background: rgba(0,200,200,0.1); color: var(--cyan); font-weight: 700; font-size: 14px; cursor: pointer; font-family: 'Inter';">⚡ Start Challenge</button>`
-        }
-      </div>
-    `;
-  }).join('');
-  
-  // Stats
-  const sc = document.getElementById('statChallenges');
-  const sa = document.getElementById('statAccuracy');
-  const ss = document.getElementById('statStreak');
-  if (sc) sc.textContent = challengeState.completed;
-  if (sa) sa.textContent = challengeState.completed > 0 ? Math.round(challengeState.correct / challengeState.completed * 100) + '%' : '-%';
-  if (ss) ss.textContent = challengeState.streak;
-}
-
-function startChallenge(type) {
-  const ct = CHALLENGE_TYPES[type];
-  const lvl = getLevel(playerData.xp).level;
-  const challenge = ct.generate(lvl);
-  
-  const el = document.getElementById('challengeCards');
-  
-  if (challenge.sequence) {
-    // Memory challenge — show then hide
-    el.innerHTML = `
-      <div style="background: var(--card); border: 2px solid var(--cyan); border-radius: 16px; padding: 24px; text-align: center;">
-        <div style="font-size: 14px; color: var(--muted); margin-bottom: 16px;">${challenge.q}</div>
-        <div style="font-size: 48px; letter-spacing: 16px; margin-bottom: 20px;" id="memDisplay">${challenge.sequence.join(' ')}</div>
-        <div style="font-size: 13px; color: var(--cyan);">Memorise the order...</div>
-      </div>
-    `;
-    setTimeout(() => {
-      el.innerHTML = `
-        <div style="background: var(--card); border: 2px solid var(--cyan); border-radius: 16px; padding: 24px; text-align: center;">
-          <div style="font-size: 16px; font-weight: 700; margin-bottom: 16px;">What was the order?</div>
-          <div style="font-size: 13px; color: var(--muted); margin-bottom: 16px;">Type them separated by spaces</div>
-          <input type="text" id="memAnswer" placeholder="e.g. 🍎 🍌 🍓" style="width: 100%; padding: 12px; border-radius: 10px; border: 2px solid var(--border); background: var(--bg); color: var(--text); font-size: 18px; text-align: center; font-family: 'Inter';" onkeydown="if(event.key==='Enter')checkMemory('${challenge.sequence.join(',')}','${type}')">
-          <button onclick="checkMemory('${challenge.sequence.join(',')}','${type}')" style="margin-top: 12px; padding: 12px 32px; border-radius: 12px; border: none; background: var(--cyan); color: #000; font-weight: 700; cursor: pointer; font-family: 'Inter';">Check</button>
-        </div>
-      `;
-    }, 3000 + challenge.sequence.length * 500); // More items = more time to memorise
-  } else {
-    // Multiple choice
-    const shuffled = [...challenge.options].sort(() => Math.random() - 0.5);
-    el.innerHTML = `
-      <div style="background: var(--card); border: 2px solid var(--cyan); border-radius: 16px; padding: 24px;">
-        <div style="font-size: 16px; font-weight: 700; margin-bottom: 16px;">${ct.icon} ${challenge.q}</div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-          ${shuffled.map(opt => `
-            <button onclick="checkAnswer('${opt}','${challenge.a}','${type}',${ct.xp})" style="padding: 14px; border-radius: 12px; border: 2px solid var(--border); background: var(--bg); color: var(--text); font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'Inter'; transition: all 0.15s;" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)'">${opt}</button>
-          `).join('')}
-        </div>
-      </div>
-    `;
-  }
-}
-
-function checkAnswer(selected, correct, type, xp) {
-  const isCorrect = selected === correct;
-  challengeState.completed++;
-  if (isCorrect) {
-    challengeState.correct++;
-    challengeState.streak++;
-    challengeState.todayDone.push(type);
-    addXP(xp, CHALLENGE_TYPES[type].icon + ' ' + CHALLENGE_TYPES[type].name + ' challenge');
-  } else {
-    challengeState.streak = 0;
-  }
-  localStorage.setItem('challengeState', JSON.stringify(challengeState));
-  
-  const el = document.getElementById('challengeCards');
-  el.innerHTML = `
-    <div style="background: var(--card); border: 2px solid ${isCorrect ? 'var(--green)' : 'var(--red)'}; border-radius: 16px; padding: 24px; text-align: center;">
-      <div style="font-size: 48px; margin-bottom: 12px;">${isCorrect ? '🎉' : '🤔'}</div>
-      <div style="font-size: 20px; font-weight: 800; color: ${isCorrect ? 'var(--green)' : 'var(--red)'};">${isCorrect ? 'CORRECT! +' + xp + ' XP' : 'Not quite!'}</div>
-      ${!isCorrect ? '<div style="font-size: 14px; color: var(--muted); margin-top: 8px;">Answer was: ' + correct + '</div>' : ''}
-      ${isCorrect && challengeState.streak >= 3 ? '<div style="font-size: 14px; color: var(--bean-orange); margin-top: 8px;">🔥 ' + challengeState.streak + ' streak!</div>' : ''}
-    </div>
-  `;
-  
-  setTimeout(renderChallenges, 2000);
-}
-
-function checkMemory(correctStr, type) {
-  const correct = correctStr.split(',');
-  const answer = document.getElementById('memAnswer').value.trim();
-  // Simple check — see if they got the sequence
-  const isCorrect = answer.includes(correct[0]) && answer.includes(correct[correct.length - 1]);
-  checkAnswer(isCorrect ? correct.join('') : 'wrong', correct.join(''), type, 20);
-}
-
-// Render on load
-setTimeout(renderChallenges, 100);
-
-// ═══════ LEVELLING / XP SYSTEM ═══════
-const LEVELS = [
-  { level: 1, xp: 0, title: 'Recruit', emoji: '⚓' },
-  { level: 2, xp: 100, title: 'Deckhand', emoji: '🚣' },
-  { level: 3, xp: 300, title: 'Cabin Boy', emoji: '⚙️' },
-  { level: 4, xp: 600, title: 'Navigator', emoji: '🧭' },
-  { level: 5, xp: 1000, title: 'First Mate', emoji: '⚔️' },
-  { level: 6, xp: 1500, title: 'Captain', emoji: '🏴‍☠️' },
-  { level: 7, xp: 2500, title: 'Grand Line Explorer', emoji: '🌊' },
-  { level: 8, xp: 4000, title: 'Yonko Challenger', emoji: '🔥' },
-  { level: 9, xp: 6000, title: 'Pirate King in Training', emoji: '👑' },
-  { level: 10, xp: 10000, title: 'PIRATE KING', emoji: '🌟' },
-];
-
-let playerData = JSON.parse(localStorage.getItem('williamXP') || JSON.stringify({
-  xp: 0,
-  todayXP: 0,
-  todayDate: new Date().toISOString().slice(0, 10),
-  streaks: { homework: 0, morning: 0, jarvis: 0 },
-  bestStreaks: { homework: 0, morning: 0, jarvis: 0 },
-  history: []
-}));
-
-// Reset daily XP if new day
-const todayStr = new Date().toISOString().slice(0, 10);
-if (playerData.todayDate !== todayStr) {
-  playerData.todayXP = 0;
-  playerData.todayDate = todayStr;
-}
-
-function getLevel(xp) {
-  let current = LEVELS[0];
-  for (const l of LEVELS) {
-    if (xp >= l.xp) current = l;
-    else break;
-  }
-  return current;
-}
-
-function getNextLevel(xp) {
-  for (const l of LEVELS) {
-    if (xp < l.xp) return l;
-  }
-  return null; // max level
-}
-
-function addXP(amount, reason) {
-  const oldLevel = getLevel(playerData.xp);
-  playerData.xp += amount;
-  playerData.todayXP += amount;
-  playerData.history.unshift({
-    xp: amount,
-    reason: reason,
-    time: new Date().toISOString()
-  });
-  if (playerData.history.length > 50) playerData.history = playerData.history.slice(0, 50);
-  
-  // XP popup!
-  showXPPopup(amount);
-  
-  const newLevel = getLevel(playerData.xp);
-  if (newLevel.level > oldLevel.level) {
-    // LEVEL UP CELEBRATION!
-    setTimeout(() => {
-      const popup = document.createElement('div');
-      popup.className = 'xp-popup';
-      popup.style.color = '#E8A444';
-      popup.style.fontSize = '28px';
-      popup.style.textShadow = '0 0 30px rgba(232,164,68,0.6)';
-      popup.textContent = '🎉 LEVEL UP! ' + newLevel.emoji + ' ' + newLevel.title + ' 🎉';
-      document.body.appendChild(popup);
-      setTimeout(() => popup.remove(), 2500);
-    }, 800);
-  }
-  
-  saveXP();
-  renderXP();
-}
-
-function saveXP() {
-  localStorage.setItem('williamXP', JSON.stringify(playerData));
-}
-
-function renderXP() {
-  const current = getLevel(playerData.xp);
-  const next = getNextLevel(playerData.xp);
-  
-  const titleEl = document.getElementById('xpTitle');
-  const levelEl = document.getElementById('xpLevel');
-  const emojiEl = document.getElementById('xpEmoji');
-  const currentEl = document.getElementById('xpCurrent');
-  const nextEl = document.getElementById('xpNext');
-  const barEl = document.getElementById('xpBar');
-  const todayEl = document.getElementById('xpToday');
-  
-  if (titleEl) titleEl.textContent = current.title;
-  if (levelEl) levelEl.textContent = current.level;
-  if (emojiEl) emojiEl.textContent = current.emoji;
-  if (currentEl) currentEl.textContent = playerData.xp + ' XP';
-  if (todayEl) todayEl.textContent = '+' + playerData.todayXP + ' XP today';
-  
-  if (next) {
-    const progress = ((playerData.xp - current.xp) / (next.xp - current.xp)) * 100;
-    if (barEl) barEl.style.width = Math.min(progress, 100) + '%';
-    if (nextEl) nextEl.textContent = (next.xp - playerData.xp) + ' XP to ' + next.title;
-  } else {
-    if (barEl) barEl.style.width = '100%';
-    if (nextEl) nextEl.textContent = 'MAX LEVEL 🌟';
-  }
-  
-  // Streaks
-  const hw = document.getElementById('streakHomework');
-  const mr = document.getElementById('streakMorning');
-  const jv = document.getElementById('streakJarvis');
-  if (hw) hw.textContent = playerData.streaks.homework;
-  if (mr) mr.textContent = playerData.streaks.morning;
-  if (jv) jv.textContent = playerData.streaks.jarvis;
-  
-  // Level map
-  const mapEl = document.getElementById('levelMap');
-  if (mapEl) {
-    mapEl.innerHTML = LEVELS.map(l => {
-      const reached = playerData.xp >= l.xp;
-      const isCurrent = l.level === current.level;
-      const bg = isCurrent ? 'var(--cyan)' : reached ? 'var(--green)' : 'var(--border)';
-      const color = isCurrent ? '#000' : reached ? '#000' : 'var(--muted)';
-      const opacity = reached ? '1' : '0.4';
-      return `<div style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 10px; margin-bottom: 4px; background: ${isCurrent ? 'rgba(0,200,200,0.1)' : 'transparent'}; opacity: ${opacity};">
-        <div style="width: 28px; height: 28px; border-radius: 50%; background: ${bg}; display: flex; align-items: center; justify-content: center; font-size: 14px; color: ${color}; font-weight: 900;">${reached ? l.emoji : l.level}</div>
-        <div style="flex: 1;"><span style="font-weight: 700; font-size: 13px;">${l.title}</span> <span style="font-size: 11px; color: var(--muted);">${l.xp} XP</span></div>
-        ${isCurrent ? '<span style="font-size: 10px; color: var(--cyan); font-weight: 700;">YOU ARE HERE</span>' : ''}
-        ${reached && !isCurrent ? '<span style="font-size: 10px; color: var(--green);">\u2713</span>' : ''}
-      </div>`;
-    }).join('');
-  }
-  
-  // Recent XP
-  const histEl = document.getElementById('xpHistory');
-  if (histEl && playerData.history.length > 0) {
-    histEl.innerHTML = playerData.history.slice(0, 10).map(h => {
-      const t = new Date(h.time);
-      const time = t.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
-      return `<div style="display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(42,58,110,0.2);">
-        <span>${h.reason}</span>
-        <span style="color: var(--green); font-weight: 700;">+${h.xp}</span>
-      </div>`;
-    }).join('');
-  }
-}
-
-// Initial render
-renderXP();
-
-// ═══════ BRAIN DUMP ═══════
-let brainDumps = JSON.parse(localStorage.getItem('brainDumps') || '[]');
+// ═══ BRAIN DUMP ═══
+let brainDumps = JSON.parse(localStorage.getItem('brainDumps')||'[]');
 renderDumps();
-
 function addDump() {
   const input = document.getElementById('dumpInput');
   const text = input.value.trim();
   if (!text) return;
-  
-  const now = new Date();
-  const period = getCurrentPeriod();
-  
-  brainDumps.unshift({
-    text: text,
-    time: now.toISOString(),
-    timeLabel: now.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' }),
-    subject: period ? period.subject : 'After school',
-    period: period ? 'P' + period.period : '',
-    reviewed: false
-  });
-  
+  brainDumps.unshift({ text, time: new Date().toISOString(), timeLabel: new Date().toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'}) });
   localStorage.setItem('brainDumps', JSON.stringify(brainDumps));
   input.value = '';
   renderDumps();
-  
-  // XP for using brain dump
   addXP(5, '💭 Brain dump');
 }
-
 function renderDumps() {
-  const list = document.getElementById('dumpList');
-  if (!list) return;
-  
-  const today = new Date().toISOString().slice(0, 10);
-  const todayDumps = brainDumps.filter(d => d.time && d.time.startsWith(today));
-  const olderDumps = brainDumps.filter(d => !d.time || !d.time.startsWith(today));
-  
-  let html = '';
-  
-  if (todayDumps.length === 0 && olderDumps.length === 0) {
-    html = '<div style="text-align: center; color: var(--muted); padding: 40px; font-size: 14px;"><div style="font-size: 40px; margin-bottom: 12px;">💭</div>Nothing yet. Drop a thought in here anytime.</div>';
-  }
-  
-  if (todayDumps.length > 0) {
-    html += '<div style="font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: 1px; margin-bottom: 4px;">TODAY</div>';
-    todayDumps.forEach((d, i) => {
-      html += renderDumpCard(d, i);
-    });
-  }
-  
-  if (olderDumps.length > 0) {
-    html += '<div style="font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: 1px; margin-top: 12px; margin-bottom: 4px;">EARLIER</div>';
-    olderDumps.forEach((d, i) => {
-      html += renderDumpCard(d, todayDumps.length + i, true);
-    });
-  }
-  
-  list.innerHTML = html;
+  const el = document.getElementById('dumpList');
+  if (!el) return;
+  if (brainDumps.length === 0) { el.innerHTML = '<div style="text-align:center;color:var(--muted);padding:30px;font-size:13px;">💭 Drop a thought anytime</div>'; return; }
+  el.innerHTML = brainDumps.slice(0,20).map((d,i) =>
+    '<div style="display:flex;gap:10px;padding:10px 12px;background:var(--card);border:2px solid var(--border);border-radius:12px;margin-bottom:6px;"><div style="flex:1;"><div style="font-size:13px;">'+d.text+'</div><div style="font-size:10px;color:var(--muted);margin-top:3px;">'+d.timeLabel+'</div></div><span style="cursor:pointer;color:var(--muted);font-size:11px;" onclick="brainDumps.splice('+i+',1);localStorage.setItem(\'brainDumps\',JSON.stringify(brainDumps));renderDumps();">✖</span></div>'
+  ).join('');
 }
 
-function renderDumpCard(d, idx, older) {
-  const opacity = d.reviewed ? '0.5' : '1';
-  const check = d.reviewed ? '✅' : '⬜';
-  const subjectColor = d.subject === 'After school' ? 'var(--muted)' : 'var(--cyan)';
-  return `
-    <div style="display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; background: var(--card); border: 2px solid var(--border); border-radius: 12px; opacity: ${opacity};">
-      <span style="cursor: pointer; font-size: 16px;" onclick="toggleDumpReviewed(${idx})">${check}</span>
-      <div style="flex: 1;">
-        <div style="font-size: 14px; font-weight: 500;">${d.text}</div>
-        <div style="font-size: 11px; color: var(--muted); margin-top: 4px;">
-          ${d.timeLabel} ${d.period ? '• ' + d.period : ''} <span style="color: ${subjectColor};">${d.subject}</span>
-        </div>
-      </div>
-      <span style="cursor: pointer; font-size: 12px; color: var(--muted);" onclick="deleteDump(${idx})">✖</span>
-    </div>
-  `;
+// ═══ XP SYSTEM ═══
+const LEVELS = [
+  {level:1,xp:0,title:'Recruit',emoji:'⚓'},
+  {level:2,xp:100,title:'Deckhand',emoji:'🚣'},
+  {level:3,xp:300,title:'Cabin Boy',emoji:'⚙️'},
+  {level:4,xp:600,title:'Navigator',emoji:'🧭'},
+  {level:5,xp:1000,title:'First Mate',emoji:'⚔️'},
+  {level:6,xp:1500,title:'Captain',emoji:'🏴‍☠️'},
+  {level:7,xp:2500,title:'Grand Line Explorer',emoji:'🌊'},
+  {level:8,xp:4000,title:'Yonko Challenger',emoji:'🔥'},
+  {level:9,xp:6000,title:'Pirate King in Training',emoji:'👑'},
+  {level:10,xp:10000,title:'PIRATE KING',emoji:'🌟'},
+];
+let playerData = JSON.parse(localStorage.getItem('williamXP')||JSON.stringify({xp:0,todayXP:0,todayDate:'',streaks:{homework:0,morning:0,jarvis:0},history:[]}));
+function getLevel(xp){let c=LEVELS[0];for(const l of LEVELS){if(xp>=l.xp)c=l;else break;}return c;}
+function getNextLevel(xp){for(const l of LEVELS){if(xp<l.xp)return l;}return null;}
+function addXP(amount,reason){
+  const old=getLevel(playerData.xp);
+  playerData.xp+=amount; playerData.todayXP+=amount;
+  playerData.history.unshift({xp:amount,reason,time:new Date().toISOString()});
+  if(playerData.history.length>50)playerData.history=playerData.history.slice(0,50);
+  showXPPopup(amount);
+  const nw=getLevel(playerData.xp);
+  if(nw.level>old.level){setTimeout(()=>{const p=document.createElement('div');p.className='xp-popup';p.style.color='var(--gold)';p.style.fontSize='24px';p.textContent='🎉 LEVEL UP! '+nw.emoji+' '+nw.title;document.body.appendChild(p);setTimeout(()=>p.remove(),2500);},800);}
+  localStorage.setItem('williamXP',JSON.stringify(playerData));
+  renderXP();
 }
+function showXPPopup(n){const e=document.createElement('div');e.className='xp-popup';e.textContent='+'+n+' XP ⚡';document.body.appendChild(e);setTimeout(()=>e.remove(),1600);}
+function renderXP(){
+  const c=getLevel(playerData.xp), n=getNextLevel(playerData.xp);
+  const t=document.getElementById('xpTitle'),l=document.getElementById('xpLevel'),cur=document.getElementById('xpCurrent'),nxt=document.getElementById('xpNext'),bar=document.getElementById('xpBar');
+  if(t)t.textContent=c.emoji+' '+c.title;
+  if(l)l.textContent=c.level;
+  if(cur)cur.textContent=playerData.xp+' XP';
+  if(n){const p=((playerData.xp-c.xp)/(n.xp-c.xp))*100;if(bar)bar.style.width=Math.min(p,100)+'%';if(nxt)nxt.textContent=(n.xp-playerData.xp)+' to '+n.title;}
+  else{if(bar)bar.style.width='100%';if(nxt)nxt.textContent='MAX 🌟';}
+  const hw=document.getElementById('streakHomework'),mr=document.getElementById('streakMorning'),jv=document.getElementById('streakJarvis');
+  if(hw)hw.textContent=playerData.streaks.homework;if(mr)mr.textContent=playerData.streaks.morning;if(jv)jv.textContent=playerData.streaks.jarvis;
+  const map=document.getElementById('levelMap');
+  if(map)map.innerHTML=LEVELS.map(lv=>{const reached=playerData.xp>=lv.xp;const cur2=lv.level===c.level;return '<div style="display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:10px;margin-bottom:3px;opacity:'+(reached?'1':'0.35')+';background:'+(cur2?'rgba(51,221,221,0.1)':'transparent')+';"><div style="width:26px;height:26px;border-radius:50%;background:'+(cur2?'var(--cyan)':reached?'var(--green)':'var(--border)')+';display:flex;align-items:center;justify-content:center;font-size:12px;color:'+(reached?'#000':'var(--muted)')+';font-weight:900;">'+lv.emoji+'</div><div style="flex:1;font-size:12px;font-weight:700;">'+lv.title+'</div>'+(cur2?'<span style="font-size:9px;color:var(--cyan);font-weight:800;">YOU</span>':'')+'</div>';}).join('');
+}
+renderXP();
 
-function toggleDumpReviewed(idx) {
-  brainDumps[idx].reviewed = !brainDumps[idx].reviewed;
-  localStorage.setItem('brainDumps', JSON.stringify(brainDumps));
-  renderDumps();
-}
+// ═══ BRAIN MODE ═══
+function askTopic(t){goChat('bean');document.getElementById('msgInput').value={space:"Why are black holes so powerful?",animals:"What's the most dangerous animal in Australia?",tech:"How does AI actually work?",history:"What was the most powerful ancient empire?",science:"What's the craziest experiment ever?",cooking:"How do you make perfect karaage?",art:"How do I start a comic book?",random:"Hit me with a random fact!"}[t]||'';document.getElementById('msgInput').focus();}
 
-function deleteDump(idx) {
-  brainDumps.splice(idx, 1);
-  localStorage.setItem('brainDumps', JSON.stringify(brainDumps));
-  renderDumps();
-}
+// ═══ SOS ═══
+function openSOS(){document.getElementById('sosOverlay').classList.add('active');document.getElementById('sosStep1').style.display='block';document.getElementById('sosStep2').style.display='none';}
+function closeSOS(){document.getElementById('sosOverlay').classList.remove('active');}
+function activateSOS(){document.getElementById('sosStep1').style.display='none';document.getElementById('sosStep2').style.display='block';}
 
-// ═══════ SOS SYSTEM ═══════
-function openSOS() {
-  document.getElementById('sosOverlay').classList.add('active');
-  document.getElementById('sosStep1').classList.add('active');
-  document.getElementById('sosStep2').classList.remove('active');
-}
-function closeSOS() {
-  document.getElementById('sosOverlay').classList.remove('active');
-}
-function activateSOS() {
-  document.getElementById('sosStep1').classList.remove('active');
-  document.getElementById('sosStep2').classList.add('active');
-  
-  // Auto-send email to all contacts
-  const emailLink = document.querySelector('.sos-email');
-  if (emailLink) {
-    // Trigger the email
-    window.open(emailLink.href, '_blank');
-  }
-  
-  // Log the SOS event (for parent dashboard)
-  const sosTime = new Date().toISOString();
-  localStorage.setItem('lastSOS', sosTime);
-  console.log('SOS ACTIVATED:', sosTime);
-}
+// ═══ SCHOOL MODE ═══
+let isDiscreet = false;
+function toggleDiscreet(){isDiscreet=!isDiscreet;document.body.classList.toggle('discreet');document.getElementById('modeBtn').textContent=isDiscreet?'🌙':'🏫';document.querySelector('.topbar-title').textContent=isDiscreet?'Study Helper':'WILLIAM\'S HQ';}
 
-// Brain mode topics
-function askAbout(topic) {
-  // Switch to chat view
-  document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.querySelector('[data-view="chat"]').classList.add('active');
-  document.getElementById('view-chat').classList.add('active');
-  
-  const topics = {
-    space: "Tell me something cool about black holes!",
-    animals: "What's the most dangerous animal in Australia?",
-    tech: "How does AI actually work?",
-    history: "What was the most powerful ancient civilisation?",
-    science: "What's the craziest science experiment ever?",
-    random: "Hit me with a random fact I won't believe!"
-  };
-  
-  document.getElementById('msgInput').value = topics[topic] || '';
-  document.getElementById('msgInput').focus();
-}
+// ═══ CLOCK ═══
+function updateClock(){document.getElementById('clock').textContent=new Date().toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'});}
+updateClock();setInterval(updateClock,30000);
+
+// ═══ FLOATERS ═══
+const FL=['\ud83d\udc3b','\ud83e\uddf8','\ud83d\udc52','\ud83c\udf56','\ud83e\udd8c','\ud83c\udff4\u200d\u2620\ufe0f','\u2693','\ud83c\udf0a','\ud83c\udf73','\ud83c\udfb5','\ud83d\udc15','\ud83c\udfb9','\ud83c\udfa8','\ud83e\udd4b','\u2b50'];
+function spawnF(){const e=document.createElement('div');e.className='floater';e.textContent=FL[Math.floor(Math.random()*FL.length)];e.style.left=(5+Math.random()*85)+'vw';e.style.fontSize=(22+Math.random()*18)+'px';const d=18+Math.random()*12;e.style.animationDuration=d+'s';document.body.appendChild(e);setTimeout(()=>e.remove(),d*1000);}
+setInterval(spawnF,6000);setTimeout(spawnF,3000);setTimeout(spawnF,5000);
+
+// ═══ WEEK ═══
+document.getElementById('recWeek').textContent='Week ' + (Math.floor((new Date()-new Date('2026-04-06'))/604800000)%2===0?'A':'B');
 </script>
 </body>
 </html>
