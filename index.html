@@ -588,6 +588,40 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
         <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#33DDDD;">Star Jumps — 20 reps</div><div style="font-size:13px;color:#8899cc;">Cardio. Gets blood flowing. Good for ADHD focus.</div></div></div>
         <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#44FF66;">Cat-Cow Stretch — 10 reps</div><div style="font-size:13px;color:#8899cc;">Spine mobility. On all fours, arch up then dip down. Undoes the bag damage.</div></div></div>
       </div>
+      <!-- Record form -->
+      <div style="margin-top:16px;background:#0f1d42;border:2px solid #FF9933;border-radius:16px;padding:20px;">
+        <div style="font-family:'Bangers',cursive;font-size:24px;color:#FF9933;margin-bottom:8px;">🎥 RECORD YOUR FORM</div>
+        <div style="font-size:16px;color:#8899cc;margin-bottom:12px;">Turn your camera on. Uncle Adam reviews your form. Perfect form = BONUS POINTS.</div>
+        <label style="display:flex;align-items:center;justify-content:center;padding:24px;background:#1e3068;border:3px dashed #FF9933;border-radius:16px;cursor:pointer;margin-bottom:12px;">
+          <input type="file" accept="video/*" capture="user" onchange="handleExerciseVideo(this)" style="display:none;">
+          <div style="text-align:center;">
+            <div style="font-size:40px;margin-bottom:6px;">🎥</div>
+            <div style="font-family:'Bangers',cursive;font-size:20px;color:#FF9933;">TAP TO RECORD</div>
+            <div style="font-size:13px;color:#8899cc;">Front camera — show Uncle Adam your form</div>
+          </div>
+        </label>
+        <div id="exerciseVideos" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
+      </div>
+
+      <!-- Form scoring -->
+      <div style="margin-top:12px;background:#0f1d42;border:2px solid #FFD700;border-radius:16px;padding:20px;">
+        <div style="font-family:'Bangers',cursive;font-size:24px;color:#FFD700;margin-bottom:8px;">⭐ FORM SCORE</div>
+        <div style="font-size:16px;color:#8899cc;margin-bottom:12px;">Uncle Adam rates your form. Perfect form = bonus points toward your reward!</div>
+        <div style="display:flex;gap:8px;justify-content:center;margin-bottom:12px;">
+          <div style="background:#1e3068;border:2px solid #2d4488;border-radius:14px;padding:16px;text-align:center;flex:1;"><div style="font-size:28px;font-weight:900;color:#FFD700;" id="formPoints">0</div><div style="font-size:12px;color:#8899cc;">Form Points</div></div>
+          <div style="background:#1e3068;border:2px solid #2d4488;border-radius:14px;padding:16px;text-align:center;flex:1;"><div style="font-size:28px;font-weight:900;color:#44FF66;" id="formPerfect">0</div><div style="font-size:12px;color:#8899cc;">Perfect Forms</div></div>
+          <div style="background:#1e3068;border:2px solid #2d4488;border-radius:14px;padding:16px;text-align:center;flex:1;"><div style="font-size:28px;font-weight:900;color:#FF9933;" id="formStreak">0</div><div style="font-size:12px;color:#8899cc;">Day Streak</div></div>
+        </div>
+        <div style="background:rgba(255,215,0,0.08);border:1px solid #FFD700;border-radius:12px;padding:14px;">
+          <div style="font-size:16px;color:#FFD700;font-weight:700;">Rewards from Uncle Adam:</div>
+          <div style="font-size:14px;color:#8899cc;line-height:2;margin-top:4px;">
+            ⭐ 50 Form Points = Small reward<br>
+            ⭐⭐ 100 Form Points = Medium reward<br>
+            ⭐⭐⭐ 200 Form Points = BIG reward from Uncle Adam
+          </div>
+        </div>
+      </div>
+
       <div onclick="addXP(25,'💪 Daily exercises done!')" style="margin-top:12px;padding:16px;background:rgba(255,85,85,0.1);border:2px solid #FF5555;border-radius:14px;cursor:pointer;text-align:center;"><span style="font-family:'Bangers',cursive;font-size:22px;color:#FF5555;">💪 DONE! +25 XP</span></div>
     </div>
 
@@ -1703,6 +1737,39 @@ function startFocusMode(taskName){
     timer.textContent=Math.floor(secs/60)+':'+(secs%60<10?'0':'')+(secs%60);
     if(secs<=0){clearInterval(iv);timer.textContent='DONE!';timer.style.color='#44FF66';addXP(30,'\ud83c\udfaf Focus 25min complete!');}
   },1000);
+}
+
+// EXERCISE VIDEO RECORDING
+let exerciseVids=JSON.parse(localStorage.getItem('exerciseVids')||'[]');
+let formData=JSON.parse(localStorage.getItem('formData')||'{"points":0,"perfect":0,"streak":0}');
+renderFormScore();
+function handleExerciseVideo(input){
+  const file=input.files[0];
+  if(!file)return;
+  // Save video file for download/review
+  const url=URL.createObjectURL(file);
+  const now=new Date();
+  exerciseVids.unshift({date:now.toISOString(),tl:now.toLocaleDateString('en-AU',{day:'numeric',month:'short'})+' '+now.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'}),url:url});
+  renderExerciseVideos();
+  addXP(10,'\ud83c\udfa5 Form video recorded');
+  // Auto download so Uncle Adam can review
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='exercise-'+now.toISOString().slice(0,10)+'.webm';
+  a.click();
+}
+function renderExerciseVideos(){
+  const el=document.getElementById('exerciseVideos');
+  if(!el)return;
+  el.innerHTML=exerciseVids.slice(0,4).map(v=>`<div style="background:#1e3068;border-radius:10px;padding:8px;text-align:center;"><div style="font-size:11px;color:#8899cc;">${v.tl}</div><div style="font-size:11px;color:#44FF66;">\u2705 Sent to Uncle Adam</div></div>`).join('');
+}
+function renderFormScore(){
+  const p=document.getElementById('formPoints');
+  const f=document.getElementById('formPerfect');
+  const s=document.getElementById('formStreak');
+  if(p)p.textContent=formData.points;
+  if(f)f.textContent=formData.perfect;
+  if(s)s.textContent=formData.streak;
 }
 
 // JUST 5 MINUTES TIMER
