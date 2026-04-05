@@ -859,12 +859,12 @@ body.discreet .sos-modal p { color: #666; }
 <div class="recorder-bar" id="recorderBar">
   <div class="rec-left">
     <button class="rec-btn" id="recBtn" onclick="toggleRecording()" title="Record class">●</button>
-    <span class="rec-status" id="recStatus">Ready</span>
+    <span class="rec-status" id="recStatus">Starting...</span>
     <span class="rec-timer" id="recTimer">00:00</span>
   </div>
   <div class="rec-right">
-    <button class="rec-save-btn" id="recSaveBtn" onclick="saveRecording()">Save</button>
     <span class="rec-count" id="recCount"></span>
+    <span style="font-size: 10px; color: var(--muted);" id="recWeek"></span>
   </div>
 </div>
 
@@ -1109,88 +1109,168 @@ function toggleTask(el) {
   }
 }
 
-// ═══════ CLASS RECORDER ═══════
+// ═══════ AUTO CLASS RECORDER ═══════
+// Records automatically based on timetable. No manual input needed.
+
 let mediaRecorder = null;
 let audioChunks = [];
 let recordingStart = null;
 let recTimerInterval = null;
+let currentPeriodLabel = '';
 let recordings = JSON.parse(localStorage.getItem('classRecordings') || '[]');
-updateRecCount();
+let micStream = null;
 
-function toggleRecording() {
-  if (mediaRecorder && mediaRecorder.state === 'recording') {
-    stopRecording();
-  } else {
-    startRecording();
+// ========= TIMETABLE DATA =========
+// Week reference date: set this to a known Monday of Week A
+// Adjust when Simon confirms which week is which
+const WEEK_A_REFERENCE = new Date('2026-04-06'); // Mon Apr 6 = Week A (adjust if needed)
+
+const PERIOD_TIMES = [
+  { id: 'P1', start: '08:00', end: '08:50' },
+  { id: 'P2', start: '08:50', end: '09:55' },
+  // RECESS 09:55-10:15
+  { id: 'P3', start: '10:15', end: '11:05' },
+  { id: 'P4', start: '11:05', end: '12:05' },
+  // LUNCH 12:05-12:50
+  { id: 'P5', start: '12:50', end: '13:40' },
+  { id: 'P6', start: '13:40', end: '14:35' },
+];
+
+const TIMETABLE = {
+  A: {
+    1: ['Art','Technology','Computing','Science','Maths','English'],
+    2: ['English','English','PE','PE','Sport','Sport'],
+    3: ['English','Computing','Science','Science','History','Technology'],
+    4: ['PE','Technology','Maths','Art','Music','History'],
+    5: ['Maths','Maths','Pastoral Care','Science','English','Computing'],
+  },
+  B: {
+    1: ['Maths','History','Technology','Computing','Music','Science'],
+    2: ['PE','Science','English','Sport','Sport',''],
+    3: ['History','History','Technology','Maths','English','Music'],
+    4: ['Art','Music','Maths','Technology','Art','PE'],
+    5: ['PE','Maths','Pastoral Care','English','History','Science'],
   }
+};
+
+function getCurrentWeek() {
+  const now = new Date();
+  const ref = new Date(WEEK_A_REFERENCE);
+  const diffDays = Math.floor((now - ref) / 86400000);
+  const weekNum = Math.floor(diffDays / 7);
+  return weekNum % 2 === 0 ? 'A' : 'B';
 }
 
-async function startRecording() {
+function getDayIndex() {
+  const d = new Date().getDay(); // 0=Sun, 1=Mon..5=Fri
+  return d >= 1 && d <= 5 ? d : 0; // 0 = not a school day
+}
+
+function getCurrentPeriod() {
+  const now = new Date();
+  const hhmm = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+  
+  for (let i = 0; i < PERIOD_TIMES.length; i++) {
+    if (hhmm >= PERIOD_TIMES[i].start && hhmm < PERIOD_TIMES[i].end) {
+      const week = getCurrentWeek();
+      const day = getDayIndex();
+      if (day === 0) return null; // weekend
+      const subjects = TIMETABLE[week][day];
+      if (!subjects) return null;
+      const subject = subjects[i] || 'Class';
+      return {
+        period: i + 1,
+        subject: subject,
+        end: PERIOD_TIMES[i].end,
+        id: PERIOD_TIMES[i].id
+      };
+    }
+  }
+  return null; // break time or outside school
+}
+
+function isBreakTime() {
+  const now = new Date();
+  const hhmm = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+  return (hhmm >= '09:55' && hhmm < '10:15') || (hhmm >= '12:05' && hhmm < '12:50');
+}
+
+function isSchoolHours() {
+  const now = new Date();
+  const hhmm = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+  const day = now.getDay();
+  return day >= 1 && day <= 5 && hhmm >= '07:50' && hhmm < '14:35';
+}
+
+// ========= RECORDING ENGINE =========
+
+async function startAutoRecording(label) {
+  if (mediaRecorder && mediaRecorder.state === 'recording') return; // already recording
+  
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ 
-      audio: { 
-        echoCancellation: true, 
-        noiseSuppression: true,
-        channelCount: 1,
-        sampleRate: 16000
-      } 
-    });
+    if (!micStream || !micStream.active) {
+      micStream = await navigator.mediaDevices.getUserMedia({
+        audio: { echoCancellation: true, noiseSuppression: true, channelCount: 1 }
+      });
+    }
     
     audioChunks = [];
-    mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
+    mediaRecorder = new MediaRecorder(micStream, { mimeType: 'audio/webm;codecs=opus' });
     
     mediaRecorder.ondataavailable = (e) => {
       if (e.data.size > 0) audioChunks.push(e.data);
     };
     
-    mediaRecorder.onstop = () => {
-      stream.getTracks().forEach(t => t.stop());
-    };
-    
-    // Collect data every 30 seconds (so we don't lose on crash)
-    mediaRecorder.start(30000);
+    mediaRecorder.start(30000); // chunk every 30s
     recordingStart = Date.now();
+    currentPeriodLabel = label;
     
-    // UI updates
+    // UI
     document.getElementById('recBtn').classList.add('recording');
     document.getElementById('recBtn').textContent = '■';
     document.getElementById('recStatus').classList.add('active');
-    document.getElementById('recStatus').textContent = 'REC';
+    document.getElementById('recStatus').textContent = label;
     document.getElementById('recTimer').classList.add('active');
-    document.getElementById('recSaveBtn').classList.remove('show');
     
+    if (recTimerInterval) clearInterval(recTimerInterval);
     recTimerInterval = setInterval(updateRecTimer, 1000);
+    
+    console.log('AUTO-REC START:', label, new Date().toLocaleTimeString());
   } catch (err) {
     console.error('Mic access denied:', err);
     document.getElementById('recStatus').textContent = 'Mic blocked';
   }
 }
 
-function stopRecording() {
+function stopAutoRecording() {
   if (!mediaRecorder || mediaRecorder.state !== 'recording') return;
   
   mediaRecorder.stop();
   clearInterval(recTimerInterval);
   
-  // UI updates
+  // Auto-save
+  setTimeout(() => autoSaveRecording(), 500);
+  
+  // UI
   document.getElementById('recBtn').classList.remove('recording');
   document.getElementById('recBtn').textContent = '●';
   document.getElementById('recStatus').classList.remove('active');
-  document.getElementById('recStatus').textContent = 'Stopped';
   document.getElementById('recTimer').classList.remove('active');
-  document.getElementById('recSaveBtn').classList.add('show');
+  
+  console.log('AUTO-REC STOP:', currentPeriodLabel, new Date().toLocaleTimeString());
 }
 
-function saveRecording() {
+function autoSaveRecording() {
   if (audioChunks.length === 0) return;
   
   const blob = new Blob(audioChunks, { type: 'audio/webm' });
   const now = new Date();
   const dateStr = now.toISOString().slice(0, 10);
-  const timeStr = now.toTimeString().slice(0, 5).replace(':', '');
-  const filename = `class-${dateStr}-${timeStr}.webm`;
+  const week = getCurrentWeek();
+  const safeLabel = currentPeriodLabel.replace(/[^a-zA-Z0-9]/g, '-');
+  const filename = `${dateStr}-W${week}-${safeLabel}.webm`;
   
-  // Save to downloads
+  // Auto-download
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
@@ -1198,22 +1278,20 @@ function saveRecording() {
   a.click();
   URL.revokeObjectURL(url);
   
-  // Track in localStorage
+  // Track
   const duration = recordingStart ? Math.floor((Date.now() - recordingStart) / 1000) : 0;
   recordings.push({
-    filename: filename,
-    date: now.toISOString(),
-    duration: duration,
-    sizeMB: (blob.size / 1024 / 1024).toFixed(1)
+    filename, label: currentPeriodLabel,
+    date: now.toISOString(), duration,
+    sizeMB: (blob.size / 1024 / 1024).toFixed(1),
+    week: week
   });
   localStorage.setItem('classRecordings', JSON.stringify(recordings));
   updateRecCount();
   
-  // Reset
   audioChunks = [];
-  document.getElementById('recSaveBtn').classList.remove('show');
   document.getElementById('recStatus').textContent = 'Saved ✓';
-  setTimeout(() => { document.getElementById('recStatus').textContent = 'Ready'; }, 2000);
+  setTimeout(() => { document.getElementById('recStatus').textContent = 'Break'; }, 2000);
 }
 
 function updateRecTimer() {
@@ -1228,8 +1306,54 @@ function updateRecCount() {
   const today = new Date().toISOString().slice(0, 10);
   const todayRecs = recordings.filter(r => r.date && r.date.startsWith(today));
   const el = document.getElementById('recCount');
-  if (el) el.textContent = todayRecs.length > 0 ? todayRecs.length + ' today' : '';
+  if (el) el.textContent = todayRecs.length > 0 ? todayRecs.length + '/6 classes' : '';
 }
+
+// Manual override — tap to force start/stop
+function toggleRecording() {
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+    stopAutoRecording();
+  } else {
+    const period = getCurrentPeriod();
+    startAutoRecording(period ? `P${period.period}-${period.subject}` : 'Manual');
+  }
+}
+
+// ========= AUTO-PILOT: Check every 30 seconds =========
+function autoRecordCheck() {
+  const period = getCurrentPeriod();
+  const isRecording = mediaRecorder && mediaRecorder.state === 'recording';
+  
+  if (period && period.subject && period.subject !== 'Sport' && period.subject !== '') {
+    // Should be recording
+    const label = `P${period.period}-${period.subject}`;
+    if (!isRecording) {
+      startAutoRecording(label);
+    } else if (currentPeriodLabel !== label) {
+      // Period changed — save old, start new
+      stopAutoRecording();
+      setTimeout(() => startAutoRecording(label), 1000);
+    }
+  } else {
+    // Break, lunch, Sport, weekend, or outside school
+    if (isRecording) {
+      stopAutoRecording();
+    }
+    if (isBreakTime()) {
+      document.getElementById('recStatus').textContent = 'Break';
+    } else if (!isSchoolHours()) {
+      document.getElementById('recStatus').textContent = getDayIndex() === 0 ? 'Weekend' : 'After school';
+    }
+  }
+}
+
+// Run auto-check every 30 seconds
+setInterval(autoRecordCheck, 30000);
+// Run once on load
+setTimeout(autoRecordCheck, 2000);
+// Show current week
+const weekEl = document.getElementById('recWeek');
+if (weekEl) weekEl.textContent = 'Week ' + getCurrentWeek();
 
 // ═══════ SOS SYSTEM ═══════
 function openSOS() {
