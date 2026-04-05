@@ -284,11 +284,65 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
     <button class="back" onclick="goHome()">← Home</button>
     <div style="padding: 8px 0 16px;"><h2 style="font-family:'Bangers',cursive; font-size:28px; letter-spacing:2px; color:#FF9933;">✅ My Tasks</h2></div>
     <div style="font-size:11px; font-weight:800; color:#8899cc; margin-bottom:8px;">DUE TODAY</div>
-    <div class="task" onclick="toggleTask(this)"><div class="tc">⬜</div><img src="assets/mrbean-maths.jpg" style="width:378px; height:500px; border-radius:12px; object-fit:cover; flex-shrink:0;"><div style="flex:1;"><div class="tt">Maths — Fractions</div><div class="td">Due: Tomorrow</div></div><div class="subj" style="background:rgba(85,170,255,0.2);color:#55AAFF;">MATHS</div></div>
+    <!-- MATHS -->
+    <div style="display:flex; gap:16px; background:#1e3068; border:2px solid #2d4488; border-radius:20px; overflow:hidden; margin-bottom:12px;">
+      <img src="assets/mrbean-maths.jpg" style="width:200px; flex-shrink:0; object-fit:cover; object-position:top;">
+      <div style="flex:1; padding:16px; display:flex; flex-direction:column; gap:8px;">
+        <div style="font-size:18px; font-weight:900; color:#55AAFF;">Maths — Fractions</div>
+        <div style="font-size:11px; color:#8899cc; margin-bottom:4px;">Due: Tomorrow</div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜';addXP(5,'✅ Step done')" style="display:flex;align-items:center;gap:10px;padding:10px;background:#0f1d42;border-radius:10px;cursor:pointer;"><span class="tc" style="font-size:18px;">⬜</span><span style="font-size:13px;font-weight:600;">20 min — Read the worksheet</span></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜';addXP(5,'✅ Step done')" style="display:flex;align-items:center;gap:10px;padding:10px;background:#0f1d42;border-radius:10px;cursor:pointer;"><span class="tc" style="font-size:18px;">⬜</span><span style="font-size:13px;font-weight:600;">Questions 1–5</span></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(68,221,85,0.1);border:1px solid #44DD55;border-radius:10px;">
+          <span style="font-size:16px;">🏃</span><span style="font-size:12px;color:#44DD55;font-weight:700;">Break! 20 star jumps or 5 push-ups</span>
+        </div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜';addXP(5,'✅ Step done')" style="display:flex;align-items:center;gap:10px;padding:10px;background:#0f1d42;border-radius:10px;cursor:pointer;"><span class="tc" style="font-size:18px;">⬜</span><span style="font-size:13px;font-weight:600;">Questions 6–10</span></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜';addXP(15,'✅ Task done!')" style="display:flex;align-items:center;gap:10px;padding:10px;background:#0f1d42;border-radius:10px;cursor:pointer;"><span class="tc" style="font-size:18px;">⬜</span><span style="font-size:13px;font-weight:700;color:#FF9933;">✅ DONE — Mark complete</span></div>
+      </div>
+    </div>
+
     <div style="font-size:11px; font-weight:800; color:#8899cc; margin:12px 0 8px;">THIS WEEK</div>
-    <div class="task" onclick="toggleTask(this)"><div class="tc">⬜</div><img src="assets/mrbean-english.jpg" style="width:378px; height:500px; border-radius:12px; object-fit:cover; flex-shrink:0;"><div style="flex:1;"><div class="tt">English — Narrative</div><div class="td">Due: Wednesday</div></div><div class="subj" style="background:rgba(255,153,51,0.2);color:#FF9933;">ENG</div></div>
-    <div class="task" onclick="toggleTask(this)"><div class="tc">⬜</div><img src="assets/mrbean-science.jpg" style="width:378px; height:500px; border-radius:12px; object-fit:cover; flex-shrink:0;"><div style="flex:1;"><div class="tt">Science — Lab Report</div><div class="td">Due: Friday</div></div><div class="subj" style="background:rgba(68,221,85,0.2);color:#44DD55;">SCI</div></div>
-    <div class="task" onclick="toggleTask(this)"><div class="tc">⬜</div><img src="assets/mrbean-history.jpg" style="width:378px; height:500px; border-radius:12px; object-fit:cover; flex-shrink:0;"><div style="flex:1;"><div class="tt">History — Egypt</div><div class="td">Due: Thursday</div></div><div class="subj" style="background:rgba(255,119,153,0.2);color:#FF7799;">HIST</div></div>
+
+    <!-- ENGLISH -->
+    <div style="display:flex; gap:16px; background:#1e3068; border:2px solid #2d4488; border-radius:20px; overflow:hidden; margin-bottom:12px;">
+      <img src="assets/mrbean-english.jpg" style="width:200px; flex-shrink:0; object-fit:cover; object-position:top;">
+      <div style="flex:1; padding:16px; display:flex; flex-direction:column; gap:8px;">
+        <div style="font-size:18px; font-weight:900; color:#FF9933;">English — Narrative</div>
+        <div style="font-size:11px; color:#8899cc; margin-bottom:4px;">Due: Wednesday</div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:10px;padding:10px;background:#0f1d42;border-radius:10px;cursor:pointer;"><span class="tc" style="font-size:18px;">⬜</span><span style="font-size:13px;font-weight:600;">Brainstorm ideas (5 min)</span></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:10px;padding:10px;background:#0f1d42;border-radius:10px;cursor:pointer;"><span class="tc" style="font-size:18px;">⬜</span><span style="font-size:13px;font-weight:600;">Write intro paragraph (20 min)</span></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(68,221,85,0.1);border:1px solid #44DD55;border-radius:10px;"><span style="font-size:16px;">🏃</span><span style="font-size:12px;color:#44DD55;font-weight:700;">Break! Walk around, drink water</span></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:10px;padding:10px;background:#0f1d42;border-radius:10px;cursor:pointer;"><span class="tc" style="font-size:18px;">⬜</span><span style="font-size:13px;font-weight:600;">Write body paragraphs (20 min)</span></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:10px;padding:10px;background:#0f1d42;border-radius:10px;cursor:pointer;"><span class="tc" style="font-size:18px;">⬜</span><span style="font-size:13px;font-weight:700;color:#FF9933;">✅ DONE — Mark complete</span></div>
+      </div>
+    </div>
+
+    <!-- SCIENCE -->
+    <div style="display:flex; gap:16px; background:#1e3068; border:2px solid #2d4488; border-radius:20px; overflow:hidden; margin-bottom:12px;">
+      <img src="assets/mrbean-science.jpg" style="width:200px; flex-shrink:0; object-fit:cover; object-position:top;">
+      <div style="flex:1; padding:16px; display:flex; flex-direction:column; gap:8px;">
+        <div style="font-size:18px; font-weight:900; color:#44DD55;">Science — Lab Report</div>
+        <div style="font-size:11px; color:#8899cc; margin-bottom:4px;">Due: Friday</div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:10px;padding:10px;background:#0f1d42;border-radius:10px;cursor:pointer;"><span class="tc" style="font-size:18px;">⬜</span><span style="font-size:13px;font-weight:600;">Aim + Hypothesis (10 min)</span></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:10px;padding:10px;background:#0f1d42;border-radius:10px;cursor:pointer;"><span class="tc" style="font-size:18px;">⬜</span><span style="font-size:13px;font-weight:600;">Method + Results (20 min)</span></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(68,221,85,0.1);border:1px solid #44DD55;border-radius:10px;"><span style="font-size:16px;">🏃</span><span style="font-size:12px;color:#44DD55;font-weight:700;">Break! 5 push-ups or stretch</span></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:10px;padding:10px;background:#0f1d42;border-radius:10px;cursor:pointer;"><span class="tc" style="font-size:18px;">⬜</span><span style="font-size:13px;font-weight:600;">Discussion + Conclusion (20 min)</span></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:10px;padding:10px;background:#0f1d42;border-radius:10px;cursor:pointer;"><span class="tc" style="font-size:18px;">⬜</span><span style="font-size:13px;font-weight:700;color:#FF9933;">✅ DONE — Mark complete</span></div>
+      </div>
+    </div>
+
+    <!-- HISTORY -->
+    <div style="display:flex; gap:16px; background:#1e3068; border:2px solid #2d4488; border-radius:20px; overflow:hidden; margin-bottom:12px;">
+      <img src="assets/mrbean-history.jpg" style="width:200px; flex-shrink:0; object-fit:cover; object-position:top;">
+      <div style="flex:1; padding:16px; display:flex; flex-direction:column; gap:8px;">
+        <div style="font-size:18px; font-weight:900; color:#FF7799;">History — Egypt</div>
+        <div style="font-size:11px; color:#8899cc; margin-bottom:4px;">Due: Thursday</div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:10px;padding:10px;background:#0f1d42;border-radius:10px;cursor:pointer;"><span class="tc" style="font-size:18px;">⬜</span><span style="font-size:13px;font-weight:600;">Read notes (10 min)</span></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:10px;padding:10px;background:#0f1d42;border-radius:10px;cursor:pointer;"><span class="tc" style="font-size:18px;">⬜</span><span style="font-size:13px;font-weight:600;">Answer Q1–3 (20 min)</span></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(68,221,85,0.1);border:1px solid #44DD55;border-radius:10px;"><span style="font-size:16px;">🏃</span><span style="font-size:12px;color:#44DD55;font-weight:700;">Break! 20 star jumps</span></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:10px;padding:10px;background:#0f1d42;border-radius:10px;cursor:pointer;"><span class="tc" style="font-size:18px;">⬜</span><span style="font-size:13px;font-weight:600;">Answer Q4–6 (20 min)</span></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:10px;padding:10px;background:#0f1d42;border-radius:10px;cursor:pointer;"><span class="tc" style="font-size:18px;">⬜</span><span style="font-size:13px;font-weight:700;color:#FF9933;">✅ DONE — Mark complete</span></div>
+      </div>
+    </div>
   </div>
 
   <!-- ═══ SCHEDULE ═══ -->
