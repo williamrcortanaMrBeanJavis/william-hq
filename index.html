@@ -803,6 +803,13 @@ body.discreet .sos-modal p { color: #666; }
     <!-- ═══════ TASKS VIEW ═══════ -->
     <div class="view" id="view-tasks">
       <div class="tasks-view">
+        <!-- Subject banner -->
+        <div style="border-radius: 16px; overflow: hidden; margin-bottom: 16px; position: relative; height: 100px; background-image: url('assets/mrbean-maths.jpg'); background-size: cover; background-position: center top;">
+          <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.95) 15%, rgba(20,34,82,0.2) 100%); display: flex; align-items: flex-end; padding: 14px;">
+            <div style="font-size: 18px; font-weight: 900;">✅ My Tasks</div>
+          </div>
+        </div>
+
         <div class="task-section">
           <div class="task-section-title">📚 DUE TODAY</div>
           <div class="task-item" onclick="toggleTask(this)">
@@ -923,7 +930,11 @@ body.discreet .sos-modal p { color: #666; }
     <!-- ═══════ CHALLENGES VIEW ═══════ -->
     <div class="view" id="view-challenge">
       <div style="padding: 20px; overflow-y: auto; height: 100%;">
-        <div style="font-size: 18px; font-weight: 800; margin-bottom: 4px;">⚡ Daily Challenges</div>
+        <div style="border-radius: 16px; overflow: hidden; margin-bottom: 12px; position: relative; height: 100px; background-image: url('assets/mrbean-superbean.jpg'); background-size: cover; background-position: center top;">
+          <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.95) 15%, rgba(20,34,82,0.2) 100%); display: flex; align-items: flex-end; padding: 14px;">
+            <div style="font-size: 18px; font-weight: 800;">⚡ Daily Challenges</div>
+          </div>
+        </div>
         <div style="font-size: 13px; color: var(--muted); margin-bottom: 20px;">Train your brain. Level up. Become Pirate King.</div>
 
         <!-- Today's Challenges -->
@@ -979,7 +990,7 @@ body.discreet .sos-modal p { color: #666; }
       <div style="padding: 20px; overflow-y: auto; height: 100%;">
         <!-- Level Card -->
         <div style="text-align: center; padding: 24px; background: var(--card); border: 2px solid var(--border); border-radius: 20px; margin-bottom: 16px;">
-          <div style="font-size: 48px; margin-bottom: 8px;" id="xpEmoji">🏴‍☠️</div>
+          <div style="width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 8px; overflow: hidden; border: 3px solid var(--bean-orange);"><img src="assets/mrbean-pirate-captain.jpg" style="width: 100%; height: 100%; object-fit: cover;"></div>
           <div style="font-size: 28px; font-weight: 900;" id="xpTitle">Recruit</div>
           <div style="font-size: 14px; color: var(--muted); margin-top: 4px;">Level <span id="xpLevel">1</span></div>
           <div style="margin: 16px auto; max-width: 300px;">
@@ -1030,7 +1041,11 @@ body.discreet .sos-modal p { color: #666; }
     <!-- ═══════ BRAIN DUMP ═══════ -->
     <div class="view" id="view-dump">
       <div style="padding: 20px; display: flex; flex-direction: column; height: 100%;">
-        <div style="font-size: 18px; font-weight: 800; margin-bottom: 4px;">💭 Brain Dump</div>
+        <div style="border-radius: 16px; overflow: hidden; margin-bottom: 12px; position: relative; height: 90px; background-image: url('assets/mrbean-comic-artist.jpg'); background-size: cover; background-position: center;">
+          <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.95) 15%, rgba(20,34,82,0.2) 100%); display: flex; align-items: flex-end; padding: 14px;">
+            <div style="font-size: 18px; font-weight: 800;">💭 Brain Dump</div>
+          </div>
+        </div>
         <div style="font-size: 13px; color: var(--muted); margin-bottom: 16px;">Random thought? Question? Idea? Type it here. Mr Bean and Jarvis will see it when you get home.</div>
         
         <div style="display: flex; gap: 8px; margin-bottom: 16px;">
@@ -1057,35 +1072,47 @@ body.discreet .sos-modal p { color: #666; }
         <div style="font-size: 13px; color: var(--muted); margin-bottom: 20px;">Curious about something? Pick a topic or just ask Mr Bean anything.</div>
         
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-          <div class="topic-card" onclick="askAbout('space')">
-            <div class="topic-emoji">🚀</div>
-            <div class="topic-title">Space & Universe</div>
-            <div class="topic-desc">Black holes, planets, stars, galaxies</div>
+          <div class="topic-card" onclick="askAbout('space')" style="background-image: url('assets/mrbean-onepiece-sea-king.jpg'); background-size: cover; background-position: center; position: relative; overflow: hidden;">
+            <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.9) 30%, rgba(20,34,82,0.3) 100%); pointer-events: none;"></div>
+            <div style="position: relative; z-index: 1;">
+              <div class="topic-title">Space & Universe</div>
+              <div class="topic-desc">Black holes, planets, stars, galaxies</div>
+            </div>
           </div>
-          <div class="topic-card" onclick="askAbout('animals')">
-            <div class="topic-emoji">🦁</div>
-            <div class="topic-title">Animals & Nature</div>
-            <div class="topic-desc">Wild animals, ocean life, evolution</div>
+          <div class="topic-card" onclick="askAbout('animals')" style="background-image: url('assets/mrbean-golden-retriever.jpg'); background-size: cover; background-position: center; position: relative; overflow: hidden;">
+            <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.9) 30%, rgba(20,34,82,0.3) 100%); pointer-events: none;"></div>
+            <div style="position: relative; z-index: 1;">
+              <div class="topic-title">Animals & Nature</div>
+              <div class="topic-desc">Wild animals, ocean life, evolution</div>
+            </div>
           </div>
-          <div class="topic-card" onclick="askAbout('tech')">
-            <div class="topic-emoji">🤖</div>
-            <div class="topic-title">Technology & AI</div>
-            <div class="topic-desc">How things work, robots, gaming tech</div>
+          <div class="topic-card" onclick="askAbout('tech')" style="background-image: url('assets/mrbean-robotics.jpg'); background-size: cover; background-position: center; position: relative; overflow: hidden;">
+            <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.9) 30%, rgba(20,34,82,0.3) 100%); pointer-events: none;"></div>
+            <div style="position: relative; z-index: 1;">
+              <div class="topic-title">Technology & AI</div>
+              <div class="topic-desc">How things work, robots, gaming tech</div>
+            </div>
           </div>
-          <div class="topic-card" onclick="askAbout('history')">
-            <div class="topic-emoji">⚔️</div>
-            <div class="topic-title">History & Ancient World</div>
-            <div class="topic-desc">Egypt, Rome, warriors, civilisations</div>
+          <div class="topic-card" onclick="askAbout('history')" style="background-image: url('assets/mrbean-pirate-captain.jpg'); background-size: cover; background-position: center; position: relative; overflow: hidden;">
+            <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.9) 30%, rgba(20,34,82,0.3) 100%); pointer-events: none;"></div>
+            <div style="position: relative; z-index: 1;">
+              <div class="topic-title">History & Ancient World</div>
+              <div class="topic-desc">Egypt, Rome, warriors, civilisations</div>
+            </div>
           </div>
-          <div class="topic-card" onclick="askAbout('science')">
-            <div class="topic-emoji">🔬</div>
-            <div class="topic-title">Science & Experiments</div>
-            <div class="topic-desc">Chemistry, physics, biology, cool facts</div>
+          <div class="topic-card" onclick="askAbout('science')" style="background-image: url('assets/mrbean-compounding.jpg'); background-size: cover; background-position: center; position: relative; overflow: hidden;">
+            <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.9) 30%, rgba(20,34,82,0.3) 100%); pointer-events: none;"></div>
+            <div style="position: relative; z-index: 1;">
+              <div class="topic-title">Science & Experiments</div>
+              <div class="topic-desc">Chemistry, physics, biology, cool facts</div>
+            </div>
           </div>
-          <div class="topic-card" onclick="askAbout('random')">
-            <div class="topic-emoji">🎲</div>
-            <div class="topic-title">Random Question</div>
-            <div class="topic-desc">Ask literally anything</div>
+          <div class="topic-card" onclick="askAbout('random')" style="background-image: url('assets/mrbean-onepiece.jpg'); background-size: cover; background-position: center; position: relative; overflow: hidden;">
+            <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.9) 30%, rgba(20,34,82,0.3) 100%); pointer-events: none;"></div>
+            <div style="position: relative; z-index: 1;">
+              <div class="topic-title">Random Question</div>
+              <div class="topic-desc">Ask literally anything</div>
+            </div>
           </div>
         </div>
       </div>
