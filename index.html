@@ -287,6 +287,7 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
     <div class="grid-btn" onclick="goView('week')"><div class="ico">🗓️</div><div class="lbl">Week</div></div>
     <div class="grid-btn" onclick="goView('notes')"><div class="ico">📝</div><div class="lbl">Notes</div></div>
     <div class="grid-btn" onclick="goView('photo')"><div class="ico">📸</div><div class="lbl">Photo</div></div>
+    <div class="grid-btn" onclick="goView('therapy')"><div class="ico">💪</div><div class="lbl">My Team</div></div>
     </div>
   </div>
 
@@ -763,6 +764,61 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
     <div style="background:#1e3068;border:2px solid #2d4488;border-radius:20px;padding:24px;">
       <div style="font-family:'Bangers',cursive;font-size:28px;color:#55AAFF;margin-bottom:12px;">🤖 Jarvis Says</div>
       <div style="font-size:18px;color:#8899cc;font-style:italic;">"Every week you show up is a week you get stronger. Not just at school — at life. Keep going, William."</div>
+    </div>
+  </div>
+
+  <!-- ═══ MY TEAM (Therapy) ═══ -->
+  <div class="view" id="view-therapy">
+    <button class="back" onclick="goHome()">← Home</button>
+    <div style="padding:8px 0 16px;"><h2 style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:2px;color:#FF9933;text-shadow:0 0 25px rgba(255,153,51,0.8);">💪 MY SUPPORT TEAM</h2></div>
+    <div style="font-size:18px;color:#8899cc;margin-bottom:16px;">These people help you build your toolkit. Even the best athletes have coaches.</div>
+
+    <!-- Speech -->
+    <div style="display:flex;background:#1e3068;border:2px solid #FF9933;border-radius:20px;overflow:hidden;margin-bottom:12px;">
+      <img src="assets/mrbean-speech.jpg" style="width:378px;flex-shrink:0;object-fit:cover;object-position:top;">
+      <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:10px;">
+        <div style="font-family:'Bangers',cursive;font-size:36px;letter-spacing:1px;color:#FF9933;text-shadow:0 0 20px rgba(255,153,51,0.8);">🗣️ SPEECH THERAPY</div>
+        <div style="font-size:18px;color:#8899cc;">Fortnightly Saturday + alternate Wednesdays</div>
+        <div style="font-size:16px;color:#44FF66;font-weight:700;">Your speech has improved MASSIVELY in the last 2 years.</div>
+        <div style="font-size:14px;color:#8899cc;margin-top:4px;">Notes & things to remember:</div>
+        <div id="speechNotes"></div>
+        <div style="display:flex;gap:8px;">
+          <input type="text" id="speechInput" placeholder="Add a note for speech..." style="flex:1;padding:12px;border-radius:12px;border:2px solid #2d4488;background:#0f1d42;color:#fff;font-size:14px;font-family:'Inter';outline:none;" onkeydown="if(event.key==='Enter')addTherapyNote('speech')">
+          <button onclick="addTherapyNote('speech')" style="padding:12px 16px;border-radius:12px;border:none;background:#FF9933;color:#000;font-weight:800;cursor:pointer;font-family:'Inter';">➕</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- OT -->
+    <div style="display:flex;background:#1e3068;border:2px solid #FFAA00;border-radius:20px;overflow:hidden;margin-bottom:12px;">
+      <img src="assets/mrbean-ot.jpg" style="width:378px;flex-shrink:0;object-fit:cover;object-position:top;">
+      <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:10px;">
+        <div style="font-family:'Bangers',cursive;font-size:36px;letter-spacing:1px;color:#FFAA00;text-shadow:0 0 20px rgba(255,170,0,0.8);">✋ OCCUPATIONAL THERAPY</div>
+        <div style="font-size:18px;color:#8899cc;">Fortnightly Saturday (alternating times)</div>
+        <div style="font-size:16px;color:#44FF66;font-weight:700;">Building skills your brain needs. Like a gym for your mind.</div>
+        <div style="font-size:14px;color:#8899cc;margin-top:4px;">Notes & exercises to practice:</div>
+        <div id="otNotes"></div>
+        <div style="display:flex;gap:8px;">
+          <input type="text" id="otInput" placeholder="Add a note for OT..." style="flex:1;padding:12px;border-radius:12px;border:2px solid #2d4488;background:#0f1d42;color:#fff;font-size:14px;font-family:'Inter';outline:none;" onkeydown="if(event.key==='Enter')addTherapyNote('ot')">
+          <button onclick="addTherapyNote('ot')" style="padding:12px 16px;border-radius:12px;border:none;background:#FFAA00;color:#000;font-weight:800;cursor:pointer;font-family:'Inter';">➕</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Psychology -->
+    <div style="display:flex;background:#1e3068;border:2px solid #55AAFF;border-radius:20px;overflow:hidden;margin-bottom:12px;">
+      <img src="assets/mrbean-psychology.jpg" style="width:378px;flex-shrink:0;object-fit:cover;object-position:top;">
+      <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:10px;">
+        <div style="font-family:'Bangers',cursive;font-size:36px;letter-spacing:1px;color:#55AAFF;text-shadow:0 0 20px rgba(85,170,255,0.8);">🧠 PSYCHOLOGY</div>
+        <div style="font-size:18px;color:#8899cc;">Fortnightly Saturday</div>
+        <div style="font-size:16px;color:#44FF66;font-weight:700;">Smart people talk to someone. Champions have coaches. You have both.</div>
+        <div style="font-size:14px;color:#8899cc;margin-top:4px;">Things I want to talk about:</div>
+        <div id="psychNotes"></div>
+        <div style="display:flex;gap:8px;">
+          <input type="text" id="psychInput" placeholder="Something to bring up next session..." style="flex:1;padding:12px;border-radius:12px;border:2px solid #2d4488;background:#0f1d42;color:#fff;font-size:14px;font-family:'Inter';outline:none;" onkeydown="if(event.key==='Enter')addTherapyNote('psych')">
+          <button onclick="addTherapyNote('psych')" style="padding:12px 16px;border-radius:12px;border:none;background:#55AAFF;color:#000;font-weight:800;cursor:pointer;font-family:'Inter';">➕</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1261,6 +1317,38 @@ function renderPhotos(){
     <img src="${p.data}" style="width:100%;display:block;cursor:pointer;" onclick="window.open(this.src)">
     <div style="position:absolute;bottom:0;left:0;right:0;padding:8px;background:rgba(10,15,40,0.9);font-size:11px;color:#8899cc;">${p.subject} • ${p.tl}</div>
   </div>`).join('');
+}
+
+// THERAPY NOTES
+let therapyNotes=JSON.parse(localStorage.getItem('therapyNotes')||'{"speech":[],"ot":[],"psych":[]}');
+renderTherapyNotes();
+function addTherapyNote(type){
+  const inputId={speech:'speechInput',ot:'otInput',psych:'psychInput'}[type];
+  const i=document.getElementById(inputId);
+  const t=i.value.trim();
+  if(!t)return;
+  if(!therapyNotes[type])therapyNotes[type]=[];
+  therapyNotes[type].unshift({text:t,time:new Date().toISOString(),tl:new Date().toLocaleDateString('en-AU',{day:'numeric',month:'short'})});
+  localStorage.setItem('therapyNotes',JSON.stringify(therapyNotes));
+  i.value='';
+  renderTherapyNotes();
+  addXP(5,'💪 Therapy note');
+}
+function renderTherapyNotes(){
+  ['speech','ot','psych'].forEach(type=>{
+    const elId={speech:'speechNotes',ot:'otNotes',psych:'psychNotes'}[type];
+    const el=document.getElementById(elId);
+    if(!el)return;
+    const notes=therapyNotes[type]||[];
+    if(!notes.length){el.innerHTML='<div style="font-size:13px;color:#555;padding:8px 0;">No notes yet. Add one before your next session.</div>';return;}
+    el.innerHTML=notes.slice(0,10).map((n,i)=>`
+      <div style="display:flex;gap:8px;align-items:center;padding:8px 10px;background:#0f1d42;border-radius:10px;margin-bottom:4px;">
+        <span style="font-size:14px;cursor:pointer;" onclick="therapyNotes['${type}'].splice(${i},1);localStorage.setItem('therapyNotes',JSON.stringify(therapyNotes));renderTherapyNotes();">✖</span>
+        <span style="font-size:14px;flex:1;">${n.text}</span>
+        <span style="font-size:11px;color:#555;">${n.tl}</span>
+      </div>
+    `).join('');
+  });
 }
 
 // WATER/BREAK REMINDERS
