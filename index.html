@@ -154,8 +154,8 @@ body.discreet .input-area input { background: #f5f5f5; color: #333; border: 1px 
 /* ═══════ LAYOUT ═══════ */
 .app-layout {
   display: flex;
-  margin-top: 56px;
-  height: calc(100vh - 56px);
+  margin-top: 88px;
+  height: calc(100vh - 88px);
 }
 
 /* ═══════ LEFT SIDEBAR ═══════ */
@@ -424,6 +424,87 @@ body.discreet .input-area input { background: #f5f5f5; color: #333; border: 1px 
 .topic-card .topic-emoji { font-size: 32px; margin-bottom: 8px; }
 .topic-card .topic-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
 .topic-card .topic-desc { font-size: 13px; color: var(--muted); }
+
+/* ═══════ CLASS RECORDER ═══════ */
+.recorder-bar {
+  position: fixed;
+  top: 56px;
+  left: 260px;
+  right: 0;
+  height: 32px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 90;
+  font-size: 11px;
+}
+.recorder-bar.hidden { display: none; }
+.rec-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.rec-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  font-size: 10px;
+  color: var(--muted);
+}
+.rec-btn:hover { border-color: var(--red); color: var(--red); }
+.rec-btn.recording {
+  border-color: var(--red);
+  background: var(--red);
+  color: white;
+  animation: rec-blink 1.5s infinite;
+}
+@keyframes rec-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+.rec-status { color: var(--muted); font-weight: 500; }
+.rec-status.active { color: var(--red); font-weight: 700; }
+.rec-timer { font-family: monospace; color: var(--muted); font-size: 11px; }
+.rec-timer.active { color: var(--red); }
+.rec-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.rec-save-btn {
+  padding: 3px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--green);
+  background: rgba(46,204,64,0.1);
+  color: var(--green);
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Inter';
+  display: none;
+}
+.rec-save-btn.show { display: block; }
+.rec-count { color: var(--muted); font-size: 10px; }
+/* Discreet mode */
+body.discreet .recorder-bar { background: #fff; border-bottom: 1px solid #e0e0e0; }
+body.discreet .rec-status { color: #888; }
+body.discreet .rec-status.active { color: #cc0000; }
+body.discreet .rec-timer.active { color: #cc0000; }
+body.discreet .rec-btn.recording { background: #cc0000; border-color: #cc0000; }
+/* Responsive */
+@media (max-width: 600px) {
+  .recorder-bar { left: 0; }
+}
 
 /* ═══════ SOS BUTTON ═══════ */
 .sos-btn {
@@ -774,6 +855,19 @@ body.discreet .sos-modal p { color: #666; }
   </div>
 </div>
 
+<!-- ═══════ CLASS RECORDER BAR ═══════ -->
+<div class="recorder-bar" id="recorderBar">
+  <div class="rec-left">
+    <button class="rec-btn" id="recBtn" onclick="toggleRecording()" title="Record class">●</button>
+    <span class="rec-status" id="recStatus">Ready</span>
+    <span class="rec-timer" id="recTimer">00:00</span>
+  </div>
+  <div class="rec-right">
+    <button class="rec-save-btn" id="recSaveBtn" onclick="saveRecording()">Save</button>
+    <span class="rec-count" id="recCount"></span>
+  </div>
+</div>
+
 <!-- ═══════ SOS BUTTON ═══════ -->
 <button class="sos-btn" onclick="openSOS()" title="Emergency">SOS</button>
 
@@ -805,7 +899,7 @@ body.discreet .sos-modal p { color: #666; }
         <a href="sms:ADAM_PHONE&body=SOS%20from%20William%20-%20I%20need%20help%20right%20now" class="sos-text">📱 Text Uncle Adam</a>
       </div>
       <div class="sos-contact">
-        <a href="mailto:ADAM_EMAIL,SIMON_EMAIL,ANNETTE_EMAIL,info@tcpa.com.au?subject=SOS%20from%20William&body=William%20pressed%20the%20emergency%20button.%20Please%20check%20on%20him%20immediately." class="sos-email">📧 Email Everyone</a>
+        <a href="mailto:info@tcpa.com.au?subject=SOS%20from%20William%20Reinhard&body=William%20pressed%20the%20emergency%20SOS%20button.%20Please%20check%20on%20him%20immediately.%20This%20is%20an%20automated%20alert." class="sos-email">📧 Email Pharmacy (TCPA)</a>
       </div>
       <div style="margin-top: 16px; padding: 12px; background: rgba(46,204,64,0.1); border: 1px solid #2ECC40; border-radius: 10px; font-size: 12px; color: #2ECC40;">
         ✅ If you're in danger, call <a href="tel:000" style="color: #2ECC40; font-weight: 800;">000</a> (police/ambulance/fire)
@@ -1013,6 +1107,128 @@ function toggleTask(el) {
     check.textContent = '✅';
     el.style.opacity = '0.6';
   }
+}
+
+// ═══════ CLASS RECORDER ═══════
+let mediaRecorder = null;
+let audioChunks = [];
+let recordingStart = null;
+let recTimerInterval = null;
+let recordings = JSON.parse(localStorage.getItem('classRecordings') || '[]');
+updateRecCount();
+
+function toggleRecording() {
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+    stopRecording();
+  } else {
+    startRecording();
+  }
+}
+
+async function startRecording() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ 
+      audio: { 
+        echoCancellation: true, 
+        noiseSuppression: true,
+        channelCount: 1,
+        sampleRate: 16000
+      } 
+    });
+    
+    audioChunks = [];
+    mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
+    
+    mediaRecorder.ondataavailable = (e) => {
+      if (e.data.size > 0) audioChunks.push(e.data);
+    };
+    
+    mediaRecorder.onstop = () => {
+      stream.getTracks().forEach(t => t.stop());
+    };
+    
+    // Collect data every 30 seconds (so we don't lose on crash)
+    mediaRecorder.start(30000);
+    recordingStart = Date.now();
+    
+    // UI updates
+    document.getElementById('recBtn').classList.add('recording');
+    document.getElementById('recBtn').textContent = '■';
+    document.getElementById('recStatus').classList.add('active');
+    document.getElementById('recStatus').textContent = 'REC';
+    document.getElementById('recTimer').classList.add('active');
+    document.getElementById('recSaveBtn').classList.remove('show');
+    
+    recTimerInterval = setInterval(updateRecTimer, 1000);
+  } catch (err) {
+    console.error('Mic access denied:', err);
+    document.getElementById('recStatus').textContent = 'Mic blocked';
+  }
+}
+
+function stopRecording() {
+  if (!mediaRecorder || mediaRecorder.state !== 'recording') return;
+  
+  mediaRecorder.stop();
+  clearInterval(recTimerInterval);
+  
+  // UI updates
+  document.getElementById('recBtn').classList.remove('recording');
+  document.getElementById('recBtn').textContent = '●';
+  document.getElementById('recStatus').classList.remove('active');
+  document.getElementById('recStatus').textContent = 'Stopped';
+  document.getElementById('recTimer').classList.remove('active');
+  document.getElementById('recSaveBtn').classList.add('show');
+}
+
+function saveRecording() {
+  if (audioChunks.length === 0) return;
+  
+  const blob = new Blob(audioChunks, { type: 'audio/webm' });
+  const now = new Date();
+  const dateStr = now.toISOString().slice(0, 10);
+  const timeStr = now.toTimeString().slice(0, 5).replace(':', '');
+  const filename = `class-${dateStr}-${timeStr}.webm`;
+  
+  // Save to downloads
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+  
+  // Track in localStorage
+  const duration = recordingStart ? Math.floor((Date.now() - recordingStart) / 1000) : 0;
+  recordings.push({
+    filename: filename,
+    date: now.toISOString(),
+    duration: duration,
+    sizeMB: (blob.size / 1024 / 1024).toFixed(1)
+  });
+  localStorage.setItem('classRecordings', JSON.stringify(recordings));
+  updateRecCount();
+  
+  // Reset
+  audioChunks = [];
+  document.getElementById('recSaveBtn').classList.remove('show');
+  document.getElementById('recStatus').textContent = 'Saved ✓';
+  setTimeout(() => { document.getElementById('recStatus').textContent = 'Ready'; }, 2000);
+}
+
+function updateRecTimer() {
+  if (!recordingStart) return;
+  const elapsed = Math.floor((Date.now() - recordingStart) / 1000);
+  const mins = String(Math.floor(elapsed / 60)).padStart(2, '0');
+  const secs = String(elapsed % 60).padStart(2, '0');
+  document.getElementById('recTimer').textContent = mins + ':' + secs;
+}
+
+function updateRecCount() {
+  const today = new Date().toISOString().slice(0, 10);
+  const todayRecs = recordings.filter(r => r.date && r.date.startsWith(today));
+  const el = document.getElementById('recCount');
+  if (el) el.textContent = todayRecs.length > 0 ? todayRecs.length + ' today' : '';
 }
 
 // ═══════ SOS SYSTEM ═══════
