@@ -753,16 +753,20 @@ body.discreet .sos-modal p { color: #666; }
   <div class="sidebar">
     <!-- Character Select -->
     <div class="sidebar-section">Talk To</div>
-    <div class="char-card bean selected" onclick="selectChar('bean')">
-      <img src="assets/mrbean-avatar.jpg" style="width: 80px; height: 80px; border-radius: 16px; object-fit: cover; margin-bottom: 8px; border: 2px solid var(--bean-orange);">
-      <div class="char-name">Mr Bean</div>
-      <div class="char-desc">Your mate. Questions, homework, fun.</div>
+    <div class="char-card bean selected" onclick="selectChar('bean')" style="background-image: url('assets/mrbean-full.jpg'); background-size: cover; background-position: center; min-height: 140px; position: relative; overflow: hidden;">
+      <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.95) 30%, rgba(20,34,82,0.3) 100%);"></div>
+      <div style="position: relative; z-index: 1; margin-top: auto; padding-top: 60px;">
+        <div class="char-name" style="font-size: 18px;">Mr Bean</div>
+        <div class="char-desc">Your mate 🐻</div>
+      </div>
     </div>
     <div style="height: 8px;"></div>
-    <div class="char-card jarvis" onclick="selectChar('jarvis')">
-      <img src="assets/jarvis-avatar.jpg" style="width: 80px; height: 80px; border-radius: 16px; object-fit: cover; margin-bottom: 8px; border: 2px solid var(--jarvis-blue);">
-      <div class="char-name">Jarvis</div>
-      <div class="char-desc">Your mentor. Growth, discipline, goals.</div>
+    <div class="char-card jarvis" onclick="selectChar('jarvis')" style="background-image: url('assets/jarvis-avatar.jpg'); background-size: cover; background-position: center; min-height: 140px; position: relative; overflow: hidden;">
+      <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.95) 30%, rgba(20,34,82,0.3) 100%);"></div>
+      <div style="position: relative; z-index: 1; margin-top: auto; padding-top: 60px;">
+        <div class="char-name" style="font-size: 18px;">Jarvis</div>
+        <div class="char-desc">Your mentor 🤖</div>
+      </div>
     </div>
 
     <div class="sidebar-section" style="margin-top: 20px;">Navigate</div>
@@ -781,9 +785,12 @@ body.discreet .sos-modal p { color: #666; }
     <!-- ═══════ CHAT VIEW ═══════ -->
     <div class="view active" id="view-chat">
       <div class="chat-messages" id="chatMessages">
-        <div class="chat-bubble bean">
-          <div class="chat-sender">🐻 Mr Bean</div>
-          Hey William 👋 I'm Mr Bean — your AI. I'm here to help you remember stuff, answer questions, and make sure things don't get missed. Think of me as your brain backup. What's going on today?
+        <div style="display: flex; gap: 10px; align-items: flex-start;">
+          <img src="assets/mrbean-avatar.jpg" style="width: 36px; height: 36px; border-radius: 10px; object-fit: cover; border: 2px solid var(--bean-orange); flex-shrink: 0;">
+          <div class="chat-bubble bean">
+            <div class="chat-sender">🐻 Mr Bean</div>
+            Hey William 👋 I'm Mr Bean — your AI. I'm here to help you remember stuff, answer questions, and make sure things don't get missed. Think of me as your brain backup. What's going on today?
+          </div>
         </div>
       </div>
       <div class="input-area">
@@ -853,7 +860,11 @@ body.discreet .sos-modal p { color: #666; }
     <!-- ═══════ SCHEDULE VIEW ═══════ -->
     <div class="view" id="view-schedule">
       <div class="schedule-view">
-        <div style="font-size: 18px; font-weight: 800; margin-bottom: 20px;">📅 Today's Schedule</div>
+        <div style="border-radius: 16px; overflow: hidden; margin-bottom: 16px; position: relative; height: 120px; background-image: url('assets/mrbean-onepiece-captain.jpg'); background-size: cover; background-position: center;">
+          <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.95) 20%, rgba(20,34,82,0.2) 100%); display: flex; align-items: flex-end; padding: 16px;">
+            <div style="font-size: 20px; font-weight: 900;">📅 Today's Schedule</div>
+          </div>
+        </div>
         <div class="time-block">
           <div class="time-label">5:30am</div>
           <div class="time-content">
@@ -1038,7 +1049,11 @@ body.discreet .sos-modal p { color: #666; }
     <!-- ═══════ BRAIN MODE ═══════ -->
     <div class="view" id="view-brain">
       <div class="brain-view">
-        <div style="font-size: 18px; font-weight: 800; margin-bottom: 8px;">🧠 Brain Mode</div>
+        <div style="border-radius: 16px; overflow: hidden; margin-bottom: 12px; position: relative; height: 100px; background-image: url('assets/mrbean-robotics.jpg'); background-size: cover; background-position: center;">
+          <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.95) 20%, rgba(20,34,82,0.2) 100%); display: flex; align-items: flex-end; padding: 14px;">
+            <div style="font-size: 18px; font-weight: 800;">🧠 Brain Mode</div>
+          </div>
+        </div>
         <div style="font-size: 13px; color: var(--muted); margin-bottom: 20px;">Curious about something? Pick a topic or just ask Mr Bean anything.</div>
         
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
@@ -1309,14 +1324,24 @@ function sendMsg() {
   
   // Simulated response
   setTimeout(() => {
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = 'display: flex; gap: 10px; align-items: flex-start;';
+    const avatar = document.createElement('img');
+    avatar.style.cssText = 'width: 36px; height: 36px; border-radius: 10px; object-fit: cover; flex-shrink: 0;';
     const resp = document.createElement('div');
     resp.className = 'chat-bubble ' + currentChar;
     if (currentChar === 'bean') {
+      avatar.src = 'assets/mrbean-avatar.jpg';
+      avatar.style.border = '2px solid var(--bean-orange)';
       resp.innerHTML = '<div class="chat-sender">🐻 Mr Bean</div>Good question, William. Let me think about that... This is where the real Mr Bean AI will respond via OpenClaw. For now I\'m just the UI shell! 🐻';
     } else {
+      avatar.src = 'assets/jarvis-avatar.jpg';
+      avatar.style.border = '2px solid var(--jarvis-blue)';
       resp.innerHTML = '<div class="chat-sender">🤖 Jarvis</div>Noted. This is where the real Jarvis AI will respond via OpenClaw. The interface is ready — the intelligence comes next.';
     }
-    messages.appendChild(resp);
+    wrapper.appendChild(avatar);
+    wrapper.appendChild(resp);
+    messages.appendChild(wrapper);
     messages.scrollTop = messages.scrollHeight;
   }, 800);
   
