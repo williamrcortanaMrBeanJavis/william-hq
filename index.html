@@ -296,71 +296,51 @@ body.discreet .sos-btn { background: #cc0000; }
 
   <!-- ═══ HOME VIEW ═══ -->
   <div class="view active" id="view-home">
-    <div class="home-grid">
-      <!-- Hero: Talk to Mr Bean -->
-      <div class="img-card wide" style="height:180px;" onclick="goChat('bean')">
-        <img src="assets/mrbean-onepiece-captain.jpg">
-        <div class="overlay">
-          <h3>💬 Talk to Mr Bean</h3>
-          <p>Your mate. Ask anything. Get help. Have fun.</p>
-        </div>
+    <!-- Hero -->
+    <div class="img-card" style="height:220px; margin-bottom:16px; border-radius:24px;" onclick="goChat('bean')">
+      <img src="assets/mrbean-onepiece-captain.jpg">
+      <div class="overlay" style="padding:20px;">
+        <h3 style="font-family:'Bangers',cursive; font-size:28px; letter-spacing:2px;">💬 Talk to Mr Bean</h3>
+        <p style="font-size:13px;">Your mate. Ask anything.</p>
       </div>
-      <!-- Talk to Jarvis -->
-      <div class="img-card" style="height:160px;" onclick="goChat('jarvis')">
+    </div>
+
+    <!-- Two main buttons -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+      <div class="img-card" style="height:100px;" onclick="goChat('jarvis')">
         <img src="assets/jarvis-avatar.jpg">
-        <div class="overlay">
-          <h3>🤖 Jarvis</h3>
-          <p>Your mentor</p>
-        </div>
+        <div class="overlay"><h3>🤖 Jarvis</h3></div>
       </div>
-      <!-- Brain Games -->
-      <div class="img-card" style="height:160px;" onclick="goView('games')">
+      <div class="img-card" style="height:100px;" onclick="goView('games')">
         <img src="assets/mrbean-superbean.jpg">
-        <div class="overlay">
-          <h3>⚡ Brain Games</h3>
-          <p>Train your brain</p>
-        </div>
+        <div class="overlay"><h3>⚡ Games</h3></div>
       </div>
-      <!-- Today's Schedule -->
-      <div class="img-card" style="height:140px;" onclick="goView('schedule')">
-        <img src="assets/mrbean-bike.jpg">
-        <div class="overlay">
-          <h3>📅 Today</h3>
-          <p>Your schedule</p>
-        </div>
+    </div>
+
+    <!-- Quick actions - clean text buttons -->
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:8px;">
+      <div onclick="goView('tasks')" style="background:var(--card); border:2px solid var(--border); border-radius:14px; padding:14px 8px; text-align:center; cursor:pointer;">
+        <div style="font-size:22px; margin-bottom:4px;">✅</div>
+        <div style="font-size:11px; font-weight:700;">Tasks</div>
       </div>
-      <!-- Tasks -->
-      <div class="img-card" style="height:140px;" onclick="goView('tasks')">
-        <img src="assets/mrbean-maths.jpg">
-        <div class="overlay">
-          <h3>✅ Tasks</h3>
-          <p>Homework & chores</p>
-        </div>
+      <div onclick="goView('schedule')" style="background:var(--card); border:2px solid var(--border); border-radius:14px; padding:14px 8px; text-align:center; cursor:pointer;">
+        <div style="font-size:22px; margin-bottom:4px;">📅</div>
+        <div style="font-size:11px; font-weight:700;">Today</div>
       </div>
-      <!-- Brain Dump -->
-      <div class="img-card" onclick="goView('dump')">
-        <img src="assets/mrbean-comic-artist.jpg">
-        <div class="overlay">
-          <h3>💭 Brain Dump</h3>
-          <p>Quick thoughts</p>
-        </div>
+      <div onclick="goView('dump')" style="background:var(--card); border:2px solid var(--border); border-radius:14px; padding:14px 8px; text-align:center; cursor:pointer;">
+        <div style="font-size:22px; margin-bottom:4px;">💭</div>
+        <div style="font-size:11px; font-weight:700;">Dump</div>
       </div>
-      <!-- My Level -->
-      <div class="img-card" onclick="goView('xp')">
-        <img src="assets/mrbean-pirate-captain.jpg">
-        <div class="overlay">
-          <h3>🎮 My Level</h3>
-          <p>XP & streaks</p>
-        </div>
+      <div onclick="goView('xp')" style="background:var(--card); border:2px solid var(--border); border-radius:14px; padding:14px 8px; text-align:center; cursor:pointer;">
+        <div style="font-size:22px; margin-bottom:4px;">🎮</div>
+        <div style="font-size:11px; font-weight:700;">Level</div>
       </div>
-      <!-- Brain Mode -->
-      <div class="img-card wide" style="height:140px;" onclick="goView('brain')">
-        <img src="assets/mrbean-onepiece.jpg">
-        <div class="overlay">
-          <h3>🧠 Brain Mode</h3>
-          <p>Curious about something? Explore it.</p>
-        </div>
-      </div>
+    </div>
+
+    <!-- Brain mode teaser -->
+    <div class="img-card" style="height:90px; margin-top:14px;" onclick="goView('brain')">
+      <img src="assets/mrbean-onepiece.jpg">
+      <div class="overlay"><h3>🧠 Brain Mode</h3><p>Curious? Explore.</p></div>
     </div>
   </div>
 
