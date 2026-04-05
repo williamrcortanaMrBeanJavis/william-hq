@@ -676,6 +676,7 @@ body.discreet .sos-modal p { color: #666; }
     <button class="sidebar-btn" data-view="schedule"><span class="icon">📅</span> Today</button>
     <button class="sidebar-btn" data-view="brain"><span class="icon">🧠</span> Brain Mode</button>
     <button class="sidebar-btn" data-view="dump"><span class="icon">💭</span> Brain Dump</button>
+    <button class="sidebar-btn" data-view="xp"><span class="icon">🎮</span> My Level</button>
   </div>
 
   <!-- ═══════ MAIN AREA ═══════ -->
@@ -808,6 +809,59 @@ body.discreet .sos-modal p { color: #666; }
         </div>
         <div style="text-align: center; color: var(--muted); font-size: 12px; margin-top: 20px; padding: 16px; border: 1px dashed var(--border); border-radius: 12px;">
           Times will be confirmed by Simon. This is a template.
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ XP / LEVEL VIEW ═══════ -->
+    <div class="view" id="view-xp">
+      <div style="padding: 20px; overflow-y: auto; height: 100%;">
+        <!-- Level Card -->
+        <div style="text-align: center; padding: 24px; background: var(--card); border: 2px solid var(--border); border-radius: 20px; margin-bottom: 16px;">
+          <div style="font-size: 48px; margin-bottom: 8px;" id="xpEmoji">🏴‍☠️</div>
+          <div style="font-size: 28px; font-weight: 900;" id="xpTitle">Recruit</div>
+          <div style="font-size: 14px; color: var(--muted); margin-top: 4px;">Level <span id="xpLevel">1</span></div>
+          <div style="margin: 16px auto; max-width: 300px;">
+            <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 4px;">
+              <span id="xpCurrent">0 XP</span>
+              <span id="xpNext">100 XP to next</span>
+            </div>
+            <div style="height: 16px; background: rgba(255,255,255,0.06); border-radius: 8px; overflow: hidden;">
+              <div id="xpBar" style="height: 100%; background: linear-gradient(90deg, var(--bean-orange), var(--cyan)); border-radius: 8px; transition: width 0.5s; width: 0%;"></div>
+            </div>
+          </div>
+          <div style="font-size: 12px; color: var(--cyan);" id="xpToday">+0 XP today</div>
+        </div>
+
+        <!-- Streaks -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px;">
+          <div style="background: var(--card); border: 2px solid var(--border); border-radius: 14px; padding: 14px; text-align: center;">
+            <div style="font-size: 24px;">🔥</div>
+            <div style="font-size: 22px; font-weight: 900;" id="streakHomework">0</div>
+            <div style="font-size: 10px; color: var(--muted);">Homework Streak</div>
+          </div>
+          <div style="background: var(--card); border: 2px solid var(--border); border-radius: 14px; padding: 14px; text-align: center;">
+            <div style="font-size: 24px;">🐻</div>
+            <div style="font-size: 22px; font-weight: 900;" id="streakMorning">0</div>
+            <div style="font-size: 10px; color: var(--muted);">Morning Streak</div>
+          </div>
+          <div style="background: var(--card); border: 2px solid var(--border); border-radius: 14px; padding: 14px; text-align: center;">
+            <div style="font-size: 24px;">🤖</div>
+            <div style="font-size: 22px; font-weight: 900;" id="streakJarvis">0</div>
+            <div style="font-size: 10px; color: var(--muted);">Jarvis Streak</div>
+          </div>
+        </div>
+
+        <!-- Level Map -->
+        <div style="background: var(--card); border: 2px solid var(--border); border-radius: 16px; padding: 16px;">
+          <div style="font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 1px; margin-bottom: 12px;">THE GRAND LINE 🌊</div>
+          <div id="levelMap"></div>
+        </div>
+
+        <!-- Recent XP -->
+        <div style="background: var(--card); border: 2px solid var(--border); border-radius: 16px; padding: 16px; margin-top: 16px;">
+          <div style="font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 1px; margin-bottom: 12px;">RECENT XP</div>
+          <div id="xpHistory" style="font-size: 13px; color: var(--muted);">Complete tasks to earn XP!</div>
         </div>
       </div>
     </div>
@@ -1490,6 +1544,148 @@ setTimeout(autoRecordCheck, 2000);
 const weekEl = document.getElementById('recWeek');
 if (weekEl) weekEl.textContent = 'Week ' + getCurrentWeek();
 
+// ═══════ LEVELLING / XP SYSTEM ═══════
+const LEVELS = [
+  { level: 1, xp: 0, title: 'Recruit', emoji: '⚓' },
+  { level: 2, xp: 100, title: 'Deckhand', emoji: '🚣' },
+  { level: 3, xp: 300, title: 'Cabin Boy', emoji: '⚙️' },
+  { level: 4, xp: 600, title: 'Navigator', emoji: '🧭' },
+  { level: 5, xp: 1000, title: 'First Mate', emoji: '⚔️' },
+  { level: 6, xp: 1500, title: 'Captain', emoji: '🏴‍☠️' },
+  { level: 7, xp: 2500, title: 'Grand Line Explorer', emoji: '🌊' },
+  { level: 8, xp: 4000, title: 'Yonko Challenger', emoji: '🔥' },
+  { level: 9, xp: 6000, title: 'Pirate King in Training', emoji: '👑' },
+  { level: 10, xp: 10000, title: 'PIRATE KING', emoji: '🌟' },
+];
+
+let playerData = JSON.parse(localStorage.getItem('williamXP') || JSON.stringify({
+  xp: 0,
+  todayXP: 0,
+  todayDate: new Date().toISOString().slice(0, 10),
+  streaks: { homework: 0, morning: 0, jarvis: 0 },
+  bestStreaks: { homework: 0, morning: 0, jarvis: 0 },
+  history: []
+}));
+
+// Reset daily XP if new day
+const todayStr = new Date().toISOString().slice(0, 10);
+if (playerData.todayDate !== todayStr) {
+  playerData.todayXP = 0;
+  playerData.todayDate = todayStr;
+}
+
+function getLevel(xp) {
+  let current = LEVELS[0];
+  for (const l of LEVELS) {
+    if (xp >= l.xp) current = l;
+    else break;
+  }
+  return current;
+}
+
+function getNextLevel(xp) {
+  for (const l of LEVELS) {
+    if (xp < l.xp) return l;
+  }
+  return null; // max level
+}
+
+function addXP(amount, reason) {
+  const oldLevel = getLevel(playerData.xp);
+  playerData.xp += amount;
+  playerData.todayXP += amount;
+  playerData.history.unshift({
+    xp: amount,
+    reason: reason,
+    time: new Date().toISOString()
+  });
+  // Keep last 50 entries
+  if (playerData.history.length > 50) playerData.history = playerData.history.slice(0, 50);
+  
+  const newLevel = getLevel(playerData.xp);
+  if (newLevel.level > oldLevel.level) {
+    // LEVEL UP!
+    console.log('LEVEL UP!', newLevel.title);
+  }
+  
+  saveXP();
+  renderXP();
+}
+
+function saveXP() {
+  localStorage.setItem('williamXP', JSON.stringify(playerData));
+}
+
+function renderXP() {
+  const current = getLevel(playerData.xp);
+  const next = getNextLevel(playerData.xp);
+  
+  const titleEl = document.getElementById('xpTitle');
+  const levelEl = document.getElementById('xpLevel');
+  const emojiEl = document.getElementById('xpEmoji');
+  const currentEl = document.getElementById('xpCurrent');
+  const nextEl = document.getElementById('xpNext');
+  const barEl = document.getElementById('xpBar');
+  const todayEl = document.getElementById('xpToday');
+  
+  if (titleEl) titleEl.textContent = current.title;
+  if (levelEl) levelEl.textContent = current.level;
+  if (emojiEl) emojiEl.textContent = current.emoji;
+  if (currentEl) currentEl.textContent = playerData.xp + ' XP';
+  if (todayEl) todayEl.textContent = '+' + playerData.todayXP + ' XP today';
+  
+  if (next) {
+    const progress = ((playerData.xp - current.xp) / (next.xp - current.xp)) * 100;
+    if (barEl) barEl.style.width = Math.min(progress, 100) + '%';
+    if (nextEl) nextEl.textContent = (next.xp - playerData.xp) + ' XP to ' + next.title;
+  } else {
+    if (barEl) barEl.style.width = '100%';
+    if (nextEl) nextEl.textContent = 'MAX LEVEL 🌟';
+  }
+  
+  // Streaks
+  const hw = document.getElementById('streakHomework');
+  const mr = document.getElementById('streakMorning');
+  const jv = document.getElementById('streakJarvis');
+  if (hw) hw.textContent = playerData.streaks.homework;
+  if (mr) mr.textContent = playerData.streaks.morning;
+  if (jv) jv.textContent = playerData.streaks.jarvis;
+  
+  // Level map
+  const mapEl = document.getElementById('levelMap');
+  if (mapEl) {
+    mapEl.innerHTML = LEVELS.map(l => {
+      const reached = playerData.xp >= l.xp;
+      const isCurrent = l.level === current.level;
+      const bg = isCurrent ? 'var(--cyan)' : reached ? 'var(--green)' : 'var(--border)';
+      const color = isCurrent ? '#000' : reached ? '#000' : 'var(--muted)';
+      const opacity = reached ? '1' : '0.4';
+      return `<div style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 10px; margin-bottom: 4px; background: ${isCurrent ? 'rgba(0,200,200,0.1)' : 'transparent'}; opacity: ${opacity};">
+        <div style="width: 28px; height: 28px; border-radius: 50%; background: ${bg}; display: flex; align-items: center; justify-content: center; font-size: 14px; color: ${color}; font-weight: 900;">${reached ? l.emoji : l.level}</div>
+        <div style="flex: 1;"><span style="font-weight: 700; font-size: 13px;">${l.title}</span> <span style="font-size: 11px; color: var(--muted);">${l.xp} XP</span></div>
+        ${isCurrent ? '<span style="font-size: 10px; color: var(--cyan); font-weight: 700;">YOU ARE HERE</span>' : ''}
+        ${reached && !isCurrent ? '<span style="font-size: 10px; color: var(--green);">\u2713</span>' : ''}
+      </div>`;
+    }).join('');
+  }
+  
+  // Recent XP
+  const histEl = document.getElementById('xpHistory');
+  if (histEl && playerData.history.length > 0) {
+    histEl.innerHTML = playerData.history.slice(0, 10).map(h => {
+      const t = new Date(h.time);
+      const time = t.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
+      return `<div style="display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(42,58,110,0.2);">
+        <span>${h.reason}</span>
+        <span style="color: var(--green); font-weight: 700;">+${h.xp}</span>
+      </div>`;
+    }).join('');
+  }
+}
+
+// Initial render
+renderXP();
+
 // ═══════ BRAIN DUMP ═══════
 let brainDumps = JSON.parse(localStorage.getItem('brainDumps') || '[]');
 renderDumps();
@@ -1514,6 +1710,9 @@ function addDump() {
   localStorage.setItem('brainDumps', JSON.stringify(brainDumps));
   input.value = '';
   renderDumps();
+  
+  // XP for using brain dump
+  addXP(5, '💭 Brain dump');
 }
 
 function renderDumps() {
