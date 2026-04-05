@@ -288,6 +288,11 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
     <div class="grid-btn" onclick="goView('notes')"><div class="ico">📝</div><div class="lbl">Notes</div></div>
     <div class="grid-btn" onclick="goView('photo')"><div class="ico">📸</div><div class="lbl">Photo</div></div>
     <div class="grid-btn" onclick="goView('therapy')"><div class="ico">💪</div><div class="lbl">My Team</div></div>
+    <div class="grid-btn" onclick="goView('meds')"><div class="ico">💊</div><div class="lbl">Meds</div></div>
+    <div class="grid-btn" onclick="goView('bedtime')"><div class="ico">😴</div><div class="lbl">Bedtime</div></div>
+    <div class="grid-btn" onclick="goView('social')"><div class="ico">👋</div><div class="lbl">Social</div></div>
+    <div class="grid-btn" onclick="goView('reading')"><div class="ico">📖</div><div class="lbl">Reading</div></div>
+    <div class="grid-btn" onclick="goView('rewards')"><div class="ico">🏆</div><div class="lbl">Rewards</div></div>
     </div>
   </div>
 
@@ -534,6 +539,136 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
       <div class="topic" onclick="askT('art')"><img src="assets/mrbean-art.jpg"><div class="t-ov"><h4>🎨 Art</h4></div></div>
       <div class="topic" onclick="askT('random')"><img src="assets/mrbean-onepiece.jpg"><div class="t-ov"><h4>🎲 Random</h4></div></div>
     </div>
+  </div>
+
+  <!-- ═══ MEDICATION ═══ -->
+  <div class="view" id="view-meds">
+    <button class="back" onclick="goHome()">← Home</button>
+    <div style="padding:8px 0 16px;"><h2 style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:2px;color:#FF5555;text-shadow:0 0 25px rgba(255,85,85,0.8);">💊 MEDICATION</h2></div>
+    <div style="display:flex;background:#1e3068;border:2px solid #FF5555;border-radius:20px;overflow:hidden;margin-bottom:12px;">
+      <img src="assets/mrbean-pharmacy.jpg" style="width:378px;flex-shrink:0;object-fit:cover;object-position:top;">
+      <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:14px;">
+        <div style="font-family:'Bangers',cursive;font-size:36px;color:#FF5555;text-shadow:0 0 20px rgba(255,85,85,0.8);">Ritalin 15mg</div>
+        <div style="font-size:18px;color:#8899cc;">Twice daily. Helps your brain focus.</div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜';addXP(10,'💊 Morning meds')" style="display:flex;align-items:center;gap:14px;padding:18px;background:#0f1d42;border:2px solid #FF9933;border-radius:16px;cursor:pointer;">
+          <span class="tc" style="font-size:28px;">⬜</span>
+          <div><div style="font-size:22px;font-weight:900;color:#FF9933;">☀️ MORNING DOSE</div><div style="font-size:14px;color:#8899cc;">Take with breakfast</div></div>
+        </div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜';addXP(10,'💊 Afternoon meds')" style="display:flex;align-items:center;gap:14px;padding:18px;background:#0f1d42;border:2px solid #55AAFF;border-radius:16px;cursor:pointer;">
+          <span class="tc" style="font-size:28px;">⬜</span>
+          <div><div style="font-size:22px;font-weight:900;color:#55AAFF;">🌤️ AFTERNOON DOSE</div><div style="font-size:14px;color:#8899cc;">Take at lunch / after school</div></div>
+        </div>
+        <div style="padding:12px;background:rgba(255,85,85,0.1);border:1px solid #FF5555;border-radius:12px;font-size:14px;color:#FF5555;">⚠️ Your meds help your brain focus. They're like fuel. No shame — even top athletes take supplements.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ BEDTIME ROUTINE ═══ -->
+  <div class="view" id="view-bedtime">
+    <button class="back" onclick="goHome()">← Home</button>
+    <div style="padding:8px 0 16px;"><h2 style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:2px;color:#8888FF;text-shadow:0 0 25px rgba(136,136,255,0.8);">😴 BEDTIME CHECK</h2></div>
+    <div style="display:flex;background:#1e3068;border:2px solid #8888FF;border-radius:20px;overflow:hidden;margin-bottom:12px;">
+      <img src="assets/mrbean-70s80s-vinyl.jpg" style="width:378px;flex-shrink:0;object-fit:cover;object-position:top;">
+      <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:10px;">
+        <div style="font-family:'Bangers',cursive;font-size:30px;color:#8888FF;">Before you sleep...</div>
+        <div style="font-size:16px;color:#8899cc;margin-bottom:4px;">Tick each one. Lights out at 9pm.</div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:22px;">⬜</span><span style="font-size:18px;font-weight:600;">🎒 Bag packed for tomorrow</span></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:22px;">⬜</span><span style="font-size:18px;font-weight:600;">👕 Uniform out ready</span></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:22px;">⬜</span><span style="font-size:18px;font-weight:600;">🪴 Teeth brushed</span></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:22px;">⬜</span><span style="font-size:18px;font-weight:600;">🔋 Phone on charger</span></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:22px;">⬜</span><span style="font-size:18px;font-weight:600;">💧 Water bottle filled</span></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:22px;">⬜</span><span style="font-size:18px;font-weight:600;">📝 Journal done (Jarvis)</span></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜';addXP(20,'😴 Bedtime check done!')" style="display:flex;align-items:center;gap:12px;padding:16px;background:rgba(136,136,255,0.1);border:2px solid #8888FF;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:22px;">⬜</span><span style="font-size:20px;font-weight:900;color:#8888FF;">🌙 ALL DONE — Lights out! +20 XP</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SOCIAL SKILLS ═══ -->
+  <div class="view" id="view-social">
+    <button class="back" onclick="goHome()">← Home</button>
+    <div style="padding:8px 0 16px;"><h2 style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:2px;color:#FF9933;text-shadow:0 0 25px rgba(255,153,51,0.8);">👋 SOCIAL SKILLS</h2></div>
+    <div style="background:#1e3068;border:2px solid #FF9933;border-radius:20px;padding:24px;margin-bottom:16px;">
+      <div style="font-family:'Bangers',cursive;font-size:28px;color:#FF9933;margin-bottom:12px;">🎯 Today's Social Challenge</div>
+      <div style="font-size:20px;color:#fff;padding:16px;background:#0f1d42;border-radius:14px;margin-bottom:12px;" id="socialChallenge"></div>
+      <button onclick="newSocialChallenge()" style="padding:12px 24px;border-radius:12px;border:none;background:#FF9933;color:#000;font-weight:900;font-size:16px;cursor:pointer;font-family:'Inter';">New Challenge 🎲</button>
+    </div>
+    <div style="background:#1e3068;border:2px solid #2d4488;border-radius:20px;padding:24px;">
+      <div style="font-family:'Bangers',cursive;font-size:28px;color:#33DDDD;margin-bottom:12px;">💡 Jarvis Social Tips</div>
+      <div style="font-size:16px;color:#8899cc;line-height:2.2;">
+        <div>👋 Ask someone "what did you do on the weekend?"</div>
+        <div>🎨 Show someone your drawing — art starts conversations</div>
+        <div>🎮 "What games do you play?" works with almost anyone</div>
+        <div>🍳 "Have you tried cooking?" — your skill is interesting</div>
+        <div>🥋 Talk about Jiu-Jitsu — people respect that</div>
+        <div>👂 Listen first. Ask follow-up questions. People love being heard.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ READING PRACTICE ═══ -->
+  <div class="view" id="view-reading">
+    <button class="back" onclick="goHome()">← Home</button>
+    <div style="padding:8px 0 16px;"><h2 style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:2px;color:#44FF66;text-shadow:0 0 25px rgba(68,255,102,0.8);">📖 READING PRACTICE</h2></div>
+    <div style="display:flex;background:#1e3068;border:2px solid #44FF66;border-radius:20px;overflow:hidden;margin-bottom:12px;">
+      <img src="assets/mrbean-comics.jpg" style="width:378px;flex-shrink:0;object-fit:cover;object-position:top;">
+      <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:12px;">
+        <div style="font-family:'Bangers',cursive;font-size:30px;color:#44FF66;">5 Minutes. Every Day.</div>
+        <div style="font-size:18px;color:#8899cc;">Your comprehension is AVERAGE. The reading speed is catching up. Keep going.</div>
+        <div style="font-size:16px;color:#FF9933;font-weight:700;">Comics COUNT as reading. Manga counts. Recipes count.</div>
+        <div style="margin-top:8px;">
+          <div style="font-size:16px;color:#8899cc;margin-bottom:8px;">What to read:</div>
+          <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜';addXP(15,'📖 Reading done!')" style="display:flex;align-items:center;gap:10px;padding:12px;background:#0f1d42;border-radius:12px;cursor:pointer;margin-bottom:6px;"><span class="tc" style="font-size:18px;">⬜</span><span style="font-size:16px;font-weight:600;">🏴‍☠️ Read One Piece (5 min)</span></div>
+          <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜';addXP(15,'📖 Reading done!')" style="display:flex;align-items:center;gap:10px;padding:12px;background:#0f1d42;border-radius:12px;cursor:pointer;margin-bottom:6px;"><span class="tc" style="font-size:18px;">⬜</span><span style="font-size:16px;font-weight:600;">📚 Read a comic book (5 min)</span></div>
+          <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜';addXP(15,'📖 Reading done!')" style="display:flex;align-items:center;gap:10px;padding:12px;background:#0f1d42;border-radius:12px;cursor:pointer;margin-bottom:6px;"><span class="tc" style="font-size:18px;">⬜</span><span style="font-size:16px;font-weight:600;">🍳 Read a recipe out loud (5 min)</span></div>
+          <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜';addXP(20,'📖 Extra reading!')" style="display:flex;align-items:center;gap:10px;padding:12px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:18px;">⬜</span><span style="font-size:16px;font-weight:600;">🌟 BONUS: Read something for 10+ min</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ REWARDS ═══ -->
+  <div class="view" id="view-rewards">
+    <button class="back" onclick="goHome()">← Home</button>
+    <div style="padding:8px 0 16px;"><h2 style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:2px;color:#FFD700;text-shadow:0 0 25px rgba(255,215,0,0.8);">🏆 REWARDS</h2></div>
+    <div style="font-size:18px;color:#8899cc;margin-bottom:16px;">XP earns real rewards. Set by Uncle Adam + Dad.</div>
+
+    <div style="background:#1e3068;border:2px solid #FFD700;border-radius:20px;padding:20px;margin-bottom:12px;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div style="font-size:40px;">🧭</div>
+        <div><div style="font-family:'Bangers',cursive;font-size:26px;color:#FFD700;">Level 4: Navigator</div><div style="font-size:16px;color:#8899cc;">600 XP — Choose dinner for the family</div></div>
+      </div>
+    </div>
+    <div style="background:#1e3068;border:2px solid #2d4488;border-radius:20px;padding:20px;margin-bottom:12px;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div style="font-size:40px;">⚔️</div>
+        <div><div style="font-family:'Bangers',cursive;font-size:26px;color:#FF9933;">Level 5: First Mate</div><div style="font-size:16px;color:#8899cc;">1000 XP — New art supplies / drawing tablet</div></div>
+      </div>
+    </div>
+    <div style="background:#1e3068;border:2px solid #2d4488;border-radius:20px;padding:20px;margin-bottom:12px;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div style="font-size:40px;">🏴‍☠️</div>
+        <div><div style="font-family:'Bangers',cursive;font-size:26px;color:#FF5555;">Level 6: Captain</div><div style="font-size:16px;color:#8899cc;">1500 XP — New game of your choice</div></div>
+      </div>
+    </div>
+    <div style="background:#1e3068;border:2px solid #2d4488;border-radius:20px;padding:20px;margin-bottom:12px;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div style="font-size:40px;">🌊</div>
+        <div><div style="font-family:'Bangers',cursive;font-size:26px;color:#33DDDD;">Level 7: Grand Line</div><div style="font-size:16px;color:#8899cc;">2500 XP — Day out with Uncle Adam</div></div>
+      </div>
+    </div>
+    <div style="background:#1e3068;border:2px solid #2d4488;border-radius:20px;padding:20px;margin-bottom:12px;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div style="font-size:40px;">🔥</div>
+        <div><div style="font-family:'Bangers',cursive;font-size:26px;color:#FF5555;">Level 8: Yonko</div><div style="font-size:16px;color:#8899cc;">4000 XP — 3D printer project with Uncle Adam</div></div>
+      </div>
+    </div>
+    <div style="background:#1e3068;border:2px solid #FFD700;border-radius:20px;padding:20px;margin-bottom:12px;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div style="font-size:40px;">🌟</div>
+        <div><div style="font-family:'Bangers',cursive;font-size:30px;color:#FFD700;">Level 10: PIRATE KING</div><div style="font-size:18px;color:#FFD700;">10000 XP — LEGENDARY REWARD (TBD by Uncle Adam)</div></div>
+      </div>
+    </div>
+    <div style="padding:14px;background:rgba(255,215,0,0.08);border:1px solid #FFD700;border-radius:14px;font-size:16px;color:#8899cc;">Rewards are real. Earn XP by doing tasks, brain games, journaling, reading, and showing up every day. No shortcuts — just consistency.</div>
   </div>
 
   <!-- ═══ TIMETABLE ═══ -->
@@ -1335,6 +1470,54 @@ function renderPhotos(){
     <div style="position:absolute;bottom:0;left:0;right:0;padding:8px;background:rgba(10,15,40,0.9);font-size:11px;color:#8899cc;">${p.subject} • ${p.tl}</div>
   </div>`).join('');
 }
+
+// SOCIAL CHALLENGES
+const SOCIAL_CHALLENGES = [
+  "👋 Say hi to someone you don't usually talk to",
+  "🎨 Show someone your art or a drawing",
+  "🎮 Ask someone what games they play",
+  "🍳 Tell someone about something you cooked",
+  "👂 Ask someone about THEIR weekend and really listen",
+  "😄 Make someone laugh today",
+  "🤝 Help someone with something",
+  "🏴‍☠️ Ask someone if they watch anime",
+  "🎵 Ask someone what music they like",
+  "💪 Give someone a genuine compliment",
+  "🎾 Tell someone about Jiu-Jitsu or tennis",
+  "😊 Sit with someone new at lunch",
+  "📚 Ask someone what subject they like best",
+  "🐶 Ask someone if they have pets",
+];
+function newSocialChallenge(){
+  const el=document.getElementById('socialChallenge');
+  if(el) el.textContent=SOCIAL_CHALLENGES[Math.floor(Math.random()*SOCIAL_CHALLENGES.length)];
+}
+newSocialChallenge();
+
+// MED REMINDERS
+function checkMedReminder(){
+  const h=new Date().getHours();
+  const m=new Date().getMinutes();
+  // Morning: 7am reminder
+  if(h===7 && m<5 && !sessionStorage.getItem('medAM')){
+    sessionStorage.setItem('medAM','1');
+    showMedAlert('morning');
+  }
+  // Afternoon: 12:30 reminder
+  if(h===12 && m>=30 && m<35 && !sessionStorage.getItem('medPM')){
+    sessionStorage.setItem('medPM','1');
+    showMedAlert('afternoon');
+  }
+}
+function showMedAlert(when){
+  const r=document.createElement('div');
+  r.style.cssText='position:fixed;top:100px;left:50%;transform:translateX(-50%);background:#1e3068;border:3px solid #FF5555;border-radius:20px;padding:20px 30px;z-index:9000;animation:msgIn 0.3s ease;text-align:center;cursor:pointer;';
+  r.innerHTML='<div style="font-size:32px;">💊</div><div style="font-family:\'Bangers\',cursive;font-size:24px;color:#FF5555;margin-top:8px;">MEDS TIME!</div><div style="font-size:14px;color:#8899cc;margin-top:4px;">Take your '+(when==='morning'?'morning':'afternoon')+' Ritalin</div><div style="font-size:12px;color:#555;margin-top:8px;">tap to dismiss</div>';
+  r.onclick=()=>r.remove();
+  document.body.appendChild(r);
+  setTimeout(()=>{if(r.parentNode)r.remove();},30000);
+}
+setInterval(checkMedReminder,60000);
 
 // THERAPY NOTES
 let therapyNotes=JSON.parse(localStorage.getItem('therapyNotes')||'{"speech":[],"ot":[],"psych":[],"uncle":[]}');
