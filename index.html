@@ -822,6 +822,23 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
     </div>
   </div>
 
+    <!-- Uncle Adam -->
+    <div style="display:flex;background:#1e3068;border:2px solid #33DDDD;border-radius:20px;overflow:hidden;margin-bottom:12px;">
+      <img src="assets/mrbean-3dprinting.jpg" style="width:378px;flex-shrink:0;object-fit:cover;object-position:top;">
+      <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:10px;">
+        <div style="font-family:'Bangers',cursive;font-size:36px;letter-spacing:1px;color:#33DDDD;text-shadow:0 0 20px rgba(51,221,221,0.8);">🚀 UNCLE ADAM</div>
+        <div style="font-size:18px;color:#8899cc;">Robotics • 3D Printing • Building cool stuff</div>
+        <div style="font-size:16px;color:#44FF66;font-weight:700;">The one who built all of this for you. Pharmacist by day, tech builder by night.</div>
+        <div style="font-size:14px;color:#8899cc;margin-top:4px;">Ideas & projects to build with Uncle Adam:</div>
+        <div id="uncleNotes"></div>
+        <div style="display:flex;gap:8px;">
+          <input type="text" id="uncleInput" placeholder="Project idea or something to show him..." style="flex:1;padding:12px;border-radius:12px;border:2px solid #2d4488;background:#0f1d42;color:#fff;font-size:14px;font-family:'Inter';outline:none;" onkeydown="if(event.key==='Enter')addTherapyNote('uncle')">
+          <button onclick="addTherapyNote('uncle')" style="padding:12px 16px;border-radius:12px;border:none;background:#33DDDD;color:#000;font-weight:800;cursor:pointer;font-family:'Inter';">➕</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ═══ DAILY GOALS ═══ -->
   <div class="view" id="view-goals">
     <button class="back" onclick="goHome()">← Home</button>
@@ -1320,10 +1337,10 @@ function renderPhotos(){
 }
 
 // THERAPY NOTES
-let therapyNotes=JSON.parse(localStorage.getItem('therapyNotes')||'{"speech":[],"ot":[],"psych":[]}');
+let therapyNotes=JSON.parse(localStorage.getItem('therapyNotes')||'{"speech":[],"ot":[],"psych":[],"uncle":[]}');
 renderTherapyNotes();
 function addTherapyNote(type){
-  const inputId={speech:'speechInput',ot:'otInput',psych:'psychInput'}[type];
+  const inputId={speech:'speechInput',ot:'otInput',psych:'psychInput',uncle:'uncleInput'}[type];
   const i=document.getElementById(inputId);
   const t=i.value.trim();
   if(!t)return;
@@ -1335,8 +1352,8 @@ function addTherapyNote(type){
   addXP(5,'💪 Therapy note');
 }
 function renderTherapyNotes(){
-  ['speech','ot','psych'].forEach(type=>{
-    const elId={speech:'speechNotes',ot:'otNotes',psych:'psychNotes'}[type];
+  ['speech','ot','psych','uncle'].forEach(type=>{
+    const elId={speech:'speechNotes',ot:'otNotes',psych:'psychNotes',uncle:'uncleNotes'}[type];
     const el=document.getElementById(elId);
     if(!el)return;
     const notes=therapyNotes[type]||[];
