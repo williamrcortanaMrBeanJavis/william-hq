@@ -570,12 +570,14 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
   <!-- ═══ BODY TRAINING ═══ -->
   <div class="view" id="view-body">
     <button class="back" onclick="goHome()">← Home</button>
-    <div style="padding:8px 0 16px;"><h2 style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:2px;color:#FF5555;text-shadow:0 0 25px rgba(255,85,85,0.8);">💪 BODY TRAINING</h2></div>
-    <div style="font-size:18px;color:#8899cc;margin-bottom:16px;">Your school bag is heavy. Build a strong back and core so it doesn't hurt.</div>
+    <div style="padding:8px 0 16px;"><h2 style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:2px;color:#FF5555;text-shadow:0 0 25px rgba(255,85,85,0.8);">💪 CALISTHENICS</h2></div>
+    <div style="font-size:18px;color:#8899cc;margin-bottom:8px;">Bodyweight training. No gym. No equipment. Just you vs gravity.</div>
+    <div style="font-size:16px;color:#FF9933;font-weight:700;margin-bottom:16px;">Zoro doesn't need a gym. Neither do you. 🗡️</div>
 
     <!-- Daily exercises -->
     <div style="background:#1e3068;border:2px solid #FF5555;border-radius:20px;padding:24px;margin-bottom:16px;">
-      <div style="font-family:'Bangers',cursive;font-size:28px;color:#FF5555;margin-bottom:12px;">🎯 DAILY 10 (pick 5, do them)</div>
+      <div style="font-family:'Bangers',cursive;font-size:28px;color:#FF5555;margin-bottom:4px;">🎯 DAILY CALISTHENICS</div>
+      <div style="font-size:14px;color:#8899cc;margin-bottom:12px;">Pick 5 today. Uncle Adam checks your form on video.</div>
       <div style="display:flex;flex-direction:column;gap:8px;">
         <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#FF9933;">Plank — 30 seconds</div><div style="font-size:13px;color:#8899cc;">Core. Hold your body straight like a board. Breathe.</div></div></div>
         <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#33DDDD;">Dead Bug — 10 each side</div><div style="font-size:13px;color:#8899cc;">Core. Lie on back, opposite arm + leg extend. Keeps your spine safe.</div></div></div>
@@ -637,14 +639,44 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
       </div>
     </div>
 
-    <!-- Progress -->
+    <!-- Calisthenics Skill Tree -->
+    <div style="background:#1e3068;border:2px solid #33DDDD;border-radius:20px;padding:20px;margin-bottom:16px;">
+      <div style="font-family:'Bangers',cursive;font-size:28px;color:#33DDDD;margin-bottom:12px;">🌳 SKILL TREE — Unlock Moves</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;align-items:center;gap:12px;padding:12px;background:#0f1d42;border-radius:12px;border-left:4px solid #44FF66;">
+          <span style="font-size:24px;">🟢</span>
+          <div><div style="font-size:16px;font-weight:900;color:#44FF66;">LEVEL 1: Foundation</div><div style="font-size:13px;color:#8899cc;">Wall push-ups • Knee plank 20s • Assisted squat • Dead hang 10s</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:12px;background:#0f1d42;border-radius:12px;border-left:4px solid #FF9933;">
+          <span style="font-size:24px;">🟡</span>
+          <div><div style="font-size:16px;font-weight:900;color:#FF9933;">LEVEL 2: Solid</div><div style="font-size:13px;color:#8899cc;">Full push-ups 10 • Plank 45s • Full squat 15 • Dead hang 20s</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:12px;background:#0f1d42;border-radius:12px;border-left:4px solid #FF5555;">
+          <span style="font-size:24px;">🔴</span>
+          <div><div style="font-size:16px;font-weight:900;color:#FF5555;">LEVEL 3: Strong</div><div style="font-size:13px;color:#8899cc;">Diamond push-ups • Plank 90s • Pistol squat (assisted) • Pull-up (1)</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:12px;background:#0f1d42;border-radius:12px;border-left:4px solid #8888FF;">
+          <span style="font-size:24px;">🟣</span>
+          <div><div style="font-size:16px;font-weight:900;color:#8888FF;">LEVEL 4: Beast</div><div style="font-size:13px;color:#8899cc;">Handstand (wall) • L-sit 10s • Muscle-up progression • Human flag (assisted)</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:12px;background:#0f1d42;border-radius:12px;border-left:4px solid #FFD700;">
+          <span style="font-size:24px;">🌟</span>
+          <div><div style="font-size:16px;font-weight:900;color:#FFD700;">LEVEL 5: SUPERHUMAN</div><div style="font-size:13px;color:#8899cc;">Freestanding handstand • Muscle-up • Full pistol squat • Front lever</div></div>
+        </div>
+      </div>
+      <div style="margin-top:12px;padding:10px;background:rgba(51,221,221,0.08);border-radius:10px;font-size:14px;color:#33DDDD;">Film yourself unlocking each level. Uncle Adam verifies and awards the badge. No cheating — form must be perfect.</div>
+    </div>
+
+    <!-- Why calisthenics -->
     <div style="background:#1e3068;border:2px solid #2d4488;border-radius:20px;padding:20px;">
-      <div style="font-family:'Bangers',cursive;font-size:24px;color:#33DDDD;margin-bottom:8px;">Level Up Your Body</div>
+      <div style="font-family:'Bangers',cursive;font-size:24px;color:#FF9933;margin-bottom:8px;">Why Calisthenics?</div>
       <div style="font-size:16px;color:#8899cc;line-height:2;">
-        <div>🟢 Week 1-2: Do 5 exercises. 1 set each.</div>
-        <div>🟡 Week 3-4: Do 7 exercises. Add 5 seconds to holds.</div>
-        <div>🔴 Month 2+: All 10 exercises. Increase reps. Add sets.</div>
-        <div>🌟 By end of term: Your bag feels lighter. Guaranteed.</div>
+        <div>🎒 Heavy bag? Strong core fixes that.</div>
+        <div>🧠 Exercise = dopamine. Your ADHD brain needs it.</div>
+        <div>🥋 Better at Jiu-Jitsu. Stronger base, better guard, harder to submit.</div>
+        <div>💪 No gym. No equipment. Do it anywhere, anytime.</div>
+        <div>👀 You'll SEE results. Visible muscle. Better posture. Girls notice.</div>
+        <div>🗡️ Zoro doesn't need machines. Neither do you.</div>
       </div>
     </div>
   </div>
