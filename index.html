@@ -17,9 +17,10 @@ body {
 }
 .app {
   width: 100%;
-  max-width: 480px;
+  max-width: 900px;
   min-height: 100vh;
   position: relative;
+  padding: 0 20px;
 }
 
 /* ═══ HEADER ═══ */
@@ -43,7 +44,7 @@ body {
 
 /* ═══ HERO ═══ */
 .hero {
-  margin: 0 16px 16px;
+  margin: 0 0 16px;
   border-radius: 20px;
   overflow: hidden;
   position: relative;
@@ -64,7 +65,7 @@ body {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
-  padding: 0 16px 16px;
+  padding: 0 0 16px;
 }
 .grid-btn {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -85,7 +86,7 @@ body {
 /* ═══ QUICK CARDS (2-up) ═══ */
 .two-up {
   display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-  padding: 0 16px 16px;
+  padding: 0 0 16px;
 }
 .quick-card {
   border-radius: 16px; overflow: hidden; position: relative;
@@ -102,7 +103,7 @@ body {
 .quick-card h3 { font-size: 15px; font-weight: 900; }
 
 /* ═══ VIEWS ═══ */
-.view { display: none; padding: 0 16px 80px; }
+.view { display: none; padding: 0 0 80px; }
 .view.active { display: block; }
 .view-header {
   border-radius: 18px; overflow: hidden; position: relative;
@@ -157,7 +158,7 @@ body {
 .sched-card .sc-sub { font-size: 10px; color: #8899cc; }
 
 /* ═══ BRAIN MODE ═══ */
-.topic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.topic-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; }
 .topic {
   border-radius: 14px; overflow: hidden; position: relative;
   cursor: pointer; border: 2px solid #2d4488; transition: all 0.15s;
@@ -184,7 +185,7 @@ body {
 .streak-lbl { font-size: 10px; color: #8899cc; }
 
 /* ═══ GAMES ═══ */
-.game-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.game-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
 .game-card { border-radius: 14px; overflow: hidden; position: relative; border: 2px solid #2d4488; transition: all 0.15s; }
 .game-card:hover { border-color: #33DDDD; transform: translateY(-2px); }
 .game-card img { width: 100%; display: block; }
@@ -262,11 +263,9 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
     </div>
 
     <!-- Brain Mode -->
-    <div style="padding:0 16px;">
-      <div class="quick-card" style="height:80px;" onclick="goView('brain')">
-        <img src="assets/mrbean-onepiece.jpg">
-        <div class="qc-overlay"><h3>🧠 BRAIN MODE</h3></div>
-      </div>
+    <div class="quick-card" onclick="goView('brain')">
+      <img src="assets/mrbean-onepiece.jpg">
+      <div class="qc-overlay"><h3>🧠 BRAIN MODE</h3></div>
     </div>
   </div>
 
