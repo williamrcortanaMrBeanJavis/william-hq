@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colour Switch — Brain Training</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root { --bg: #0f0f1a; --card: #1a1a2e; --border: #2a2a4a; --text: #e8e8f0; --muted: #8888aa; --cyan: #00C8C8; --green: #2ECC40; --red: #ff4444; --orange: #E8A444; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+
+.header { text-align: center; margin-bottom: 16px; }
+.title { font-size: 24px; font-weight: 900; }
+.sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+.stats { display: flex; gap: 20px; justify-content: center; margin-top: 12px; }
+.stat { text-align: center; }
+.sv { font-size: 20px; font-weight: 900; color: var(--cyan); }
+.sl { font-size: 10px; color: var(--muted); }
+
+.op-theme { background: var(--card); border: 2px solid var(--orange); border-radius: 16px; padding: 10px 20px; margin-bottom: 16px; text-align: center; font-size: 13px; color: var(--orange); font-weight: 700; }
+
+.word-display {
+  width: 320px;
+  height: 160px;
+  background: var(--card);
+  border: 3px solid var(--border);
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 56px;
+  font-weight: 900;
+  margin: 16px auto;
+  transition: all 0.15s;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+}
+.word-display.flash-green { border-color: var(--green); }
+.word-display.flash-red { border-color: var(--red); }
+
+.instruction {
+  text-align: center;
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+.instruction em { color: var(--cyan); font-style: normal; font-weight: 900; }
+
+.colour-btns {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  max-width: 320px;
+  margin: 0 auto;
+}
+.colour-btn {
+  padding: 16px;
+  border-radius: 14px;
+  border: 3px solid var(--border);
+  background: var(--card);
+  font-weight: 800;
+  font-size: 18px;
+  cursor: pointer;
+  font-family: 'Inter';
+  transition: all 0.1s;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.colour-btn:active { transform: scale(0.95); }
+.colour-btn:hover { border-color: var(--cyan); }
+
+.msg { text-align: center; font-size: 14px; margin: 12px 0; min-height: 20px; }
+.timer-bar { width: 320px; height: 6px; background: var(--border); border-radius: 3px; margin: 10px auto; overflow: hidden; }
+.timer-fill { height: 100%; background: var(--cyan); border-radius: 3px; transition: width 0.1s linear; }
+
+.result-screen { display: none; text-align: center; max-width: 360px; background: var(--card); border: 2px solid var(--border); border-radius: 20px; padding: 24px; margin-top: 16px; }
+.btn-play { padding: 14px 40px; border-radius: 14px; border: none; background: var(--cyan); color: #000; font-weight: 800; font-size: 16px; cursor: pointer; font-family: 'Inter'; }
+
+.mode-toggle {
+  display: flex; gap: 8px; justify-content: center; margin: 12px 0;
+}
+.mode-btn {
+  padding: 6px 16px; border-radius: 10px; border: 2px solid var(--border);
+  background: transparent; color: var(--muted); font-size: 11px; font-weight: 700;
+  cursor: pointer; font-family: 'Inter';
+}
+.mode-btn.active { border-color: var(--cyan); color: var(--cyan); background: rgba(0,200,200,0.1); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="title">🎨 Colour Switch</div>
+  <div class="sub">Don't read the word — name the COLOUR!</div>
+  <div class="stats">
+    <div class="stat"><div class="sv" id="sCorrect">0</div><div class="sl">Correct</div></div>
+    <div class="stat"><div class="sv" id="sSpeed">-</div><div class="sl">Avg Speed</div></div>
+    <div class="stat"><div class="sv" id="sStreak">0</div><div class="sl">Streak</div></div>
+    <div class="stat"><div class="sv" id="sRound">0/15</div><div class="sl">Round</div></div>
+  </div>
+</div>
+
+<div class="op-theme">🎨 Devil Fruit Colours — What colour is the INK, not the word!</div>
+
+<div class="mode-toggle">
+  <button class="mode-btn active" onclick="setMode('ink')" id="modeInk">Name the INK colour</button>
+  <button class="mode-btn" onclick="setMode('word')" id="modeWord">Name the WORD</button>
+</div>
+
+<div class="timer-bar"><div class="timer-fill" id="timerFill" style="width: 100%;"></div></div>
+
+<div class="instruction" id="instruction">What colour is the <em>INK</em>?</div>
+
+<div class="word-display" id="wordDisplay">READY</div>
+
+<div class="msg" id="msg">Press START to begin</div>
+
+<div class="colour-btns" id="colourBtns" style="display: none;">
+  <button class="colour-btn" style="color: #ff4444;" onclick="answer('red')">RED</button>
+  <button class="colour-btn" style="color: #4488ff;" onclick="answer('blue')">BLUE</button>
+  <button class="colour-btn" style="color: #2ECC40;" onclick="answer('green')">GREEN</button>
+  <button class="colour-btn" style="color: #E8A444;" onclick="answer('yellow')">YELLOW</button>
+</div>
+
+<button class="btn-play" id="startBtn" onclick="startGame()">⚡ START</button>
+
+<div class="result-screen" id="resultScreen">
+  <div style="font-size: 48px;" id="rEmoji">🎉</div>
+  <div style="font-size: 22px; font-weight: 900; margin: 8px 0;" id="rTitle"></div>
+  <div style="font-size: 14px; color: var(--muted);" id="rDetail"></div>
+  <div style="font-size: 28px; font-weight: 900; color: var(--green); margin: 12px 0;" id="rXP"></div>
+  <button class="btn-play" onclick="startGame()" style="margin-top: 12px;">Play Again</button>
+</div>
+
+<script>
+const COLOURS = {
+  red: '#ff4444',
+  blue: '#4488ff',
+  green: '#2ECC40',
+  yellow: '#E8A444'
+};
+const COLOUR_NAMES = Object.keys(COLOURS);
+
+let mode = 'ink'; // 'ink' = name the colour of the ink, 'word' = name what the word says
+let round = 0;
+let maxRounds = 15;
+let correct = 0;
+let streak = 0;
+let bestStreak = 0;
+let times = [];
+let currentWord = '';
+let currentInkColour = '';
+let roundStart = 0;
+let timerInterval = null;
+let timePerRound = 4000;
+
+function setMode(m) {
+  mode = m;
+  document.getElementById('modeInk').className = 'mode-btn' + (m === 'ink' ? ' active' : '');
+  document.getElementById('modeWord').className = 'mode-btn' + (m === 'word' ? ' active' : '');
+  document.getElementById('instruction').innerHTML = mode === 'ink' 
+    ? 'What colour is the <em>INK</em>?' 
+    : 'What does the <em>WORD</em> say?';
+}
+
+function startGame() {
+  round = 0; correct = 0; streak = 0; bestStreak = 0; times = [];
+  document.getElementById('startBtn').style.display = 'none';
+  document.getElementById('resultScreen').style.display = 'none';
+  document.getElementById('colourBtns').style.display = 'grid';
+  nextRound();
+}
+
+function nextRound() {
+  if (round >= maxRounds) return endGame();
+  round++;
+  
+  document.getElementById('sRound').textContent = round + '/' + maxRounds;
+  document.getElementById('sCorrect').textContent = correct;
+  document.getElementById('sStreak').textContent = streak;
+  
+  // Generate — make it tricky (word says one colour, ink is different)
+  currentWord = COLOUR_NAMES[Math.floor(Math.random() * COLOUR_NAMES.length)];
+  
+  // 70% chance of mismatch (harder), 30% match
+  if (Math.random() < 0.7) {
+    do {
+      currentInkColour = COLOUR_NAMES[Math.floor(Math.random() * COLOUR_NAMES.length)];
+    } while (currentInkColour === currentWord);
+  } else {
+    currentInkColour = currentWord;
+  }
+  
+  const display = document.getElementById('wordDisplay');
+  display.textContent = currentWord.toUpperCase();
+  display.style.color = COLOURS[currentInkColour];
+  display.className = 'word-display';
+  
+  document.getElementById('msg').textContent = '';
+  roundStart = Date.now();
+  
+  // Timer
+  clearInterval(timerInterval);
+  let elapsed = 0;
+  document.getElementById('timerFill').style.width = '100%';
+  document.getElementById('timerFill').style.background = 'var(--cyan)';
+  timerInterval = setInterval(() => {
+    elapsed += 50;
+    const pct = Math.max(0, 100 - (elapsed / timePerRound * 100));
+    document.getElementById('timerFill').style.width = pct + '%';
+    if (pct < 30) document.getElementById('timerFill').style.background = 'var(--red)';
+    else if (pct < 60) document.getElementById('timerFill').style.background = 'var(--orange)';
+    if (elapsed >= timePerRound) {
+      clearInterval(timerInterval);
+      handleAnswer(null);
+    }
+  }, 50);
+}
+
+function answer(colour) {
+  clearInterval(timerInterval);
+  handleAnswer(colour);
+}
+
+function handleAnswer(colour) {
+  const time = Date.now() - roundStart;
+  const correctAnswer = mode === 'ink' ? currentInkColour : currentWord;
+  const isCorrect = colour === correctAnswer;
+  const display = document.getElementById('wordDisplay');
+  
+  if (colour === null) {
+    display.className = 'word-display flash-red';
+    streak = 0;
+    document.getElementById('msg').textContent = '⏰ Too slow!';
+    document.getElementById('msg').style.color = 'var(--red)';
+  } else if (isCorrect) {
+    correct++;
+    streak++;
+    bestStreak = Math.max(bestStreak, streak);
+    times.push(time);
+    display.className = 'word-display flash-green';
+    document.getElementById('msg').textContent = '✅ ' + time + 'ms' + (streak >= 3 ? ' 🔥' + streak : '');
+    document.getElementById('msg').style.color = 'var(--green)';
+  } else {
+    streak = 0;
+    display.className = 'word-display flash-red';
+    document.getElementById('msg').textContent = '❌ It was ' + correctAnswer.toUpperCase();
+    document.getElementById('msg').style.color = 'var(--red)';
+  }
+  
+  document.getElementById('sCorrect').textContent = correct;
+  document.getElementById('sStreak').textContent = streak;
+  if (times.length > 0) {
+    document.getElementById('sSpeed').textContent = Math.round(times.reduce((a,b) => a+b, 0) / times.length) + 'ms';
+  }
+  
+  setTimeout(() => {
+    document.getElementById('msg').style.color = 'var(--text)';
+    nextRound();
+  }, 700);
+}
+
+function endGame() {
+  document.getElementById('colourBtns').style.display = 'none';
+  clearInterval(timerInterval);
+  
+  const accuracy = Math.round(correct / maxRounds * 100);
+  const avgTime = times.length > 0 ? Math.round(times.reduce((a,b) => a+b, 0) / times.length) : 0;
+  
+  let xp = Math.round(correct * 4 + bestStreak * 5);
+  if (accuracy >= 90) xp += 25;
+  if (avgTime < 1200 && accuracy >= 80) xp += 15;
+  
+  // Stroop effect difficulty bonus
+  if (mode === 'ink') xp = Math.round(xp * 1.2); // ink mode is harder
+  
+  const emoji = accuracy >= 90 ? '🌟' : accuracy >= 70 ? '🎉' : accuracy >= 50 ? '👍' : '💪';
+  const title = accuracy >= 90 ? 'COLOUR HAKI MASTER!' : accuracy >= 70 ? 'Sharp Focus!' : accuracy >= 50 ? 'Getting Stronger!' : 'Keep Training!';
+  
+  document.getElementById('rEmoji').textContent = emoji;
+  document.getElementById('rTitle').textContent = title;
+  document.getElementById('rDetail').textContent = `${correct}/${maxRounds} correct • ${accuracy}% • ${avgTime}ms avg • Streak: ${bestStreak} • Mode: ${mode.toUpperCase()}`;
+  document.getElementById('rXP').textContent = '+' + xp + ' XP';
+  document.getElementById('resultScreen').style.display = 'block';
+  
+  // Save
+  const stats = JSON.parse(localStorage.getItem('colourSwitchStats') || '{"games":0,"correct":0,"total":0,"xp":0}');
+  stats.games++; stats.correct += correct; stats.total += maxRounds; stats.xp += xp;
+  localStorage.setItem('colourSwitchStats', JSON.stringify(stats));
+  
+  try {
+    const pd = JSON.parse(localStorage.getItem('williamXP'));
+    if (pd) { pd.xp += xp; pd.todayXP += xp; pd.history.unshift({ xp, reason: '🎨 Colour Switch (' + accuracy + '%)', time: new Date().toISOString() }); localStorage.setItem('williamXP', JSON.stringify(pd)); }
+  } catch(e) {}
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  const map = { r: 'red', b: 'blue', g: 'green', y: 'yellow' };
+  if (map[e.key]) answer(map[e.key]);
+});
+</script>
+</body>
+</html>

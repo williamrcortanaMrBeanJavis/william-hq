@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memory Grid — Brain Training</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0f1a;
+  --card: #1a1a2e;
+  --border: #2a2a4a;
+  --text: #e8e8f0;
+  --muted: #8888aa;
+  --cyan: #00C8C8;
+  --green: #2ECC40;
+  --red: #ff4444;
+  --orange: #E8A444;
+  --blue: #4488ff;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+
+.game-header { text-align: center; margin-bottom: 20px; }
+.game-title { font-size: 24px; font-weight: 900; }
+.game-subtitle { font-size: 13px; color: var(--muted); margin-top: 4px; }
+.game-stats { display: flex; gap: 20px; justify-content: center; margin-top: 12px; }
+.stat { text-align: center; }
+.stat-val { font-size: 20px; font-weight: 900; color: var(--cyan); }
+.stat-label { font-size: 10px; color: var(--muted); }
+
+.grid-container { margin: 20px 0; }
+.grid {
+  display: grid;
+  gap: 8px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+.cell {
+  aspect-ratio: 1;
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  background: var(--card);
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+.cell:hover { border-color: var(--cyan); }
+.cell.lit { background: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 15px rgba(0,200,200,0.4); }
+.cell.selected { background: var(--blue); border-color: var(--blue); }
+.cell.correct { background: var(--green); border-color: var(--green); }
+.cell.wrong { background: var(--red); border-color: var(--red); }
+
+.msg { text-align: center; font-size: 16px; font-weight: 700; margin: 16px 0; min-height: 24px; }
+.btn {
+  padding: 14px 40px;
+  border-radius: 14px;
+  border: none;
+  font-weight: 800;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: 'Inter';
+  transition: all 0.15s;
+}
+.btn-cyan { background: var(--cyan); color: #000; }
+.btn-cyan:hover { transform: scale(1.05); }
+.btn-orange { background: var(--orange); color: #000; }
+
+.result-card {
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 20px;
+  padding: 24px;
+  text-align: center;
+  max-width: 360px;
+  margin: 20px auto;
+}
+.xp-earned { font-size: 32px; font-weight: 900; color: var(--green); margin: 12px 0; }
+.level-bar { height: 12px; background: rgba(255,255,255,0.06); border-radius: 6px; overflow: hidden; margin: 8px 0; }
+.level-fill { height: 100%; background: linear-gradient(90deg, var(--orange), var(--cyan)); border-radius: 6px; transition: width 1s; }
+
+.theme-banner {
+  background: var(--card);
+  border: 2px solid var(--orange);
+  border-radius: 16px;
+  padding: 12px 20px;
+  margin-bottom: 16px;
+  text-align: center;
+  font-size: 13px;
+}
+.op-ref { color: var(--orange); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="game-header">
+  <div class="game-title">🧩 Memory Grid</div>
+  <div class="game-subtitle">Remember the pattern. Train your brain.</div>
+  <div class="game-stats">
+    <div class="stat"><div class="stat-val" id="sLevel">1</div><div class="stat-label">Level</div></div>
+    <div class="stat"><div class="stat-val" id="sScore">0</div><div class="stat-label">Score</div></div>
+    <div class="stat"><div class="stat-val" id="sStreak">0</div><div class="stat-label">Streak</div></div>
+    <div class="stat"><div class="stat-val" id="sXP">0</div><div class="stat-label">XP</div></div>
+  </div>
+</div>
+
+<div class="theme-banner" id="themeBanner">
+  <span class="op-ref">🏴‍☠️ Nami's Navigation Charts</span> — Memorise the sea route!
+</div>
+
+<div class="grid-container">
+  <div class="grid" id="grid"></div>
+</div>
+
+<div class="msg" id="msg">Press START to begin</div>
+<button class="btn btn-cyan" id="startBtn" onclick="startRound()">⚡ START</button>
+
+<div class="result-card" id="resultCard" style="display: none;">
+  <div style="font-size: 48px;" id="resultEmoji">🎉</div>
+  <div style="font-size: 20px; font-weight: 800; margin-top: 8px;" id="resultText">Round Complete!</div>
+  <div class="xp-earned" id="resultXP">+25 XP</div>
+  <div style="font-size: 12px; color: var(--muted);" id="resultDetail">Grid size: 3x3 • 3 tiles</div>
+  <button class="btn btn-orange" onclick="nextRound()" style="margin-top: 16px;">Next Round →</button>
+</div>
+
+<script>
+let gridSize = 3;
+let tileCount = 3;
+let litCells = [];
+let selectedCells = [];
+let phase = 'idle'; // idle, showing, input, result
+let score = 0;
+let streak = 0;
+let totalXP = 0;
+let level = 1;
+let roundsPlayed = 0;
+
+const OP_MESSAGES = [
+  { text: "🏴‍☠️ Nami's Navigation Charts — Memorise the sea route!", ref: "Even Nami started with simple maps." },
+  { text: "⚔️ Zoro's Training Grid — Remember the sword positions!", ref: "Zoro trains every single day. No exceptions." },
+  { text: "🍖 Sanji's Recipe Grid — Remember the ingredients!", ref: "A chef remembers every ingredient." },
+  { text: "🏴‍☠️ Luffy's Crew Roll Call — Where is everyone?", ref: "A captain knows where every crew member is." },
+  { text: "🔧 Franky's Blueprint — Remember the build pattern!", ref: "SUPER! Engineers remember the details." },
+  { text: "📖 Robin's Ancient Map — Memorise the symbols!", ref: "History is written by those who remember." },
+  { text: "🎵 Brook's Music Sheet — Remember the notes!", ref: "Yohohoho! Music is memory made beautiful." },
+];
+
+function updateTheme() {
+  const msg = OP_MESSAGES[Math.floor(Math.random() * OP_MESSAGES.length)];
+  document.getElementById('themeBanner').innerHTML = `<span class="op-ref">${msg.text}</span>`;
+}
+
+function createGrid() {
+  const grid = document.getElementById('grid');
+  grid.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
+  grid.innerHTML = '';
+  
+  for (let i = 0; i < gridSize * gridSize; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    cell.dataset.idx = i;
+    cell.onclick = () => cellClick(i);
+    grid.appendChild(cell);
+  }
+}
+
+function startRound() {
+  document.getElementById('startBtn').style.display = 'none';
+  document.getElementById('resultCard').style.display = 'none';
+  updateTheme();
+  
+  // Calculate difficulty
+  if (roundsPlayed > 0 && roundsPlayed % 3 === 0) {
+    // Increase difficulty every 3 rounds
+    if (tileCount < gridSize * gridSize - 1) tileCount++;
+    if (roundsPlayed % 6 === 0 && gridSize < 6) {
+      gridSize++;
+      tileCount = Math.max(3, Math.floor(gridSize * 0.8));
+    }
+  }
+  
+  createGrid();
+  
+  // Pick random cells to light up
+  litCells = [];
+  const indices = Array.from({length: gridSize * gridSize}, (_, i) => i);
+  for (let i = indices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [indices[i], indices[j]] = [indices[j], indices[i]];
+  }
+  litCells = indices.slice(0, tileCount);
+  selectedCells = [];
+  
+  // Show phase
+  phase = 'showing';
+  document.getElementById('msg').textContent = '👀 Memorise the pattern...';
+  document.getElementById('msg').style.color = 'var(--cyan)';
+  
+  // Light up cells
+  litCells.forEach(idx => {
+    document.querySelectorAll('.cell')[idx].classList.add('lit');
+  });
+  
+  // Hide after delay (more tiles = more time)
+  const showTime = 1500 + (tileCount * 400);
+  setTimeout(() => {
+    document.querySelectorAll('.cell').forEach(c => c.classList.remove('lit'));
+    phase = 'input';
+    document.getElementById('msg').textContent = `Tap ${tileCount} tiles! (${selectedCells.length}/${tileCount})`;
+    document.getElementById('msg').style.color = 'var(--text)';
+  }, showTime);
+}
+
+function cellClick(idx) {
+  if (phase !== 'input') return;
+  
+  const cell = document.querySelectorAll('.cell')[idx];
+  if (selectedCells.includes(idx)) return; // already selected
+  
+  selectedCells.push(idx);
+  
+  if (litCells.includes(idx)) {
+    cell.classList.add('correct');
+  } else {
+    cell.classList.add('wrong');
+  }
+  
+  document.getElementById('msg').textContent = `Tap ${tileCount} tiles! (${selectedCells.length}/${tileCount})`;
+  
+  if (selectedCells.length >= tileCount) {
+    finishRound();
+  }
+}
+
+function finishRound() {
+  phase = 'result';
+  roundsPlayed++;
+  
+  const correctCount = selectedCells.filter(i => litCells.includes(i)).length;
+  const accuracy = correctCount / tileCount;
+  const perfect = accuracy === 1;
+  
+  // Show all correct tiles
+  litCells.forEach(idx => {
+    const cell = document.querySelectorAll('.cell')[idx];
+    if (!cell.classList.contains('correct')) {
+      cell.style.border = '2px dashed var(--cyan)';
+      cell.style.opacity = '0.5';
+    }
+  });
+  
+  // Calculate XP
+  let xp = Math.round(10 + (tileCount * 5) + (gridSize * 3));
+  if (perfect) {
+    xp = Math.round(xp * 1.5);
+    streak++;
+  } else {
+    streak = Math.max(0, streak - 1);
+  }
+  if (streak >= 3) xp += 10;
+  
+  score += correctCount;
+  totalXP += xp;
+  level = Math.floor(totalXP / 100) + 1;
+  
+  // Update stats
+  document.getElementById('sLevel').textContent = level;
+  document.getElementById('sScore').textContent = score;
+  document.getElementById('sStreak').textContent = streak;
+  document.getElementById('sXP').textContent = totalXP;
+  
+  // Show result
+  setTimeout(() => {
+    const emoji = perfect ? '🎉' : accuracy >= 0.5 ? '👍' : '🤔';
+    const text = perfect ? 'PERFECT!' : accuracy >= 0.5 ? 'Good effort!' : 'Keep trying!';
+    
+    document.getElementById('resultEmoji').textContent = emoji;
+    document.getElementById('resultText').textContent = text;
+    document.getElementById('resultXP').textContent = '+' + xp + ' XP';
+    document.getElementById('resultXP').style.color = perfect ? 'var(--green)' : 'var(--orange)';
+    document.getElementById('resultDetail').textContent = `${correctCount}/${tileCount} correct • ${gridSize}x${gridSize} grid${streak >= 3 ? ' • 🔥 ' + streak + ' streak!' : ''}`;
+    document.getElementById('resultCard').style.display = 'block';
+    
+    // Save to parent localStorage
+    const gameData = JSON.parse(localStorage.getItem('memoryGridStats') || '{"games":0,"correct":0,"total":0,"xp":0}');
+    gameData.games++;
+    gameData.correct += correctCount;
+    gameData.total += tileCount;
+    gameData.xp += xp;
+    localStorage.setItem('memoryGridStats', JSON.stringify(gameData));
+    
+    // Also add to main XP if available
+    try {
+      const pd = JSON.parse(localStorage.getItem('williamXP'));
+      if (pd) {
+        pd.xp += xp;
+        pd.todayXP += xp;
+        pd.history.unshift({ xp, reason: '🧩 Memory Grid ' + (perfect ? '(perfect!)' : ''), time: new Date().toISOString() });
+        localStorage.setItem('williamXP', JSON.stringify(pd));
+      }
+    } catch(e) {}
+  }, 1000);
+}
+
+function nextRound() {
+  startRound();
+}
+
+// Init
+createGrid();
+</script>
+</body>
+</html>

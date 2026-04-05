@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speed Match — Brain Training</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root { --bg: #0f0f1a; --card: #1a1a2e; --border: #2a2a4a; --text: #e8e8f0; --muted: #8888aa; --cyan: #00C8C8; --green: #2ECC40; --red: #ff4444; --orange: #E8A444; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+
+.header { text-align: center; margin-bottom: 16px; }
+.title { font-size: 24px; font-weight: 900; }
+.sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+.stats { display: flex; gap: 20px; justify-content: center; margin-top: 12px; }
+.stat { text-align: center; }
+.sv { font-size: 20px; font-weight: 900; color: var(--cyan); }
+.sl { font-size: 10px; color: var(--muted); }
+
+.card-area {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  margin: 20px auto;
+}
+.match-card {
+  width: 100%;
+  height: 100%;
+  background: var(--card);
+  border: 3px solid var(--border);
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 100px;
+  transition: all 0.2s;
+  position: absolute;
+  top: 0; left: 0;
+}
+.match-card.flash-green { border-color: var(--green); background: rgba(46,204,64,0.1); }
+.match-card.flash-red { border-color: var(--red); background: rgba(255,68,68,0.1); }
+.prev-label {
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.buttons {
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+}
+.match-btn {
+  padding: 16px 40px;
+  border-radius: 16px;
+  border: 3px solid;
+  font-weight: 900;
+  font-size: 18px;
+  cursor: pointer;
+  font-family: 'Inter';
+  transition: all 0.1s;
+  min-width: 140px;
+}
+.match-btn:active { transform: scale(0.95); }
+.btn-yes { border-color: var(--green); background: rgba(46,204,64,0.1); color: var(--green); }
+.btn-no { border-color: var(--red); background: rgba(255,68,68,0.1); color: var(--red); }
+
+.msg { text-align: center; font-size: 14px; margin: 16px 0; min-height: 20px; }
+.timer-bar { width: 300px; height: 6px; background: var(--border); border-radius: 3px; margin: 10px auto; overflow: hidden; }
+.timer-fill { height: 100%; background: var(--cyan); border-radius: 3px; transition: width 0.1s linear; }
+
+.result-screen { display: none; text-align: center; max-width: 360px; background: var(--card); border: 2px solid var(--border); border-radius: 20px; padding: 24px; }
+.btn-play { padding: 14px 40px; border-radius: 14px; border: none; background: var(--cyan); color: #000; font-weight: 800; font-size: 16px; cursor: pointer; font-family: 'Inter'; }
+
+.op-theme { background: var(--card); border: 2px solid var(--orange); border-radius: 16px; padding: 10px 20px; margin-bottom: 16px; text-align: center; font-size: 13px; color: var(--orange); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="title">⚡ Speed Match</div>
+  <div class="sub">Same or different? Train your speed!</div>
+  <div class="stats">
+    <div class="stat"><div class="sv" id="sCorrect">0</div><div class="sl">Correct</div></div>
+    <div class="stat"><div class="sv" id="sSpeed">-</div><div class="sl">Avg Speed</div></div>
+    <div class="stat"><div class="sv" id="sStreak">0</div><div class="sl">Streak</div></div>
+    <div class="stat"><div class="sv" id="sRound">0/20</div><div class="sl">Round</div></div>
+  </div>
+</div>
+
+<div class="op-theme" id="opTheme">⚡ Observation Haki — See before others do!</div>
+
+<div class="timer-bar"><div class="timer-fill" id="timerFill" style="width: 100%;"></div></div>
+
+<div class="prev-label" id="prevLabel" style="visibility: hidden;">Previous</div>
+<div class="card-area">
+  <div class="match-card" id="prevCard" style="transform: scale(0.7) translateY(-30px); opacity: 0.3; z-index: 1; font-size: 60px;">❓</div>
+  <div class="match-card" id="currentCard" style="z-index: 2;">❓</div>
+</div>
+
+<div class="msg" id="msg">Press START to begin</div>
+
+<div class="buttons" id="buttons" style="display: none;">
+  <button class="match-btn btn-yes" onclick="answer(true)">✅ SAME</button>
+  <button class="match-btn btn-no" onclick="answer(false)">❌ DIFF</button>
+</div>
+
+<button class="btn-play" id="startBtn" onclick="startGame()">⚡ START</button>
+
+<div class="result-screen" id="resultScreen">
+  <div style="font-size: 48px;" id="rEmoji">🎉</div>
+  <div style="font-size: 22px; font-weight: 900; margin: 8px 0;" id="rTitle">Great Job!</div>
+  <div style="font-size: 14px; color: var(--muted);" id="rDetail"></div>
+  <div style="font-size: 28px; font-weight: 900; color: var(--green); margin: 12px 0;" id="rXP">+50 XP</div>
+  <button class="btn-play" onclick="startGame()" style="margin-top: 12px;">Play Again</button>
+</div>
+
+<script>
+const SYMBOLS = ['🐵','🦁','🐺','🐸','🐙','🦈','🐉','🦅','🐍','🦋','🌸','⭐','💎','🔥','⚡','🌊','☀️','🌙','🗡️','🎯','🏴‍☠️','⚓','🍖','🎪'];
+
+let round = 0;
+let maxRounds = 20;
+let correct = 0;
+let streak = 0;
+let bestStreak = 0;
+let times = [];
+let prevSymbol = null;
+let currentSymbol = null;
+let isSame = false;
+let roundStart = 0;
+let timerInterval = null;
+let timePerRound = 3000; // 3 seconds
+
+function startGame() {
+  round = 0; correct = 0; streak = 0; times = [];
+  document.getElementById('startBtn').style.display = 'none';
+  document.getElementById('resultScreen').style.display = 'none';
+  document.getElementById('buttons').style.display = 'flex';
+  document.getElementById('prevLabel').style.visibility = 'hidden';
+  prevSymbol = null;
+  nextRound();
+}
+
+function nextRound() {
+  if (round >= maxRounds) return endGame();
+  round++;
+  
+  document.getElementById('sRound').textContent = round + '/' + maxRounds;
+  document.getElementById('sCorrect').textContent = correct;
+  document.getElementById('sStreak').textContent = streak;
+  
+  // Update previous
+  if (prevSymbol) {
+    document.getElementById('prevCard').textContent = prevSymbol;
+    document.getElementById('prevLabel').style.visibility = 'visible';
+  }
+  
+  // Choose new symbol
+  prevSymbol = currentSymbol;
+  isSame = Math.random() > 0.5;
+  
+  if (isSame && prevSymbol) {
+    currentSymbol = prevSymbol;
+  } else {
+    do {
+      currentSymbol = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
+    } while (currentSymbol === prevSymbol);
+  }
+  
+  const card = document.getElementById('currentCard');
+  card.textContent = currentSymbol;
+  card.className = 'match-card';
+  
+  document.getElementById('msg').textContent = round === 1 ? 'Is this the SAME or DIFFERENT from the next one?' : 'Same or different from the one above?';
+  
+  roundStart = Date.now();
+  
+  // Timer bar
+  clearInterval(timerInterval);
+  let elapsed = 0;
+  document.getElementById('timerFill').style.width = '100%';
+  document.getElementById('timerFill').style.background = 'var(--cyan)';
+  timerInterval = setInterval(() => {
+    elapsed += 50;
+    const pct = Math.max(0, 100 - (elapsed / timePerRound * 100));
+    document.getElementById('timerFill').style.width = pct + '%';
+    if (pct < 30) document.getElementById('timerFill').style.background = 'var(--red)';
+    else if (pct < 60) document.getElementById('timerFill').style.background = 'var(--orange)';
+    if (elapsed >= timePerRound) {
+      clearInterval(timerInterval);
+      answer(null); // timeout
+    }
+  }, 50);
+}
+
+function answer(userSaidSame) {
+  clearInterval(timerInterval);
+  const time = Date.now() - roundStart;
+  const card = document.getElementById('currentCard');
+  
+  if (round === 1 || prevSymbol === null) {
+    // First round — no previous to compare. Just move on.
+    card.className = 'match-card';
+    setTimeout(nextRound, 300);
+    return;
+  }
+  
+  const isCorrect = userSaidSame === isSame;
+  
+  if (userSaidSame === null) {
+    // Timeout
+    card.className = 'match-card flash-red';
+    streak = 0;
+    document.getElementById('msg').textContent = '⏰ Too slow!';
+  } else if (isCorrect) {
+    correct++;
+    streak++;
+    bestStreak = Math.max(bestStreak, streak);
+    times.push(time);
+    card.className = 'match-card flash-green';
+    document.getElementById('msg').textContent = '✅ ' + (time < 800 ? 'LIGHTNING! ' : time < 1500 ? 'Fast! ' : '') + time + 'ms';
+    document.getElementById('msg').style.color = 'var(--green)';
+  } else {
+    streak = 0;
+    card.className = 'match-card flash-red';
+    document.getElementById('msg').textContent = '❌ ' + (isSame ? 'They were the SAME' : 'They were DIFFERENT');
+    document.getElementById('msg').style.color = 'var(--red)';
+  }
+  
+  document.getElementById('sCorrect').textContent = correct;
+  document.getElementById('sStreak').textContent = streak;
+  
+  if (times.length > 0) {
+    const avg = Math.round(times.reduce((a,b) => a+b, 0) / times.length);
+    document.getElementById('sSpeed').textContent = avg + 'ms';
+  }
+  
+  setTimeout(() => {
+    document.getElementById('msg').style.color = 'var(--text)';
+    nextRound();
+  }, 800);
+}
+
+function endGame() {
+  document.getElementById('buttons').style.display = 'none';
+  clearInterval(timerInterval);
+  
+  const accuracy = Math.round(correct / (maxRounds - 1) * 100);
+  const avgTime = times.length > 0 ? Math.round(times.reduce((a,b) => a+b, 0) / times.length) : 0;
+  
+  let xp = Math.round(correct * 3 + bestStreak * 5);
+  if (accuracy >= 90) xp += 20;
+  if (avgTime < 1000 && accuracy >= 80) xp += 15;
+  
+  const emoji = accuracy >= 90 ? '🌟' : accuracy >= 70 ? '🎉' : accuracy >= 50 ? '👍' : '💪';
+  const title = accuracy >= 90 ? 'OBSERVATION HAKI UNLOCKED!' : accuracy >= 70 ? 'Sharp Eyes!' : accuracy >= 50 ? 'Getting There!' : 'Keep Training!';
+  
+  document.getElementById('rEmoji').textContent = emoji;
+  document.getElementById('rTitle').textContent = title;
+  document.getElementById('rDetail').textContent = `${correct}/${maxRounds-1} correct • ${accuracy}% accuracy • ${avgTime}ms avg • Best streak: ${bestStreak}`;
+  document.getElementById('rXP').textContent = '+' + xp + ' XP';
+  document.getElementById('resultScreen').style.display = 'block';
+  
+  // Save stats
+  const stats = JSON.parse(localStorage.getItem('speedMatchStats') || '{"games":0,"totalCorrect":0,"totalRounds":0,"bestAccuracy":0,"bestSpeed":9999,"xp":0}');
+  stats.games++;
+  stats.totalCorrect += correct;
+  stats.totalRounds += maxRounds - 1;
+  stats.bestAccuracy = Math.max(stats.bestAccuracy, accuracy);
+  if (avgTime > 0) stats.bestSpeed = Math.min(stats.bestSpeed, avgTime);
+  stats.xp += xp;
+  localStorage.setItem('speedMatchStats', JSON.stringify(stats));
+  
+  // Add to main XP
+  try {
+    const pd = JSON.parse(localStorage.getItem('williamXP'));
+    if (pd) { pd.xp += xp; pd.todayXP += xp; pd.history.unshift({ xp, reason: '⚡ Speed Match (' + accuracy + '%)', time: new Date().toISOString() }); localStorage.setItem('williamXP', JSON.stringify(pd)); }
+  } catch(e) {}
+}
+
+// Keyboard controls
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowLeft' || e.key === 'a') answer(true);
+  if (e.key === 'ArrowRight' || e.key === 'd') answer(false);
+});
+</script>
+</body>
+</html>
