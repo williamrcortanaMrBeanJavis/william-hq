@@ -753,17 +753,17 @@ body.discreet .sos-modal p { color: #666; }
   <div class="sidebar">
     <!-- Character Select -->
     <div class="sidebar-section">Talk To</div>
-    <div class="char-card bean selected" onclick="selectChar('bean')" style="background-image: url('assets/mrbean-full.jpg'); background-size: cover; background-position: center; min-height: 140px; position: relative; overflow: hidden;">
-      <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.95) 30%, rgba(20,34,82,0.3) 100%);"></div>
-      <div style="position: relative; z-index: 1; margin-top: auto; padding-top: 60px;">
+    <div class="char-card bean selected" onclick="selectChar('bean'); switchToChat();" style="cursor: pointer; background-image: url('assets/mrbean-full.jpg'); background-size: cover; background-position: center; min-height: 140px; position: relative; overflow: hidden;">
+      <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.95) 30%, rgba(20,34,82,0.3) 100%); pointer-events: none;"></div>
+      <div style="position: relative; z-index: 1; margin-top: auto; padding-top: 60px; pointer-events: none;">
         <div class="char-name" style="font-size: 18px;">Mr Bean</div>
         <div class="char-desc">Your mate 🐻</div>
       </div>
     </div>
     <div style="height: 8px;"></div>
-    <div class="char-card jarvis" onclick="selectChar('jarvis')" style="background-image: url('assets/jarvis-avatar.jpg'); background-size: cover; background-position: center; min-height: 140px; position: relative; overflow: hidden;">
-      <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.95) 30%, rgba(20,34,82,0.3) 100%);"></div>
-      <div style="position: relative; z-index: 1; margin-top: auto; padding-top: 60px;">
+    <div class="char-card jarvis" onclick="selectChar('jarvis'); switchToChat();" style="cursor: pointer; background-image: url('assets/jarvis-avatar.jpg'); background-size: cover; background-position: center; min-height: 140px; position: relative; overflow: hidden;">
+      <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,34,82,0.95) 30%, rgba(20,34,82,0.3) 100%); pointer-events: none;"></div>
+      <div style="position: relative; z-index: 1; margin-top: auto; padding-top: 60px; pointer-events: none;">
         <div class="char-name" style="font-size: 18px;">Jarvis</div>
         <div class="char-desc">Your mentor 🤖</div>
       </div>
@@ -1266,6 +1266,15 @@ document.querySelectorAll('.sidebar-btn').forEach(btn => {
     document.getElementById('view-' + btn.dataset.view).classList.add('active');
   });
 });
+
+// Switch to chat view
+function switchToChat() {
+  document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelector('[data-view="chat"]').classList.add('active');
+  document.getElementById('view-chat').classList.add('active');
+  document.getElementById('msgInput').focus();
+}
 
 // Character select
 function selectChar(char) {
