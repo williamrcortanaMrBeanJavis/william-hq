@@ -222,14 +222,21 @@ function startRound() {
   document.getElementById('resultCard').style.display = 'none';
   updateTheme();
   
-  // Calculate difficulty
-  if (roundsPlayed > 0 && roundsPlayed % 3 === 0) {
-    // Increase difficulty every 3 rounds
-    if (tileCount < gridSize * gridSize - 1) tileCount++;
-    if (roundsPlayed % 6 === 0 && gridSize < 6) {
-      gridSize++;
-      tileCount = Math.max(3, Math.floor(gridSize * 0.8));
+  // ADAPTIVE DIFFICULTY: adjusts based on performance
+  if (roundsPlayed > 0 && roundsPlayed % 2 === 0) {
+    const recentCorrect = score > 0 ? (score / roundsPlayed) : 0;
+    if (recentCorrect > 0.8) {
+      // Doing well — increase difficulty
+      if (tileCount < gridSize * gridSize - 1) tileCount++;
+      if (roundsPlayed % 4 === 0 && gridSize < 6) {
+        gridSize++;
+        tileCount = Math.max(3, Math.floor(gridSize * 0.7));
+      }
+    } else if (recentCorrect < 0.5 && tileCount > 2) {
+      // Struggling — ease off
+      tileCount = Math.max(2, tileCount - 1);
     }
+    // Otherwise stay at current level
   }
   
   createGrid();

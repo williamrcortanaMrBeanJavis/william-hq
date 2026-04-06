@@ -318,6 +318,7 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
     <div class="grid-btn" onclick="goView('flash')"><div class="ico">🃏</div><div class="lbl">Flash</div></div>
     <div class="grid-btn" onclick="goView('spelling')"><div class="ico">🔤</div><div class="lbl">Spelling</div></div>
     <div class="grid-btn" onclick="goView('body')"><div class="ico">💪</div><div class="lbl">Body</div></div>
+    <div class="grid-btn" onclick="goView('readaloud')"><div class="ico">🎤</div><div class="lbl">Read</div></div>
     </div>
   </div>
 
@@ -689,6 +690,32 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
         <div>💪 No gym. No equipment. Do it anywhere, anytime.</div>
         <div>👀 You'll SEE results. Visible muscle. Better posture. Girls notice.</div>
         <div>🗡️ Zoro doesn't need machines. Neither do you.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ READ ALOUD ═══ -->
+  <div class="view" id="view-readaloud">
+    <button class="back" onclick="goHome()">← Home</button>
+    <div style="padding:8px 0 16px;"><h2 style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:2px;color:#44FF66;text-shadow:0 0 25px rgba(68,255,102,0.8);">🎤 READ ALOUD</h2></div>
+    <div style="display:flex;background:#1e3068;border:2px solid #44FF66;border-radius:20px;overflow:hidden;margin-bottom:16px;">
+      <img src="assets/mrbean-comics.jpg" style="width:378px;flex-shrink:0;object-fit:cover;object-position:top;">
+      <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:12px;">
+        <div style="font-family:'Bangers',cursive;font-size:30px;color:#44FF66;">Read to Mr Bean</div>
+        <div style="font-size:16px;color:#8899cc;">5 minutes. Read out loud. Mr Bean listens. Comics, manga, recipes — all count.</div>
+        <div style="font-size:16px;color:#FF9933;font-weight:700;">Your comprehension is AVERAGE. The reading speed is catching up. Every day you read aloud, it gets faster.</div>
+        <div style="padding:16px;background:#0f1d42;border-radius:14px;text-align:center;">
+          <div style="font-size:14px;color:#8899cc;margin-bottom:8px;">Today's reading passage:</div>
+          <div style="font-size:20px;color:#fff;line-height:1.8;padding:12px;background:rgba(68,255,102,0.05);border:1px solid #2d4488;border-radius:10px;" id="readPassage">"The Going Merry sailed across the Grand Line. Luffy stood at the bow, grinning. The wind was strong, the waves were wild, but the crew was ready. Nami checked her map. Zoro sharpened his swords. Sanji cooked in the kitchen. This was their dream — freedom on the open sea."</div>
+        </div>
+        <button onclick="startReadAloud()" id="readBtn" style="padding:16px;border-radius:14px;border:none;background:#44FF66;color:#000;font-weight:900;font-size:20px;cursor:pointer;font-family:'Bangers',cursive;letter-spacing:1px;">🎤 START READING (tap to record)</button>
+        <div id="readTimer" style="text-align:center;font-family:'Bangers',cursive;font-size:36px;color:#33DDDD;display:none;">0:00</div>
+        <div id="readResult" style="display:none;padding:16px;background:rgba(68,255,102,0.1);border:2px solid #44FF66;border-radius:14px;text-align:center;">
+          <div style="font-size:24px;margin-bottom:8px;">🎉</div>
+          <div style="font-size:20px;font-weight:900;color:#44FF66;">Great job! +15 XP</div>
+          <div style="font-size:14px;color:#8899cc;margin-top:4px;">Mr Bean heard every word. Keep it up tomorrow!</div>
+        </div>
+        <button onclick="nextPassage()" style="padding:12px;border-radius:12px;border:2px solid #2d4488;background:transparent;color:#8899cc;font-weight:700;cursor:pointer;font-family:'Inter';">Next passage ➡️</button>
       </div>
     </div>
   </div>
@@ -1781,6 +1808,49 @@ function startFocusMode(taskName){
     timer.textContent=Math.floor(secs/60)+':'+(secs%60<10?'0':'')+(secs%60);
     if(secs<=0){clearInterval(iv);timer.textContent='DONE!';timer.style.color='#44FF66';addXP(30,'\ud83c\udfaf Focus 25min complete!');}
   },1000);
+}
+
+// READ ALOUD
+const READ_PASSAGES = [
+  '"The Going Merry sailed across the Grand Line. Luffy stood at the bow, grinning. The wind was strong, the waves were wild, but the crew was ready. Nami checked her map. Zoro sharpened his swords. Sanji cooked in the kitchen. This was their dream \u2014 freedom on the open sea."',
+  '"To make perfect karaage, cut the chicken into bite-sized pieces. Mix soy sauce, ginger, and garlic in a bowl. Add the chicken and let it sit for thirty minutes. Coat each piece in potato starch. Fry in hot oil until golden brown. Drain on paper towels. Serve hot."',
+  '"Ancient Egypt was one of the greatest civilisations in history. The Egyptians built pyramids that still stand today. They invented hieroglyphics to write their language. The Nile River flooded every year, making the soil perfect for farming. Pharaohs ruled as both kings and gods."',
+  '"A force is a push or a pull that acts on an object. Gravity is a force that pulls everything toward the Earth. Friction is a force that slows things down when they rub together. Forces can be balanced or unbalanced. When forces are unbalanced, objects change speed or direction."',
+  '"Golden Retrievers are one of the most popular dog breeds in the world. They are known for being friendly, loyal, and intelligent. They love water and were originally bred to retrieve birds for hunters. Golden Retrievers need lots of exercise and love being around people."',
+  '"Chopper joined the Straw Hat crew as their doctor. He is a reindeer who ate the Human-Human Fruit. He was always treated as a monster, but Luffy saw him differently. Luffy said being different is not a weakness. Chopper learned that his difference was actually his greatest strength."'
+];
+let currentPassageIdx = 0;
+let readRecording = false;
+let readStart = null;
+let readInterval = null;
+
+function nextPassage(){
+  currentPassageIdx = (currentPassageIdx + 1) % READ_PASSAGES.length;
+  document.getElementById('readPassage').textContent = READ_PASSAGES[currentPassageIdx];
+  document.getElementById('readResult').style.display = 'none';
+  document.getElementById('readBtn').style.display = 'block';
+  document.getElementById('readTimer').style.display = 'none';
+}
+
+function startReadAloud(){
+  if(!readRecording){
+    readRecording = true;
+    readStart = Date.now();
+    document.getElementById('readBtn').textContent = '\u23f9 STOP READING';
+    document.getElementById('readBtn').style.background = '#FF5555';
+    document.getElementById('readTimer').style.display = 'block';
+    readInterval = setInterval(()=>{
+      const elapsed = Math.floor((Date.now()-readStart)/1000);
+      document.getElementById('readTimer').textContent = Math.floor(elapsed/60)+':'+(elapsed%60<10?'0':'')+(elapsed%60);
+    },1000);
+  } else {
+    readRecording = false;
+    clearInterval(readInterval);
+    document.getElementById('readBtn').style.display = 'none';
+    document.getElementById('readTimer').style.display = 'none';
+    document.getElementById('readResult').style.display = 'block';
+    addXP(15,'\ud83c\udfa4 Read aloud');
+  }
 }
 
 // EXERCISE VIDEO RECORDING
