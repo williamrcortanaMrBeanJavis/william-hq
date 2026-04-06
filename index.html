@@ -343,7 +343,16 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
   <!-- ═══ TASKS ═══ -->
   <div class="view" id="view-tasks">
     <button class="back" onclick="goHome()">← Home</button>
-    <div style="padding: 8px 0 16px;"><h2 style="font-family:'Bangers',cursive; font-size:28px; letter-spacing:2px; color:#FF9933;">✅ My Tasks</h2></div>
+    <div style="padding: 8px 0 16px; display:flex; align-items:center; justify-content:space-between;">
+      <h2 style="font-family:'Bangers',cursive; font-size:28px; letter-spacing:2px; color:#FF9933;">✅ My Tasks</h2>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <video id="focusCamVideo" style="width:120px;height:90px;border-radius:10px;border:2px solid #2d4488;object-fit:cover;background:#000;" muted></video>
+        <div>
+          <div id="focusCamStatus" style="font-size:12px;color:#8899cc;font-weight:700;">⏸ Off</div>
+          <button onclick="focusCamActive?stopFocusCam():startFocusCam()" style="margin-top:4px;padding:6px 12px;border-radius:8px;border:2px solid #33DDDD;background:rgba(51,221,221,0.1);color:#33DDDD;font-size:11px;font-weight:800;cursor:pointer;font-family:'Inter';">📷 Focus Cam</button>
+        </div>
+      </div>
+    </div>
     <div style="font-size:11px; font-weight:800; color:#8899cc; margin-bottom:8px;">DUE TODAY</div>
     <!-- MATHS -->
     <div style="display:flex; gap:16px; background:#1e3068; border:2px solid #2d4488; border-radius:20px; overflow:hidden; margin-bottom:12px;">
@@ -1673,6 +1682,101 @@ function checkSundayPlanning(){
   }
 }
 setTimeout(checkSundayPlanning,5000);
+
+// FOCUS CAMERA — watches William during homework, detects distraction
+let focusCamActive = false;
+let focusCamStream = null;
+let lastMotionTime = Date.now();
+let distractionCount = 0;
+
+function startFocusCam(){
+  if(focusCamActive) return;
+  navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:320,height:240}}).then(stream=>{
+    focusCamActive=true;
+    focusCamStream=stream;
+    const video=document.getElementById('focusCamVideo');
+    if(video){video.srcObject=stream;video.play();}
+    document.getElementById('focusCamStatus').textContent='\ud83d\udfe2 Watching';
+    document.getElementById('focusCamStatus').style.color='#44FF66';
+    // Start motion detection
+    startFocusDetection(stream);
+  }).catch(e=>{
+    console.log('Camera denied:',e);
+    document.getElementById('focusCamStatus').textContent='\ud83d\udd34 Camera blocked';
+    document.getElementById('focusCamStatus').style.color='#FF5555';
+  });
+}
+
+function stopFocusCam(){
+  focusCamActive=false;
+  if(focusCamStream){focusCamStream.getTracks().forEach(t=>t.stop());focusCamStream=null;}
+  document.getElementById('focusCamStatus').textContent='\u23f8 Off';
+  document.getElementById('focusCamStatus').style.color='#8899cc';
+}
+
+function startFocusDetection(stream){
+  const canvas=document.createElement('canvas');
+  canvas.width=320;canvas.height=240;
+  const ctx=canvas.getContext('2d');
+  const video=document.getElementById('focusCamVideo');
+  let prevFrame=null;
+  
+  setInterval(()=>{
+    if(!focusCamActive||!video)return;
+    ctx.drawImage(video,0,0,320,240);
+    const frame=ctx.getImageData(0,0,320,240);
+    
+    if(prevFrame){
+      // Compare frames — detect large movement (looking away, getting up)
+      let diff=0;
+      for(let i=0;i<frame.data.length;i+=16){
+        diff+=Math.abs(frame.data[i]-prevFrame.data[i]);
+      }
+      const avgDiff=diff/(frame.data.length/16);
+      
+      if(avgDiff>15){
+        // Significant movement detected
+        lastMotionTime=Date.now();
+      }
+      
+      // If no significant motion for 45 seconds — they might be zoned out
+      // If TOO much motion — they might be fidgeting/distracted
+      const timeSinceMotion=(Date.now()-lastMotionTime)/1000;
+      
+      if(timeSinceMotion>45){
+        // Zoned out — nudge
+        nudgeBack('zoned');
+        lastMotionTime=Date.now();
+      }
+    }
+    prevFrame=frame;
+  },2000); // Check every 2 seconds
+}
+
+function nudgeBack(type){
+  distractionCount++;
+  const nudges=[
+    '\ud83d\udc3b Oi! Eyes on the work, William!',
+    '\ud83d\udc3b Hey! You were doing great. Come back!',
+    '\ud83d\udc3b Mr Bean sees you drifting... FOCUS! \ud83d\udcaa',
+    '\ud83d\udc3b 5 more minutes then a break. You got this!',
+    '\ud83d\udc3b Luffy never quits mid-battle. Neither do you!',
+    '\ud83d\udc3b Quick \u2014 what were you just working on? Get back to it!',
+    '\ud83d\udc3b Zoro would be disappointed. Back to work! \ud83d\udde1\ufe0f',
+    '\ud83d\udc3b Even Chopper studies medicine. Your turn!',
+  ];
+  const msg=nudges[Math.floor(Math.random()*nudges.length)];
+  
+  const n=document.createElement('div');
+  n.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1e3068;border:3px solid #FF9933;border-radius:20px;padding:24px 32px;z-index:9500;animation:msgIn 0.3s ease;text-align:center;cursor:pointer;max-width:400px;';
+  n.innerHTML='<div style="font-size:24px;font-weight:900;color:#FF9933;line-height:1.4;">'+msg+'</div>';
+  if(distractionCount>=3){
+    n.innerHTML+='<div style="font-size:14px;color:#FF5555;margin-top:8px;">That\'s '+distractionCount+' times. Try the 5-min timer? \u23f1</div>';
+  }
+  n.onclick=()=>n.remove();
+  document.body.appendChild(n);
+  setTimeout(()=>{if(n.parentNode)n.remove();},8000);
+}
 
 // FOLLOW-UP TRACKER
 let followUps=JSON.parse(localStorage.getItem('followUps')||'[]');
