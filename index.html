@@ -1894,6 +1894,10 @@ function checkCarryOver(){
 }
 setTimeout(checkCarryOver,3000);
 
+// ONE PIECE FACTS + BRAIN QUESTIONS
+const OP_FACTS=['Zoro uses 3 swords because he promised his dead friend he\'d become the greatest swordsman for both of them.','Luffy\'s straw hat was given by Shanks \u2014 it represents his promise to become Pirate King.','Chopper was treated as a monster. Luffy saw him as a friend. Your difference is your strength.','Sanji never wastes food because he once starved for 85 days on a rock.','Robin spent 20 years alone before finding the Straw Hats. It\'s okay to ask for help.','Usopp is scared of EVERYTHING but still fights. That\'s brave.','Nami draws maps of every island. Building something bigger than any adventure.','Franky built the Thousand Sunny himself.','Brook waited 50 years alone to keep a promise to Laboon.','Jinbe left everything to join Luffy because he believed in the dream.'];
+const BRAIN_QS=['If you could have any Devil Fruit power, which one?','What would happen if gravity doubled?','If you cooked for any person in history, who?','Why is the sky blue but sunsets red?','If you designed a robot, what would it do?','What\'s the strongest material in the world?','If you were a comic villain, what power?','What\'s the biggest animal ever?','If you lived in any anime world, which?','Why do dogs wag their tails?'];
+
 // DAILY BRIEFING
 function renderBriefing(){
   const el=document.getElementById('briefContent');
@@ -1904,18 +1908,22 @@ function renderBriefing(){
   const shortDay=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][now.getDay()];
   const periods=TIMETABLE[currentWeek][shortDay];
   const subjects=periods?[...new Set(periods.filter(p=>p.sub&&p.sub!=='RECESS'&&p.sub!=='LUNCH'&&p.sub!=='').map(p=>p.sub))]:[];
-  
-  let html=`<div style="font-size:20px;color:#fff;font-weight:800;margin-bottom:4px;">📅 ${day} — Week ${currentWeek}</div>`;
+  const rooms=periods?periods.filter(p=>p.room&&p.sub!=='RECESS'&&p.sub!=='LUNCH'&&p.sub!=='').map(p=>p.sub+' ('+p.room+')'):[];
+  const activities={Tue:'🤖 Robotics 3-4:30 • 🥋 Jiu-Jitsu 5-6',Thu:'🥋 Jiu-Jitsu 5-6',Sat:'🎾 Tennis 9am • 🎹 Piano 1:15pm'};
+  const opFact=OP_FACTS[now.getDate()%OP_FACTS.length];
+  const brainQ=BRAIN_QS[now.getDate()%BRAIN_QS.length];
+  let html='';
+  html+=`<div style="font-size:20px;color:#fff;font-weight:800;margin-bottom:6px;">🌅 ${day} — Week ${currentWeek}</div>`;
   if(subjects.length>0){
-    html+=`<div>🏫 Subjects: <strong style="color:#fff;">${subjects.join(', ')}</strong></div>`;
+    html+=`<div style="margin-bottom:4px;">🏫 <strong style="color:#fff;">${rooms.join(' • ')}</strong></div>`;
   } else {
     html+=`<div>🎉 No school today!</div>`;
   }
-  // Check activities
-  if(shortDay==='Tue') html+='<div>🤖 Robotics 3:00-4:30 • 🥋 Jiu-Jitsu 5:00-6:00</div>';
-  if(shortDay==='Thu') html+='<div>🥋 Jiu-Jitsu 5:00-6:00</div>';
-  if(shortDay==='Sat') html+='<div>🎾 Tennis 9am • 🎹 Piano 1:15pm</div>';
-  html+='<div>⏰ Homework deadline: <strong style="color:#FF9933;">8:00pm</strong></div>';
+  if(activities[shortDay]) html+=`<div style="margin-bottom:4px;">${activities[shortDay]}</div>`;
+  html+=`<div style="margin-bottom:4px;">⏰ Homework deadline: <strong style="color:#FF9933;">8:00pm</strong></div>`;
+  html+=`<div style="margin-bottom:4px;">💊 <strong style="color:#FF5555;">Take your Ritalin with breakfast</strong></div>`;
+  html+=`<div style="padding:8px 12px;background:rgba(255,153,51,0.08);border-radius:8px;margin-bottom:6px;">🏴‍☠️ <em>${opFact}</em></div>`;
+  html+=`<div style="padding:8px 12px;background:rgba(51,221,221,0.08);border-radius:8px;">🧠 <strong style="color:#33DDDD;">${brainQ}</strong></div>`;
   el.innerHTML=html;
 }
 setTimeout(renderBriefing,200);
