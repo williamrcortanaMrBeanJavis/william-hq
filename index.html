@@ -586,6 +586,47 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
 
     <!-- Daily exercises -->
     <div style="background:#1e3068;border:2px solid #FF5555;border-radius:20px;padding:24px;margin-bottom:16px;">
+      <div style="display:flex;gap:10px;margin-bottom:12px;">
+        <button onclick="document.getElementById('caliSection').style.display='block';document.getElementById('weightsSection').style.display='none';" style="flex:1;padding:12px;border-radius:12px;border:2px solid #FF5555;background:rgba(255,85,85,0.1);color:#FF5555;font-weight:900;font-size:16px;cursor:pointer;font-family:'Bangers',cursive;">CALISTHENICS</button>
+        <button onclick="document.getElementById('weightsSection').style.display='block';document.getElementById('caliSection').style.display='none';" style="flex:1;padding:12px;border-radius:12px;border:2px solid #55AAFF;background:rgba(85,170,255,0.1);color:#55AAFF;font-weight:900;font-size:16px;cursor:pointer;font-family:'Bangers',cursive;">WEIGHTS 🏋️</button>
+      </div>
+
+      <!-- WEIGHTS SECTION -->
+      <div id="weightsSection" style="display:none;">
+        <div style="font-family:'Bangers',cursive;font-size:28px;color:#55AAFF;margin-bottom:4px;">🏋️ WEIGHTS — BUILD MUSCLE</div>
+        <div style="font-size:14px;color:#8899cc;margin-bottom:12px;">Dad wants you strong. Uncle Adam checks your form on video. Start light, perfect form first.</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#55AAFF;">Dumbbell Press — 3 x 10</div><div style="font-size:13px;color:#8899cc;">Chest + shoulders. Lie on bench or floor. Push up slow, control down.</div></div></div>
+          <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#FF9933;">Dumbbell Rows — 3 x 10 each</div><div style="font-size:13px;color:#8899cc;">Back + biceps. Lean on bench, pull weight to hip. Builds the muscles that carry your bag.</div></div></div>
+          <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#44FF66;">Goblet Squat — 3 x 12</div><div style="font-size:13px;color:#8899cc;">Legs + core. Hold dumbbell at chest, squat deep. Jiu-Jitsu base gets stronger.</div></div></div>
+          <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#FF55CC;">Shoulder Press — 3 x 10</div><div style="font-size:13px;color:#8899cc;">Shoulders + triceps. Sit or stand, push dumbbells overhead. Builds the V-shape.</div></div></div>
+          <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#33DDDD;">Bicep Curls — 3 x 12</div><div style="font-size:13px;color:#8899cc;">Arms. Slow up, slow down. Control > heavy. The mirror muscle.</div></div></div>
+          <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#FFAA00;">Dumbbell Deadlift — 3 x 10</div><div style="font-size:13px;color:#8899cc;">Back + legs + grip. Hinge at hips, keep back straight. The king of lifts.</div></div></div>
+        </div>
+        <div style="margin-top:12px;padding:14px;background:rgba(85,170,255,0.08);border:1px solid #55AAFF;border-radius:12px;">
+          <div style="font-size:16px;color:#55AAFF;font-weight:700;">Starting Weights (Age 13):</div>
+          <div style="font-size:14px;color:#8899cc;margin-top:4px;line-height:2;">
+            • Start with 2-5kg dumbbells<br>
+            • Perfect form FIRST — then add weight<br>
+            • 3 sessions per week (Mon/Wed/Fri or Tue/Thu/Sat)<br>
+            • Rest 60-90 seconds between sets<br>
+            • Record form on video — Uncle Adam checks
+          </div>
+        </div>
+        <div style="margin-top:8px;padding:14px;background:rgba(255,85,85,0.08);border:1px solid #FF5555;border-radius:12px;">
+          <div style="font-size:16px;color:#FF5555;font-weight:700;">⚠️ Safety Rules:</div>
+          <div style="font-size:14px;color:#8899cc;margin-top:4px;line-height:2;">
+            • NEVER lift heavy without someone watching<br>
+            • If it hurts (not muscle burn — actual PAIN) — STOP<br>
+            • Warm up first: star jumps + arm circles<br>
+            • Uncle Adam or Dad must approve weight increases
+          </div>
+        </div>
+        <div onclick="addXP(30,'🏋️ Weights session done!')" style="margin-top:12px;padding:16px;background:rgba(85,170,255,0.1);border:2px solid #55AAFF;border-radius:14px;cursor:pointer;text-align:center;"><span style="font-family:'Bangers',cursive;font-size:22px;color:#55AAFF;">🏋️ WEIGHTS DONE! +30 XP</span></div>
+      </div>
+
+      <!-- CALISTHENICS SECTION -->
+      <div id="caliSection">
       <div style="font-family:'Bangers',cursive;font-size:28px;color:#FF5555;margin-bottom:4px;">🎯 DAILY CALISTHENICS</div>
       <div style="font-size:14px;color:#8899cc;margin-bottom:12px;">Pick 5 today. Uncle Adam checks your form on video.</div>
       <div style="display:flex;flex-direction:column;gap:8px;">
@@ -701,6 +742,7 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
         <div>🗡️ Zoro doesn't need machines. Neither do you.</div>
       </div>
     </div>
+    </div><!-- close caliSection -->
   </div>
 
   <!-- ═══ READ ALOUD ═══ -->
@@ -1682,6 +1724,13 @@ function checkSundayPlanning(){
   }
 }
 setTimeout(checkSundayPlanning,5000);
+
+// ONE PIECE REWARD (earn episodes by completing homework)
+function checkEpisodeReward(){
+  // Count tasks done today
+  const doneTasks=document.querySelectorAll('.tc').length;
+  // This is a placeholder — in production, tracks actual completions
+}
 
 // FOCUS CAMERA — watches William during homework, detects distraction
 let focusCamActive = false;
