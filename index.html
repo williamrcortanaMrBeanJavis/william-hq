@@ -1411,6 +1411,7 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
       <a href="games/memory-grid.html" class="game-card" style="text-decoration:none;"><img src="assets/mrbean-art.jpg"><div class="g-ov"><h4 style="font-size:13px; color:#fff;">🧩 Memory</h4></div></a>
       <a href="games/speed-match.html" class="game-card" style="text-decoration:none;"><img src="assets/mrbean-jiujitsu.jpg"><div class="g-ov"><h4 style="font-size:13px; color:#fff;">⚡ Speed</h4></div></a>
       <a href="games/colour-switch.html" class="game-card" style="text-decoration:none;"><img src="assets/mrbean-music-cooking.jpg"><div class="g-ov"><h4 style="font-size:13px; color:#fff;">🎨 Colour</h4></div></a>
+      <a href="games/dual-nback.html" class="game-card" style="text-decoration:none;"><img src="assets/mrbean-focus.jpg"><div class="g-ov"><h4 style="font-size:13px; color:#fff;">🧠 N-Back</h4></div></a>
     </div>
   </div>
 
@@ -1594,6 +1595,82 @@ function uC(){document.getElementById('clock').textContent=new Date().toLocaleTi
 
 // Init timetable
 setTimeout(()=>renderTimetable(),100);
+
+// SUNDAY NIGHT PLANNING
+function checkSundayPlanning(){
+  const now=new Date();
+  if(now.getDay()===0 && now.getHours()>=19 && now.getHours()<21 && !sessionStorage.getItem('sundayPlan')){
+    sessionStorage.setItem('sundayPlan','1');
+    const overlay=document.createElement('div');
+    overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:10000;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:40px;';
+    overlay.innerHTML=`
+      <div style="max-width:500px;text-align:center;">
+        <div style="font-size:48px;margin-bottom:12px;">\ud83d\udcc5</div>
+        <div style="font-family:'Bangers',cursive;font-size:36px;color:#FF9933;text-shadow:0 0 20px rgba(255,153,51,0.6);margin-bottom:16px;">SUNDAY NIGHT PLANNING</div>
+        <div style="font-size:18px;color:#8899cc;margin-bottom:24px;">Let's get ready for the week. 5 minutes. Then you're done.</div>
+        <div style="text-align:left;background:#1e3068;border-radius:16px;padding:20px;margin-bottom:20px;">
+          <div style="font-size:16px;color:#fff;line-height:2.2;">
+            <div>\ud83d\udcc6 <strong>Check your timetable</strong> \u2014 Week ${currentWeek==='A'?'B':'A'} starts tomorrow</div>
+            <div>\ud83c\udf92 <strong>Pack your bag</strong> \u2014 go to Tomorrow tab</div>
+            <div>\ud83c\udfaf <strong>Set 3 goals</strong> \u2014 go to Goals tab</div>
+            <div>\ud83e\uddea <strong>Check exams</strong> \u2014 anything coming this week?</div>
+            <div>\ud83d\ude34 <strong>Early bed</strong> \u2014 Monday starts strong</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;justify-content:center;">
+          <button onclick="this.closest('div[style*=fixed]').remove();goView('tomorrow');" style="padding:14px 28px;border-radius:14px;border:none;background:#FF9933;color:#000;font-weight:900;font-size:16px;cursor:pointer;font-family:'Bangers',cursive;">\ud83d\udca1 Plan Tomorrow</button>
+          <button onclick="this.closest('div[style*=fixed]').remove();addXP(15,'\ud83d\udcc5 Sunday planning');" style="padding:14px 28px;border-radius:14px;border:2px solid #2d4488;background:transparent;color:#8899cc;font-weight:700;cursor:pointer;font-family:'Inter';">Done \u2705</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+  }
+}
+setTimeout(checkSundayPlanning,5000);
+
+// FOLLOW-UP TRACKER
+let followUps=JSON.parse(localStorage.getItem('followUps')||'[]');
+function checkFollowUps(){
+  if(!followUps.length)return;
+  const now=new Date();
+  const h=now.getHours();
+  // Check at 4pm (homework time)
+  if(h===16 && !sessionStorage.getItem('followUpChecked')){
+    sessionStorage.setItem('followUpChecked','1');
+    const pending=followUps.filter(f=>!f.done);
+    if(pending.length>0){
+      const r=document.createElement('div');
+      r.style.cssText='position:fixed;top:100px;right:20px;background:#1e3068;border:2px solid #FF9933;border-radius:16px;padding:16px 20px;z-index:9000;animation:msgIn 0.3s ease;max-width:350px;cursor:pointer;';
+      r.innerHTML='<div style="font-family:\'Bangers\',cursive;font-size:18px;color:#FF9933;margin-bottom:6px;">\ud83d\udc3b Mr Bean reminder:</div><div style="font-size:14px;color:#8899cc;">You said you\'d do: <strong style="color:#fff;">'+pending[0].text+'</strong></div><div style="font-size:12px;color:#555;margin-top:6px;">tap to dismiss</div>';
+      r.onclick=()=>r.remove();
+      document.body.appendChild(r);
+      setTimeout(()=>{if(r.parentNode)r.remove();},15000);
+    }
+  }
+}
+setInterval(checkFollowUps,60000);
+
+// AUTO CARRY-OVER (check at midnight)
+function checkCarryOver(){
+  const today=new Date().toISOString().slice(0,10);
+  const lastCheck=localStorage.getItem('lastCarryOverCheck');
+  if(lastCheck===today)return;
+  localStorage.setItem('lastCarryOverCheck',today);
+  // Flag any unfinished tasks from yesterday in the briefing
+  const carriedOver=localStorage.getItem('carriedOverTasks');
+  if(carriedOver){
+    const tasks=JSON.parse(carriedOver);
+    if(tasks.length>0){
+      const r=document.createElement('div');
+      r.style.cssText='position:fixed;top:100px;left:50%;transform:translateX(-50%);background:#1e3068;border:2px solid #FF5555;border-radius:16px;padding:16px 24px;z-index:9000;animation:msgIn 0.3s ease;text-align:center;cursor:pointer;';
+      r.innerHTML='<div style="font-size:20px;">\u26a0\ufe0f</div><div style="font-family:\'Bangers\',cursive;font-size:20px;color:#FF5555;">CARRIED OVER</div><div style="font-size:14px;color:#8899cc;margin-top:4px;">'+tasks.length+' task(s) from yesterday still need doing</div><div style="font-size:12px;color:#555;margin-top:6px;">tap to dismiss</div>';
+      r.onclick=()=>r.remove();
+      document.body.appendChild(r);
+      setTimeout(()=>{if(r.parentNode)r.remove();},20000);
+    }
+  }
+}
+setTimeout(checkCarryOver,3000);
 
 // DAILY BRIEFING
 function renderBriefing(){

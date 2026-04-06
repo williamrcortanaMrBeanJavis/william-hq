@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dual N-Back — Brain Training</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Bangers&display=swap" rel="stylesheet">
+<style>
+:root { --bg:#0d1b3e; --card:#142252; --border:#1e3a7a; --text:#e8e8f0; --muted:#8899cc; --cyan:#00C8C8; --green:#2ECC40; --red:#ff4444; --orange:#E8A444; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',sans-serif; background:linear-gradient(180deg,#0d1b3e,#1a0a2e,#0d1b3e); color:var(--text); min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:20px; }
+.back-btn { position:fixed; top:16px; left:16px; padding:8px 16px; border-radius:10px; border:2px solid var(--border); background:var(--card); color:var(--muted); font-size:13px; font-weight:700; cursor:pointer; font-family:'Inter'; z-index:100; text-decoration:none; }
+.back-btn:hover { border-color:var(--cyan); color:var(--cyan); }
+h1 { font-family:'Bangers',cursive; font-size:32px; letter-spacing:2px; color:var(--orange); margin-bottom:4px; }
+.sub { font-size:13px; color:var(--muted); margin-bottom:16px; text-align:center; }
+.stats { display:flex; gap:16px; margin-bottom:16px; }
+.stat { text-align:center; }
+.sv { font-size:20px; font-weight:900; color:var(--cyan); }
+.sl { font-size:10px; color:var(--muted); }
+.op-theme { background:var(--card); border:2px solid var(--orange); border-radius:16px; padding:10px 20px; margin-bottom:16px; text-align:center; font-size:13px; color:var(--orange); font-weight:700; }
+
+/* Grid */
+.grid-wrap { margin:16px 0; position:relative; }
+.grid3x3 { display:grid; grid-template-columns:repeat(3,90px); grid-template-rows:repeat(3,90px); gap:8px; }
+.gcell { background:var(--card); border:2px solid var(--border); border-radius:14px; transition:all 0.2s; }
+.gcell.lit { background:var(--cyan); border-color:var(--cyan); box-shadow:0 0 20px rgba(0,200,200,0.5); }
+
+/* Letter display */
+.letter-display { font-family:'Bangers',cursive; font-size:72px; color:var(--orange); text-shadow:0 0 20px rgba(232,164,68,0.6); text-align:center; margin:16px 0; min-height:80px; }
+
+/* Buttons */
+.btn-row { display:flex; gap:12px; margin:16px 0; }
+.nbtn { padding:16px 32px; border-radius:14px; font-weight:900; font-size:18px; cursor:pointer; font-family:'Inter'; border:3px solid; transition:all 0.1s; }
+.nbtn:active { transform:scale(0.95); }
+.nbtn-pos { border-color:var(--cyan); background:rgba(0,200,200,0.1); color:var(--cyan); }
+.nbtn-snd { border-color:var(--orange); background:rgba(232,164,68,0.1); color:var(--orange); }
+.nbtn-both { border-color:var(--green); background:rgba(46,204,64,0.1); color:var(--green); }
+.nbtn-none { border-color:var(--border); background:var(--card); color:var(--muted); }
+
+.msg { text-align:center; font-size:16px; margin:12px 0; min-height:24px; font-weight:700; }
+.start-btn { padding:16px 48px; border-radius:16px; border:none; background:linear-gradient(135deg,var(--orange),var(--cyan)); color:#000; font-weight:900; font-size:20px; cursor:pointer; font-family:'Bangers',cursive; letter-spacing:2px; }
+.result { background:var(--card); border:2px solid var(--border); border-radius:20px; padding:24px; text-align:center; max-width:400px; display:none; }
+
+.floater { position:fixed; pointer-events:none; z-index:0; opacity:0; animation:floatAcross linear forwards; }
+@keyframes floatAcross { 0%{transform:translateX(-80px);opacity:0;} 5%{opacity:0.5;} 50%{opacity:0.4;} 100%{transform:translateX(110vw);opacity:0;} }
+</style>
+</head>
+<body>
+<a href="../index.html" class="back-btn">← Back</a>
+
+<h1>🧠 Dual N-Back</h1>
+<div class="sub">The ONLY brain game with peer-reviewed evidence of improving working memory.<br>Match the position AND the letter from <span id="nLevel">2</span> turns ago.</div>
+
+<div class="op-theme">🏴‍☠️ Navigator Training — Remember where you've been!</div>
+
+<div class="stats">
+  <div class="stat"><div class="sv" id="sLevel">2</div><div class="sl">N-Back</div></div>
+  <div class="stat"><div class="sv" id="sRound">0/20</div><div class="sl">Round</div></div>
+  <div class="stat"><div class="sv" id="sAcc">-%</div><div class="sl">Accuracy</div></div>
+  <div class="stat"><div class="sv" id="sXP">0</div><div class="sl">XP</div></div>
+</div>
+
+<div class="grid-wrap">
+  <div class="grid3x3" id="grid"></div>
+</div>
+
+<div class="letter-display" id="letterDisplay"></div>
+
+<div class="msg" id="msg">Match position AND letter from 2 turns ago</div>
+
+<div class="btn-row" id="btns" style="display:none;">
+  <button class="nbtn nbtn-pos" onclick="respond('position')">📍 Position</button>
+  <button class="nbtn nbtn-snd" onclick="respond('letter')">🔤 Letter</button>
+  <button class="nbtn nbtn-both" onclick="respond('both')">✅ Both</button>
+  <button class="nbtn nbtn-none" onclick="respond('none')">❌ Neither</button>
+</div>
+
+<button class="start-btn" id="startBtn" onclick="startGame()">⚡ START</button>
+
+<div class="result" id="result">
+  <div style="font-size:48px;" id="rEmoji">🎉</div>
+  <div style="font-size:24px;font-weight:900;margin:8px 0;" id="rTitle"></div>
+  <div style="font-size:14px;color:var(--muted);" id="rDetail"></div>
+  <div style="font-size:28px;font-weight:900;color:var(--green);margin:12px 0;" id="rXP"></div>
+  <button class="start-btn" onclick="startGame()" style="margin-top:12px;">Play Again</button>
+</div>
+
+<script>
+// Create grid
+const grid = document.getElementById('grid');
+for(let i=0;i<9;i++){const c=document.createElement('div');c.className='gcell';c.dataset.idx=i;grid.appendChild(c);}
+
+let nBack = 2;
+let history = []; // {pos, letter}
+let round = 0;
+let maxRounds = 20;
+let correct = 0;
+let total = 0;
+let totalXP = 0;
+let gameActive = false;
+let responded = false;
+
+const LETTERS = 'BCDFGHJKLMNPQRSTVWXZ';
+
+function startGame(){
+  history=[]; round=0; correct=0; total=0; responded=false;
+  document.getElementById('startBtn').style.display='none';
+  document.getElementById('result').style.display='none';
+  document.getElementById('btns').style.display='flex';
+  gameActive=true;
+  nextTurn();
+}
+
+function nextTurn(){
+  if(round>=maxRounds) return endGame();
+  
+  // Clear previous
+  document.querySelectorAll('.gcell').forEach(c=>c.classList.remove('lit'));
+  document.getElementById('letterDisplay').textContent='';
+  responded=false;
+  
+  // Generate
+  const pos = Math.floor(Math.random()*9);
+  const letter = LETTERS[Math.floor(Math.random()*LETTERS.length)];
+  
+  // 30% chance of position match, 30% letter match, 10% both
+  if(round>=nBack){
+    const r=Math.random();
+    const ref=history[round-nBack];
+    if(r<0.1){
+      // Both match
+      history.push({pos:ref.pos, letter:ref.letter});
+    } else if(r<0.35){
+      // Position match only
+      history.push({pos:ref.pos, letter:letter===ref.letter?LETTERS[(LETTERS.indexOf(letter)+1)%LETTERS.length]:letter});
+    } else if(r<0.6){
+      // Letter match only
+      let newPos=pos;
+      while(newPos===ref.pos) newPos=Math.floor(Math.random()*9);
+      history.push({pos:newPos, letter:ref.letter});
+    } else {
+      // No match
+      let newPos=pos;
+      while(newPos===ref.pos) newPos=Math.floor(Math.random()*9);
+      let newLetter=letter;
+      while(newLetter===ref.letter) newLetter=LETTERS[Math.floor(Math.random()*LETTERS.length)];
+      history.push({pos:newPos, letter:newLetter});
+    }
+  } else {
+    history.push({pos, letter});
+  }
+  
+  const current = history[history.length-1];
+  
+  // Show
+  setTimeout(()=>{
+    document.querySelectorAll('.gcell')[current.pos].classList.add('lit');
+    document.getElementById('letterDisplay').textContent=current.letter;
+    round++;
+    document.getElementById('sRound').textContent=round+'/'+maxRounds;
+    
+    if(round<=nBack){
+      document.getElementById('msg').textContent='Watch and remember... ('+round+'/'+nBack+')';
+      document.getElementById('msg').style.color='var(--muted)';
+      // Auto-advance for first N rounds
+      setTimeout(()=>{
+        document.querySelectorAll('.gcell').forEach(c=>c.classList.remove('lit'));
+        document.getElementById('letterDisplay').textContent='';
+        setTimeout(nextTurn,500);
+      },2000);
+    } else {
+      document.getElementById('msg').textContent='Does position or letter match '+nBack+' turns ago?';
+      document.getElementById('msg').style.color='var(--text)';
+      // Auto-advance after 3 seconds if no response
+      setTimeout(()=>{
+        if(!responded&&gameActive) respond('none');
+      },3500);
+    }
+  },500);
+}
+
+function respond(type){
+  if(responded||round<=nBack) return;
+  responded=true;
+  
+  const current=history[round-1];
+  const ref=history[round-1-nBack];
+  
+  const posMatch = current.pos===ref.pos;
+  const letMatch = current.letter===ref.letter;
+  
+  let correctAnswer;
+  if(posMatch&&letMatch) correctAnswer='both';
+  else if(posMatch) correctAnswer='position';
+  else if(letMatch) correctAnswer='letter';
+  else correctAnswer='none';
+  
+  const isCorrect = type===correctAnswer;
+  total++;
+  if(isCorrect) correct++;
+  
+  const msg=document.getElementById('msg');
+  if(isCorrect){
+    msg.textContent='✅ Correct!';
+    msg.style.color='var(--green)';
+  } else {
+    msg.textContent='❌ It was: '+correctAnswer;
+    msg.style.color='var(--red)';
+  }
+  
+  document.getElementById('sAcc').textContent=Math.round(correct/total*100)+'%';
+  
+  setTimeout(()=>{
+    document.querySelectorAll('.gcell').forEach(c=>c.classList.remove('lit'));
+    document.getElementById('letterDisplay').textContent='';
+    setTimeout(nextTurn,500);
+  },1000);
+}
+
+function endGame(){
+  gameActive=false;
+  document.getElementById('btns').style.display='none';
+  
+  const acc=total>0?Math.round(correct/total*100):0;
+  let xp=Math.round(correct*5+nBack*10);
+  if(acc>=80){xp+=20;nBack=Math.min(nBack+1,5);}
+  else if(acc<50&&nBack>1){nBack--;}
+  totalXP+=xp;
+  
+  document.getElementById('sLevel').textContent=nBack;
+  document.getElementById('nLevel').textContent=nBack;
+  document.getElementById('sXP').textContent=totalXP;
+  
+  const emoji=acc>=80?'🌟':acc>=60?'🎉':acc>=40?'👍':'💪';
+  const title=acc>=80?'NAVIGATOR LEVEL UP!':acc>=60?'Good memory!':acc>=40?'Getting there!':'Keep training!';
+  
+  document.getElementById('rEmoji').textContent=emoji;
+  document.getElementById('rTitle').textContent=title+(acc>=80?' N='+(nBack)+'!':'');
+  document.getElementById('rDetail').textContent=correct+'/'+total+' correct • '+acc+'% • N-Back level: '+nBack;
+  document.getElementById('rXP').textContent='+'+xp+' XP';
+  document.getElementById('result').style.display='block';
+  
+  try{const pd=JSON.parse(localStorage.getItem('williamXP'));if(pd){pd.xp+=xp;pd.todayXP+=xp;pd.history.unshift({xp,reason:'🧠 Dual N-Back ('+acc+'%)',time:new Date().toISOString()});localStorage.setItem('williamXP',JSON.stringify(pd));}}catch(e){}
+}
+
+// Floaters
+const FL=['🐻','🧸','👒','🍖','🦌','🏴‍☠️','⚓','🌊','🍳','🎵','🐕','🎹','🎨','🥋','⭐'];
+function sF(){const e=document.createElement('div');e.className='floater';e.textContent=FL[Math.floor(Math.random()*FL.length)];e.style.top=(10+Math.random()*70)+'vh';e.style.fontSize=(30+Math.random()*20)+'px';const d=12+Math.random()*10;e.style.animationDuration=d+'s';document.body.appendChild(e);setTimeout(()=>e.remove(),d*1000);}
+setInterval(sF,4000);setTimeout(sF,2000);
+</script>
+</body>
+</html>
