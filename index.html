@@ -580,20 +580,34 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
   <!-- ═══ BODY TRAINING ═══ -->
   <div class="view" id="view-body">
     <button class="back" onclick="goHome()">← Home</button>
-    <div style="padding:8px 0 16px;"><h2 style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:2px;color:#FF5555;text-shadow:0 0 25px rgba(255,85,85,0.8);">💪 CALISTHENICS</h2></div>
-    <div style="font-size:18px;color:#8899cc;margin-bottom:8px;">Bodyweight training. No gym. No equipment. Just you vs gravity.</div>
-    <div style="font-size:16px;color:#FF9933;font-weight:700;margin-bottom:16px;">Zoro doesn't need a gym. Neither do you. 🗡️</div>
+    <div style="padding:8px 0 16px;"><h2 style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:2px;color:#FF5555;text-shadow:0 0 25px rgba(255,85,85,0.8);">💪 BODY TRAINING</h2></div>
+    <div style="font-size:18px;color:#8899cc;margin-bottom:8px;">Bodyweight + weights. Build the body. Train like Zoro. 🗡️</div>
 
-    <!-- Daily exercises -->
+    <!-- CALISTHENICS SECTION -->
     <div style="background:#1e3068;border:2px solid #FF5555;border-radius:20px;padding:24px;margin-bottom:16px;">
-      <div style="display:flex;gap:10px;margin-bottom:12px;">
-        <button onclick="document.getElementById('caliSection').style.display='block';document.getElementById('weightsSection').style.display='none';" style="flex:1;padding:12px;border-radius:12px;border:2px solid #FF5555;background:rgba(255,85,85,0.1);color:#FF5555;font-weight:900;font-size:16px;cursor:pointer;font-family:'Bangers',cursive;">CALISTHENICS</button>
-        <button onclick="document.getElementById('weightsSection').style.display='block';document.getElementById('caliSection').style.display='none';" style="flex:1;padding:12px;border-radius:12px;border:2px solid #55AAFF;background:rgba(85,170,255,0.1);color:#55AAFF;font-weight:900;font-size:16px;cursor:pointer;font-family:'Bangers',cursive;">WEIGHTS 🏋️</button>
+      <div id="caliSection">
+      <div style="font-family:'Bangers',cursive;font-size:28px;color:#FF5555;margin-bottom:4px;">🎯 DAILY CALISTHENICS</div>
+      <div style="font-size:14px;color:#8899cc;margin-bottom:12px;">Pick 5 today. Uncle Adam checks your form on video.</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#FF9933;">Plank — 30 seconds</div><div style="font-size:13px;color:#8899cc;">Core. Hold your body straight like a board. Breathe.</div></div></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#33DDDD;">Dead Bug — 10 each side</div><div style="font-size:13px;color:#8899cc;">Core. Lie on back, opposite arm + leg extend. Keeps your spine safe.</div></div></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#44FF66;">Superman Hold — 20 seconds</div><div style="font-size:13px;color:#8899cc;">Back. Lie face down, lift arms + legs off ground. Strengthens your back for the bag.</div></div></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#FF55CC;">Bird Dog — 10 each side</div><div style="font-size:13px;color:#8899cc;">Core + back. On all fours, extend opposite arm + leg. Balance and strength.</div></div></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#55AAFF;">Squats — 15 reps</div><div style="font-size:13px;color:#8899cc;">Legs. Stand, sit back like sitting in a chair, stand up. Builds leg strength.</div></div></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#FFAA00;">Push-ups — 10 reps</div><div style="font-size:13px;color:#8899cc;">Upper body. On knees is fine to start. Build up over time.</div></div></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#8888FF;">Glute Bridge — 15 reps</div><div style="font-size:13px;color:#8899cc;">Back + glutes. Lie on back, feet flat, push hips up. Protects lower back.</div></div></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#FF9933;">Side Plank — 20 sec each</div><div style="font-size:13px;color:#8899cc;">Obliques. On your side, lift hips. Stabilises your spine when carrying the bag.</div></div></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#33DDDD;">Star Jumps — 20 reps</div><div style="font-size:13px;color:#8899cc;">Cardio. Gets blood flowing. Good for ADHD focus.</div></div></div>
+        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#44FF66;">Cat-Cow Stretch — 10 reps</div><div style="font-size:13px;color:#8899cc;">Spine mobility. On all fours, arch up then dip down. Undoes the bag damage.</div></div></div>
       </div>
+      <div onclick="addXP(25,'💪 Daily calisthenics done!')" style="margin-top:12px;padding:16px;background:rgba(255,85,85,0.1);border:2px solid #FF5555;border-radius:14px;cursor:pointer;text-align:center;"><span style="font-family:'Bangers',cursive;font-size:22px;color:#FF5555;">💪 CALISTHENICS DONE! +25 XP</span></div>
+      </div><!-- close caliSection -->
+    </div>
 
-      <!-- WEIGHTS SECTION -->
-      <div id="weightsSection" style="display:none;">
-        <div style="font-family:'Bangers',cursive;font-size:28px;color:#55AAFF;margin-bottom:4px;">🏋️ FORCE USA G12 — BUILD MUSCLE</div>
+    <!-- G12 WEIGHTS SECTION -->
+    <div style="background:#1e3068;border:2px solid #55AAFF;border-radius:20px;padding:24px;margin-bottom:16px;">
+      <div id="weightsSection">
+        <div style="padding:0 0 8px;"><h2 style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:2px;color:#55AAFF;text-shadow:0 0 25px rgba(85,170,255,0.8);">🏋️ FORCE USA G12</h2></div>
         <div style="font-size:14px;color:#8899cc;margin-bottom:12px;">Dad's G12 is a BEAST. Smith machine + cables + pull-up bar. Uncle Adam checks your form on video.</div>
 
         <!-- DAY A: Push -->
@@ -646,59 +660,41 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
           </div>
         </div>
         <div onclick="addXP(30,'🏋️ G12 session done!')" style="margin-top:12px;padding:16px;background:rgba(85,170,255,0.1);border:2px solid #55AAFF;border-radius:14px;cursor:pointer;text-align:center;"><span style="font-family:'Bangers',cursive;font-size:22px;color:#55AAFF;">🏋️ G12 SESSION DONE! +30 XP</span></div>
-      </div>
+      </div><!-- close weightsSection -->
+    </div>
 
-      <!-- CALISTHENICS SECTION -->
-      <div id="caliSection">
-      <div style="font-family:'Bangers',cursive;font-size:28px;color:#FF5555;margin-bottom:4px;">🎯 DAILY CALISTHENICS</div>
-      <div style="font-size:14px;color:#8899cc;margin-bottom:12px;">Pick 5 today. Uncle Adam checks your form on video.</div>
-      <div style="display:flex;flex-direction:column;gap:8px;">
-        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#FF9933;">Plank — 30 seconds</div><div style="font-size:13px;color:#8899cc;">Core. Hold your body straight like a board. Breathe.</div></div></div>
-        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#33DDDD;">Dead Bug — 10 each side</div><div style="font-size:13px;color:#8899cc;">Core. Lie on back, opposite arm + leg extend. Keeps your spine safe.</div></div></div>
-        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#44FF66;">Superman Hold — 20 seconds</div><div style="font-size:13px;color:#8899cc;">Back. Lie face down, lift arms + legs off ground. Strengthens your back for the bag.</div></div></div>
-        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#FF55CC;">Bird Dog — 10 each side</div><div style="font-size:13px;color:#8899cc;">Core + back. On all fours, extend opposite arm + leg. Balance and strength.</div></div></div>
-        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#55AAFF;">Squats — 15 reps</div><div style="font-size:13px;color:#8899cc;">Legs. Stand, sit back like sitting in a chair, stand up. Builds leg strength.</div></div></div>
-        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#FFAA00;">Push-ups — 10 reps</div><div style="font-size:13px;color:#8899cc;">Upper body. On knees is fine to start. Build up over time.</div></div></div>
-        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#8888FF;">Glute Bridge — 15 reps</div><div style="font-size:13px;color:#8899cc;">Back + glutes. Lie on back, feet flat, push hips up. Protects lower back.</div></div></div>
-        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#FF9933;">Side Plank — 20 sec each</div><div style="font-size:13px;color:#8899cc;">Obliques. On your side, lift hips. Stabilises your spine when carrying the bag.</div></div></div>
-        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#33DDDD;">Star Jumps — 20 reps</div><div style="font-size:13px;color:#8899cc;">Cardio. Gets blood flowing. Good for ADHD focus.</div></div></div>
-        <div onclick="this.querySelector('.tc').textContent=this.querySelector('.tc').textContent==='⬜'?'✅':'⬜'" style="display:flex;align-items:center;gap:12px;padding:14px;background:#0f1d42;border-radius:12px;cursor:pointer;"><span class="tc" style="font-size:20px;">⬜</span><div style="flex:1;"><div style="font-size:18px;font-weight:700;color:#44FF66;">Cat-Cow Stretch — 10 reps</div><div style="font-size:13px;color:#8899cc;">Spine mobility. On all fours, arch up then dip down. Undoes the bag damage.</div></div></div>
-      </div>
-      <!-- Record form -->
-      <div style="margin-top:16px;background:#0f1d42;border:2px solid #FF9933;border-radius:16px;padding:20px;">
-        <div style="font-family:'Bangers',cursive;font-size:24px;color:#FF9933;margin-bottom:8px;">🎥 RECORD YOUR FORM</div>
-        <div style="font-size:16px;color:#8899cc;margin-bottom:12px;">Turn your camera on. Uncle Adam reviews your form. Perfect form = BONUS POINTS.</div>
-        <label style="display:flex;align-items:center;justify-content:center;padding:24px;background:#1e3068;border:3px dashed #FF9933;border-radius:16px;cursor:pointer;margin-bottom:12px;">
-          <input type="file" accept="video/*" capture="user" onchange="handleExerciseVideo(this)" style="display:none;">
-          <div style="text-align:center;">
-            <div style="font-size:40px;margin-bottom:6px;">🎥</div>
-            <div style="font-family:'Bangers',cursive;font-size:20px;color:#FF9933;">TAP TO RECORD</div>
-            <div style="font-size:13px;color:#8899cc;">Front camera — show Uncle Adam your form</div>
-          </div>
-        </label>
-        <div id="exerciseVideos" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
-      </div>
-
-      <!-- Form scoring -->
-      <div style="margin-top:12px;background:#0f1d42;border:2px solid #FFD700;border-radius:16px;padding:20px;">
-        <div style="font-family:'Bangers',cursive;font-size:24px;color:#FFD700;margin-bottom:8px;">⭐ FORM SCORE</div>
-        <div style="font-size:16px;color:#8899cc;margin-bottom:12px;">Uncle Adam rates your form. Perfect form = bonus points toward your reward!</div>
-        <div style="display:flex;gap:8px;justify-content:center;margin-bottom:12px;">
-          <div style="background:#1e3068;border:2px solid #2d4488;border-radius:14px;padding:16px;text-align:center;flex:1;"><div style="font-size:28px;font-weight:900;color:#FFD700;" id="formPoints">0</div><div style="font-size:12px;color:#8899cc;">Form Points</div></div>
-          <div style="background:#1e3068;border:2px solid #2d4488;border-radius:14px;padding:16px;text-align:center;flex:1;"><div style="font-size:28px;font-weight:900;color:#44FF66;" id="formPerfect">0</div><div style="font-size:12px;color:#8899cc;">Perfect Forms</div></div>
-          <div style="background:#1e3068;border:2px solid #2d4488;border-radius:14px;padding:16px;text-align:center;flex:1;"><div style="font-size:28px;font-weight:900;color:#FF9933;" id="formStreak">0</div><div style="font-size:12px;color:#8899cc;">Day Streak</div></div>
+    <!-- Record form -->
+    <div style="background:#1e3068;border:2px solid #FF9933;border-radius:20px;padding:24px;margin-bottom:16px;">
+      <div style="font-family:'Bangers',cursive;font-size:24px;color:#FF9933;margin-bottom:8px;">🎥 RECORD YOUR FORM</div>
+      <div style="font-size:16px;color:#8899cc;margin-bottom:12px;">Turn your camera on. Uncle Adam reviews your form. Perfect form = BONUS POINTS.</div>
+      <label style="display:flex;align-items:center;justify-content:center;padding:24px;background:#0f1d42;border:3px dashed #FF9933;border-radius:16px;cursor:pointer;margin-bottom:12px;">
+        <input type="file" accept="video/*" capture="user" onchange="handleExerciseVideo(this)" style="display:none;">
+        <div style="text-align:center;">
+          <div style="font-size:40px;margin-bottom:6px;">🎥</div>
+          <div style="font-family:'Bangers',cursive;font-size:20px;color:#FF9933;">TAP TO RECORD</div>
+          <div style="font-size:13px;color:#8899cc;">Front camera — show Uncle Adam your form</div>
         </div>
-        <div style="background:rgba(255,215,0,0.08);border:1px solid #FFD700;border-radius:12px;padding:14px;">
-          <div style="font-size:16px;color:#FFD700;font-weight:700;">Rewards from Uncle Adam:</div>
-          <div style="font-size:14px;color:#8899cc;line-height:2;margin-top:4px;">
-            ⭐ 50 Form Points = Small reward<br>
-            ⭐⭐ 100 Form Points = Medium reward<br>
-            ⭐⭐⭐ 200 Form Points = BIG reward from Uncle Adam
-          </div>
+      </label>
+      <div id="exerciseVideos" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
+    </div>
+
+    <!-- Form scoring -->
+    <div style="background:#1e3068;border:2px solid #FFD700;border-radius:20px;padding:24px;margin-bottom:16px;">
+      <div style="font-family:'Bangers',cursive;font-size:24px;color:#FFD700;margin-bottom:8px;">⭐ FORM SCORE</div>
+      <div style="font-size:16px;color:#8899cc;margin-bottom:12px;">Uncle Adam rates your form. Perfect form = bonus points toward your reward!</div>
+      <div style="display:flex;gap:8px;justify-content:center;margin-bottom:12px;">
+        <div style="background:#0f1d42;border:2px solid #2d4488;border-radius:14px;padding:16px;text-align:center;flex:1;"><div style="font-size:28px;font-weight:900;color:#FFD700;" id="formPoints">0</div><div style="font-size:12px;color:#8899cc;">Form Points</div></div>
+        <div style="background:#0f1d42;border:2px solid #2d4488;border-radius:14px;padding:16px;text-align:center;flex:1;"><div style="font-size:28px;font-weight:900;color:#44FF66;" id="formPerfect">0</div><div style="font-size:12px;color:#8899cc;">Perfect Forms</div></div>
+        <div style="background:#0f1d42;border:2px solid #2d4488;border-radius:14px;padding:16px;text-align:center;flex:1;"><div style="font-size:28px;font-weight:900;color:#FF9933;" id="formStreak">0</div><div style="font-size:12px;color:#8899cc;">Day Streak</div></div>
+      </div>
+      <div style="background:rgba(255,215,0,0.08);border:1px solid #FFD700;border-radius:12px;padding:14px;">
+        <div style="font-size:16px;color:#FFD700;font-weight:700;">Rewards from Uncle Adam:</div>
+        <div style="font-size:14px;color:#8899cc;line-height:2;margin-top:4px;">
+          ⭐ 50 Form Points = Small reward<br>
+          ⭐⭐ 100 Form Points = Medium reward<br>
+          ⭐⭐⭐ 200 Form Points = BIG reward from Uncle Adam
         </div>
       </div>
-
-      <div onclick="addXP(25,'💪 Daily exercises done!')" style="margin-top:12px;padding:16px;background:rgba(255,85,85,0.1);border:2px solid #FF5555;border-radius:14px;cursor:pointer;text-align:center;"><span style="font-family:'Bangers',cursive;font-size:22px;color:#FF5555;">💪 DONE! +25 XP</span></div>
     </div>
 
     <!-- Why this matters -->
@@ -765,7 +761,6 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
         <div>🗡️ Zoro doesn't need machines. Neither do you.</div>
       </div>
     </div>
-    </div><!-- close caliSection -->
   </div>
 
   <!-- ═══ READ ALOUD ═══ -->
