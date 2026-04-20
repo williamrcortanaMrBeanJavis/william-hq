@@ -1,0 +1,109 @@
+{
+  "synced_at": "2026-04-20T23:15:14.054376+10:00",
+  "todo": [
+    {
+      "id": 607896,
+      "name": "7 Purple Persuasive Writing Draft",
+      "course_id": 60175,
+      "course_name": "English Year 7",
+      "due_at": "2026-04-24T05:00:00Z",
+      "points": 0.0,
+      "html_url": "https://learn.sasc.nsw.edu.au/courses/60175/assignments/607896",
+      "description": "<link rel=\"stylesheet\" href=\"https://instructure-uploads-apse2.s3.ap-southeast-2.amazonaws.com/account_46740000000000054/attachments/5227016/dp_app.css\"><h4><strong>The question: Why should we reduce, reuse and recycle what we use?</strong></h4>\n<p>&nbsp;</p>\n<p><span>Step 1: Let\u2019s brainstorm ideas in connection to this question</span></p>\n<p><span>Step 2: Write an introduction outlining your idea&nbsp;</span></p>\n<p><span>Step 3: Begin planning and writing your persuasive essay using the scaffo"
+    },
+    {
+      "id": 608464,
+      "name": "7 Yellow Creative Writing Portfolio Draft 2 - Persuasive Writing",
+      "course_id": 60175,
+      "course_name": "English Year 7",
+      "due_at": "2026-04-24T13:59:00Z",
+      "points": 0.0,
+      "html_url": "https://learn.sasc.nsw.edu.au/courses/60175/assignments/608464",
+      "description": "<link rel=\"stylesheet\" href=\"https://instructure-uploads-apse2.s3.ap-southeast-2.amazonaws.com/account_46740000000000054/attachments/5227016/dp_app.css\"><p><strong>Writing Task</strong></p>\n<p>Compose a reply to President Ziya's letter below, arguing that it is unacceptable to allow children to live and work in such conditions. You should aim to write <u>400 words</u> and <u>use the rhetorical devices listed here: rhetorical question, statistics, emotive language</u></p>\n<p>&nbsp;</p>\n<p><img sr"
+    }
+  ],
+  "courses": [
+    {
+      "id": 54605,
+      "name": "Carmichael 2026",
+      "code": "carmichael2026"
+    },
+    {
+      "id": 60166,
+      "name": "Christian Studies Year 7",
+      "code": "7CST"
+    },
+    {
+      "id": 60175,
+      "name": "English Year 7",
+      "code": "7ENG"
+    },
+    {
+      "id": 60186,
+      "name": "History Year 7",
+      "code": "7HIS"
+    },
+    {
+      "id": 60195,
+      "name": "Mathematics Year 7",
+      "code": "7MAT"
+    },
+    {
+      "id": 60170,
+      "name": "Music Year 7",
+      "code": "7MUS"
+    },
+    {
+      "id": 60201,
+      "name": "Pastoral Care Year 7",
+      "code": "7PC"
+    },
+    {
+      "id": 60206,
+      "name": "PDHPE  Year 7",
+      "code": "7PE"
+    },
+    {
+      "id": 60214,
+      "name": "Science Year 7",
+      "code": "7SCI"
+    },
+    {
+      "id": 61183,
+      "name": "Technology Mandatory: Engineering and Digital Technologies",
+      "code": "7TMEDT"
+    },
+    {
+      "id": 36578,
+      "name": "The Senior School Student Hub",
+      "code": "SSSH"
+    },
+    {
+      "id": 60245,
+      "name": "Visual Arts Year 7",
+      "code": "7ART"
+    }
+  ],
+  "assignments": [
+    {
+      "course_id": 60175,
+      "course_name": "English Year 7",
+      "id": 607896,
+      "name": "7 Purple Persuasive Writing Draft",
+      "due_at": "2026-04-24T05:00:00Z",
+      "points": 0.0,
+      "html_url": "https://learn.sasc.nsw.edu.au/courses/60175/assignments/607896",
+      "submitted": true
+    },
+    {
+      "course_id": 60175,
+      "course_name": "English Year 7",
+      "id": 608464,
+      "name": "7 Yellow Creative Writing Portfolio Draft 2 - Persuasive Writing",
+      "due_at": "2026-04-24T13:59:00Z",
+      "points": 0.0,
+      "html_url": "https://learn.sasc.nsw.edu.au/courses/60175/assignments/608464",
+      "submitted": false
+    }
+  ]
+}

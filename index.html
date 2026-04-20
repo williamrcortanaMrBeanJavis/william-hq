@@ -324,6 +324,47 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
 </head>
 <body>
 <div class="app">
+<!-- ═════ LIVE CANVAS FEED — inserted 2026-04-20 23:15 ═════ -->
+<div id="canvas-live" style="margin:12px;padding:14px 16px;background:linear-gradient(135deg,#1a2d5e,#2a4088);border:2px solid #FF9933;border-radius:14px;box-shadow:0 0 20px rgba(255,153,51,0.3)">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+    <div style="font-family:'Bangers',sans-serif;font-size:22px;color:#FF9933;letter-spacing:1px">⏰ LIVE FROM CANVAS</div>
+    <div id="canvas-synced" style="font-size:10px;color:#88bbff"></div>
+  </div>
+  <div id="canvas-list" style="display:flex;flex-direction:column;gap:8px">Loading...</div>
+</div>
+<script>
+(async () => {
+  try {
+    const r = await fetch('canvas-feed.json?t=' + Date.now());
+    const d = await r.json();
+    const list = document.getElementById('canvas-list');
+    const synced = document.getElementById('canvas-synced');
+    synced.textContent = 'Synced ' + (d.synced_at||'').slice(0,16).replace('T',' ');
+    if (!d.todo || d.todo.length === 0) {
+      list.innerHTML = '<div style="color:#44DD55;font-size:14px">✅ Nothing urgent right now — you\'re clear!</div>';
+      return;
+    }
+    list.innerHTML = '';
+    for (const t of d.todo) {
+      const due = (t.due_at||'').slice(0,16).replace('T',' ');
+      const dueDate = t.due_at ? new Date(t.due_at) : null;
+      const now = new Date();
+      const daysLeft = dueDate ? Math.ceil((dueDate - now) / 86400000) : null;
+      const urgent = daysLeft !== null && daysLeft <= 3;
+      const row = document.createElement('div');
+      row.style.cssText = 'padding:10px 12px;background:' + (urgent ? 'rgba(255,85,85,0.15)' : 'rgba(68,221,85,0.08)') + ';border-left:3px solid ' + (urgent ? '#FF5555' : '#44DD55') + ';border-radius:8px';
+      row.innerHTML = '<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:4px">' + (t.name||'') + '</div>' +
+                      '<div style="font-size:12px;color:#FFD580">📚 ' + (t.course_name||'') + '</div>' +
+                      '<div style="font-size:13px;color:' + (urgent ? '#FF5555' : '#44DD55') + ';margin-top:4px;font-weight:600">' +
+                      '⏰ ' + due + (daysLeft !== null ? ' — ' + (daysLeft <= 0 ? 'DUE NOW' : daysLeft + ' day' + (daysLeft===1?'':'s') + ' left') : '') + '</div>';
+      list.appendChild(row);
+    }
+  } catch (e) {
+    document.getElementById('canvas-list').innerHTML = '<div style="color:#FF5555;font-size:12px">Canvas sync not available right now.</div>';
+  }
+})();
+</script>
+<!-- ═════ END CANVAS FEED ═════ -->
 
   <!-- HEADER -->
   <div class="header">
