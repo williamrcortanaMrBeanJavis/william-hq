@@ -270,6 +270,19 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
     gap: 8px !important;
     padding: 0 10px !important;
   }
+
+  /* 25-button home action grid — force 3 cols, override inline repeat(6,1fr) */
+  .home-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+    padding: 0 12px !important;
+  }
+  .home-grid .grid-btn {
+    min-height: 74px !important;
+    padding: 10px 4px !important;
+  }
+  .home-grid .ico { font-size: 26px !important; }
+  .home-grid .lbl { font-size: 11px !important; }
   .tile, .feature, .btn-tile, button.tile {
     font-size: 12px !important;
     padding: 12px 6px !important;
@@ -440,7 +453,7 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
     </div>
 
     <!-- Action buttons -->
-    <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; padding: 0 20px;">
+    <div class="home-grid" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; padding: 0 20px;">
       <div class="grid-btn" onclick="goView('games')"><div class="ico">⚡</div><div class="lbl">Games</div></div>
       <div class="grid-btn" onclick="goView('tasks')"><div class="ico">✅</div><div class="lbl">Tasks</div></div>
       <div class="grid-btn" onclick="goView('schedule')"><div class="ico">📅</div><div class="lbl">Today</div></div>
