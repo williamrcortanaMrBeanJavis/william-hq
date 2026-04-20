@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>William's Telemetry Dashboard — USS Cerritos</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Bangers&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: #0a0f2a; color: #fff; min-height: 100vh; }
+.header { background: linear-gradient(135deg, #1a2d5e, #2a4088); padding: 20px 24px; border-bottom: 2px solid #2d4488; display: flex; align-items: center; justify-content: space-between; }
+.header h1 { font-family: 'Bangers', cursive; font-size: 28px; color: #33DDDD; letter-spacing: 2px; }
+.header .subtitle { font-size: 12px; color: #8899cc; margin-top: 2px; }
+.header .server-status { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.dot-green { width: 10px; height: 10px; border-radius: 50%; background: #44DD55; box-shadow: 0 0 8px rgba(68,221,85,0.8); }
+.dot-amber { width: 10px; height: 10px; border-radius: 50%; background: #FFD580; box-shadow: 0 0 8px rgba(255,213,128,0.8); }
+.dot-red   { width: 10px; height: 10px; border-radius: 50%; background: #FF5555; box-shadow: 0 0 8px rgba(255,85,85,0.8); }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+
+/* Status cards row */
+.status-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.stat-card { background: #1e3068; border: 2px solid #2d4488; border-radius: 16px; padding: 20px; text-align: center; }
+.stat-card.green  { border-color: #44DD55; }
+.stat-card.amber  { border-color: #FFD580; }
+.stat-card.red    { border-color: #FF5555; }
+.stat-num { font-size: 36px; font-weight: 900; margin-bottom: 4px; }
+.stat-lbl { font-size: 12px; color: #8899cc; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+/* Devices table */
+.section { background: #1e3068; border: 2px solid #2d4488; border-radius: 16px; padding: 20px; margin-bottom: 20px; }
+.section h2 { font-family: 'Bangers', cursive; font-size: 22px; color: #FF9933; letter-spacing: 1px; margin-bottom: 16px; }
+
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; font-size: 11px; color: #8899cc; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 8px 12px; border-bottom: 2px solid #2d4488; }
+td { padding: 10px 12px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(255,255,255,0.03); }
+
+.badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; }
+.badge-green { background: rgba(68,221,85,0.15); color: #44DD55; border: 1px solid rgba(68,221,85,0.3); }
+.badge-amber { background: rgba(255,213,128,0.15); color: #FFD580; border: 1px solid rgba(255,213,128,0.3); }
+.badge-red   { background: rgba(255,85,85,0.15); color: #FF5555; border: 1px solid rgba(255,85,85,0.3); }
+
+/* Timeline */
+.timeline { display: flex; flex-direction: column; gap: 6px; max-height: 400px; overflow-y: auto; padding-right: 8px; }
+.timeline-item { display: flex; gap: 12px; align-items: flex-start; padding: 8px 12px; background: rgba(255,255,255,0.03); border-radius: 10px; border-left: 3px solid transparent; }
+.timeline-item.heartbeat { border-left-color: #44DD55; }
+.timeline-item.receipt   { border-left-color: #55AAFF; }
+.timeline-item.event     { border-left-color: #FF9933; }
+.tl-time { font-size: 11px; color: #8899cc; font-weight: 800; white-space: nowrap; min-width: 50px; }
+.tl-desc { font-size: 13px; }
+
+/* Refresh bar */
+.refresh-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; font-size: 12px; color: #8899cc; }
+.refresh-bar button { padding: 8px 18px; border-radius: 10px; border: 2px solid #33DDDD; background: rgba(51,221,221,0.1); color: #33DDDD; font-weight: 700; font-size: 12px; cursor: pointer; font-family: 'Inter'; }
+.refresh-bar button:hover { background: rgba(51,221,221,0.2); }
+
+/* Error state */
+.no-data { text-align: center; padding: 40px 20px; color: #8899cc; }
+.no-data .big { font-size: 40px; margin-bottom: 12px; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #2d4488; border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>📡 William's Telemetry Dashboard</h1>
+    <div class="subtitle">USS Cerritos | Offline-First | Admiral Adam</div>
+  </div>
+  <div class="server-status">
+    <div id="serverDot" class="dot-amber"></div>
+    <span id="serverStatus">Connecting to Cerritos...</span>
+    <span id="lastRefresh" style="margin-left:12px;color:#555;"></span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="refresh-bar">
+    <span id="dataDate">Loading data...</span>
+    <button onclick="loadAll()">🔄 Refresh</button>
+  </div>
+
+  <!-- Summary stats -->
+  <div class="status-row" id="statsRow">
+    <div class="stat-card">
+      <div class="stat-num" id="statDevices">–</div>
+      <div class="stat-lbl">Devices Seen Today</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="statHeartbeats">–</div>
+      <div class="stat-lbl">Heartbeats Today</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="statEvents">–</div>
+      <div class="stat-lbl">Events Today</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="statReceipts">–</div>
+      <div class="stat-lbl">Receipts Today</div>
+    </div>
+  </div>
+
+  <!-- Devices -->
+  <div class="section">
+    <h2>📱 Devices</h2>
+    <div id="devicesTable">
+      <div class="no-data"><div class="big">📡</div>Waiting for data from Cerritos...</div>
+    </div>
+  </div>
+
+  <!-- Today's Timeline -->
+  <div class="section">
+    <h2>⏱ Today's Event Timeline</h2>
+    <div class="timeline" id="timeline">
+      <div class="no-data"><div class="big">🕐</div>No events yet today</div>
+    </div>
+  </div>
+
+  <!-- Quick checks -->
+  <div class="section">
+    <h2>✅ Quick Checks</h2>
+    <div id="quickChecks" style="display:flex;flex-direction:column;gap:10px;">
+      <div style="font-size:13px;color:#8899cc;">Loading...</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const CERRITOS = 'http://192.168.50.9:3401';
+const TODAY = new Date().toISOString().slice(0, 10);
+
+function ts2time(ts) {
+  if (!ts) return '–';
+  try { return new Date(ts).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit', hour12: false }); }
+  catch(e) { return ts.slice(11, 16) || '–'; }
+}
+
+function statusBadge(status) {
+  const cls = status === 'green' ? 'badge-green' : status === 'amber' ? 'badge-amber' : 'badge-red';
+  const icon = status === 'green' ? '🟢' : status === 'amber' ? '🟡' : '🔴';
+  return `<span class="badge ${cls}">${icon} ${status.toUpperCase()}</span>`;
+}
+
+function ageFmt(ms) {
+  if (ms < 60000)  return `${Math.round(ms/1000)}s ago`;
+  if (ms < 3600000) return `${Math.round(ms/60000)}m ago`;
+  return `${Math.round(ms/3600000)}h ago`;
+}
+
+async function apiFetch(path) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 5000);
+  try {
+    const res = await fetch(CERRITOS + path, { signal: ctrl.signal, cache: 'no-store' });
+    clearTimeout(timer);
+    if (!res.ok) return null;
+    return await res.json();
+  } catch(e) {
+    clearTimeout(timer);
+    return null;
+  }
+}
+
+async function loadAll() {
+  document.getElementById('lastRefresh').textContent = 'Refreshing...';
+
+  // Check health
+  const health = await apiFetch('/health');
+  if (health && health.status === 'ok') {
+    document.getElementById('serverDot').className = 'dot-green';
+    document.getElementById('serverStatus').textContent = 'Cerritos Online';
+  } else {
+    document.getElementById('serverDot').className = 'dot-red';
+    document.getElementById('serverStatus').textContent = 'Cerritos Offline';
+    document.getElementById('lastRefresh').textContent = new Date().toLocaleTimeString('en-AU');
+    return;
+  }
+
+  // Load device status
+  const statusData = await apiFetch('/api/status');
+  // Load telemetry stats via events endpoint (we'll parse device list from heartbeats)
+  const alertsData = await apiFetch('/api/alerts');
+
+  document.getElementById('dataDate').textContent = `Data for ${TODAY}`;
+  document.getElementById('lastRefresh').textContent = 'Updated ' + new Date().toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
+
+  // ── Devices table ──────────────────────────────────────────────────────────
+  if (statusData && statusData.devices && statusData.devices.length > 0) {
+    const now = Date.now();
+    const devices = statusData.devices;
+
+    // Filter to today's devices (last seen today)
+    const todayDevices = devices.filter(d => {
+      if (!d.received_at) return false;
+      return d.received_at.startsWith(TODAY);
+    });
+
+    document.getElementById('statDevices').textContent = todayDevices.length;
+
+    const rows = devices.map(d => {
+      const lastSeen = d.received_at ? ts2time(d.received_at) : '–';
+      const ageMs = d.age_ms || (now - new Date(d.received_at).getTime());
+      const ageStr = ageFmt(ageMs);
+      const batt = d.battery != null ? d.battery + '%' : '–';
+      const status = d.status || (ageMs > 900000 ? 'red' : ageMs > 300000 ? 'amber' : 'green');
+      return `<tr>
+        <td><strong>${d.device_id ? d.device_id.slice(0,12) + '…' : '–'}</strong></td>
+        <td>${d.device_type || '–'}</td>
+        <td>${lastSeen}</td>
+        <td>${ageStr}</td>
+        <td>${batt}</td>
+        <td>${statusBadge(status)}</td>
+      </tr>`;
+    }).join('');
+
+    document.getElementById('devicesTable').innerHTML = `
+      <table>
+        <thead><tr>
+          <th>Device ID</th><th>Type</th><th>Last Seen</th><th>Age</th><th>Battery</th><th>Status</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  } else {
+    document.getElementById('statDevices').textContent = '0';
+    document.getElementById('devicesTable').innerHTML = `
+      <div class="no-data"><div class="big">📡</div>No devices seen today. Data uploads when William gets home.</div>`;
+  }
+
+  // ── Timeline — load from telemetry batch data (via /api/telemetry/batch stats) ──
+  // Since we don't have a direct "today's events" endpoint, we'll render what
+  // we have from device status + alerts, and note that full timeline is in DEBRIEF
+  const timelineItems = [];
+
+  if (statusData && statusData.devices) {
+    for (const d of statusData.devices) {
+      if (d.received_at && d.received_at.startsWith(TODAY)) {
+        timelineItems.push({
+          time: ts2time(d.received_at),
+          ts: d.received_at,
+          type: 'heartbeat',
+          desc: `💓 Last heartbeat — ${d.device_type || 'device'} (battery: ${d.battery ?? '?'}%)`
+        });
+      }
+    }
+  }
+
+  if (alertsData && alertsData.alerts) {
+    for (const a of alertsData.alerts) {
+      if (a.timestamp && a.timestamp.startsWith(TODAY)) {
+        timelineItems.push({
+          time: ts2time(a.timestamp),
+          ts: a.timestamp,
+          type: 'event',
+          desc: `🚨 Alert: ${a.message}`
+        });
+      }
+    }
+  }
+
+  timelineItems.sort((a, b) => a.ts.localeCompare(b.ts));
+
+  if (timelineItems.length > 0) {
+    const tlHtml = timelineItems.map(item => `
+      <div class="timeline-item ${item.type}">
+        <span class="tl-time">${item.time}</span>
+        <span class="tl-desc">${item.desc}</span>
+      </div>`).join('');
+    document.getElementById('timeline').innerHTML = tlHtml;
+  } else {
+    document.getElementById('timeline').innerHTML = `
+      <div class="no-data"><div class="big">🕐</div>No events synced yet today.<br>
+      <small style="font-size:12px">Data uploads when William's laptop hits home Wi-Fi.</small></div>`;
+  }
+
+  // ── Quick Checks ───────────────────────────────────────────────────────────
+  const checks = [];
+
+  if (health && health.status === 'ok') {
+    checks.push({ ok: true, text: 'Cerritos server online on port 3401' });
+  } else {
+    checks.push({ ok: false, text: 'Cerritos server offline — data cannot sync' });
+  }
+
+  if (statusData && statusData.devices) {
+    const schoolDevice = statusData.devices.find(d => d.device_type === 'school_laptop');
+    if (schoolDevice) {
+      const ageMin = Math.round((Date.now() - new Date(schoolDevice.received_at).getTime()) / 60000);
+      if (ageMin < 120) {
+        checks.push({ ok: true, text: `School laptop data synced ${ageMin} min ago` });
+      } else {
+        checks.push({ ok: null, text: `School laptop last seen ${ageMin} min ago — may still be at school` });
+      }
+    } else {
+      checks.push({ ok: null, text: 'No school laptop data yet — waiting for home Wi-Fi sync' });
+    }
+  }
+
+  if (alertsData && alertsData.alerts) {
+    const todayAlerts = alertsData.alerts.filter(a => a.timestamp && a.timestamp.startsWith(TODAY));
+    if (todayAlerts.length === 0) {
+      checks.push({ ok: true, text: 'No alerts triggered today' });
+    } else {
+      checks.push({ ok: false, text: `${todayAlerts.length} alert(s) today — check alerts section` });
+    }
+  }
+
+  // Add link to debrief
+  checks.push({ ok: null, text: `Full day debrief: <a href="debriefs/DEBRIEF-${TODAY}.md" style="color:#33DDDD">DEBRIEF-${TODAY}.md</a> (generated at 18:30 AEST)` });
+
+  document.getElementById('quickChecks').innerHTML = checks.map(c => {
+    const icon = c.ok === true ? '✅' : c.ok === false ? '❌' : 'ℹ️';
+    return `<div style="display:flex;gap:10px;align-items:flex-start;padding:10px;background:rgba(255,255,255,0.03);border-radius:10px;font-size:14px;">
+      <span>${icon}</span><span>${c.text}</span></div>`;
+  }).join('');
+
+  // ── Stats ──────────────────────────────────────────────────────────────────
+  // Heartbeat count is approximated from server status page
+  // Full counts require the events endpoint which we read from telemetry batch
+  if (statusData && statusData.devices) {
+    document.getElementById('statHeartbeats').textContent = statusData.devices.length > 0 ? statusData.devices.length + '+' : '0';
+  }
+  document.getElementById('statEvents').textContent = timelineItems.filter(i => i.type === 'event').length;
+  document.getElementById('statReceipts').textContent = '–';
+}
+
+// Auto-refresh every 2 min
+loadAll();
+setInterval(loadAll, 2 * 60 * 1000);
+</script>
+</body>
+</html>

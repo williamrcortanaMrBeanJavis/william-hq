@@ -21,6 +21,15 @@
 <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
 <link rel="shortcut icon" href="icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Bangers&display=swap" rel="stylesheet">
+<!-- Offline-first telemetry — must load before any JS. If it fails, app is unaffected. -->
+<script>
+// Defensive guard: if telemetry.js fails to load, stubs prevent ReferenceErrors
+window.initTelemetry = window.initTelemetry || function(){};
+window.sendHeartbeat = window.sendHeartbeat || function(){};
+window.logReceipt    = window.logReceipt    || function(){};
+window.logEvent      = window.logEvent      || function(){};
+</script>
+<script src="telemetry.js" onerror="console.warn('[Telemetry] telemetry.js failed to load — app continues normally')"></script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
@@ -353,6 +362,8 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
     const list = document.getElementById('canvas-list');
     const synced = document.getElementById('canvas-synced');
     synced.textContent = 'Synced ' + (d.synced_at||'').slice(0,16).replace('T',' ');
+    // Telemetry: log canvas sync event
+    try { logEvent('canvas_sync', {count: (d.todo||[]).length, synced_at: d.synced_at}); } catch(e){}
     if (!d.todo || d.todo.length === 0) {
       list.innerHTML = '<div style="color:#44DD55;font-size:14px">✅ Nothing urgent right now — you\'re clear!</div>';
       return;
@@ -396,6 +407,8 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
     if (!d.cards || d.cards.length === 0) return;
     document.getElementById('preteach-live').style.display = 'block';
     document.getElementById('preteach-date').textContent = 'Week ' + d.week + ' • ' + d.day + ' • ' + d.date;
+    // Telemetry: log pre-teach render receipt
+    try { logReceipt('preteach-' + (d.date || d.day || 'today'), 'rendered'); } catch(e){}
     const container = document.getElementById('preteach-cards');
     for (const c of d.cards) {
       const hasAssignments = c.assignments && c.assignments.length > 0;
@@ -503,12 +516,12 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
 
     <!-- Action buttons -->
     <div class="home-grid" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; padding: 0 20px;">
-      <div class="grid-btn" onclick="goView('games')"><div class="ico">⚡</div><div class="lbl">Games</div></div>
-      <div class="grid-btn" onclick="goView('tasks')"><div class="ico">✅</div><div class="lbl">Tasks</div></div>
-      <div class="grid-btn" onclick="goView('schedule')"><div class="ico">📅</div><div class="lbl">Today</div></div>
-      <div class="grid-btn" onclick="goView('brain')"><div class="ico">🧠</div><div class="lbl">Brain</div></div>
-      <div class="grid-btn" onclick="goView('dump')"><div class="ico">💭</div><div class="lbl">Dump</div></div>
-      <div class="grid-btn" onclick="goView('xp')"><div class="ico">🎮</div><div class="lbl">Level</div></div>
+      <div class="grid-btn" onclick="goView('games');logEvent('interaction',{button_id:'games'})"><div class="ico">⚡</div><div class="lbl">Games</div></div>
+      <div class="grid-btn" onclick="goView('tasks');logEvent('interaction',{button_id:'tasks'})"><div class="ico">✅</div><div class="lbl">Tasks</div></div>
+      <div class="grid-btn" onclick="goView('schedule');logEvent('interaction',{button_id:'schedule'})"><div class="ico">📅</div><div class="lbl">Today</div></div>
+      <div class="grid-btn" onclick="goView('brain');logEvent('interaction',{button_id:'brain'})"><div class="ico">🧠</div><div class="lbl">Brain</div></div>
+      <div class="grid-btn" onclick="goView('dump');logEvent('interaction',{button_id:'dump'})"><div class="ico">💭</div><div class="lbl">Dump</div></div>
+      <div class="grid-btn" onclick="goView('xp');logEvent('interaction',{button_id:'xp'})"><div class="ico">🎮</div><div class="lbl">Level</div></div>
     <div class="grid-btn" onclick="goView('timetable')"><div class="ico">📆</div><div class="lbl">Timetable</div></div>
     <div class="grid-btn" onclick="goView('bag')"><div class="ico">🎒</div><div class="lbl">Bag</div></div>
     <div class="grid-btn" onclick="goView('exams')"><div class="ico">🧪</div><div class="lbl">Exams</div></div>
@@ -2730,6 +2743,9 @@ function updateTimer(){
 }
 updateTimer();
 setInterval(updateTimer,30000);
+
+// ── Telemetry init — must be last (after all functions defined) ──────────────
+try { initTelemetry(); } catch(e) {}
 
 // FLOATERS
 const FL=['🐻','🧸','👒','🍖','🦌','🏴‍☠️','⚓','🌊','🍳','🎵','🐕','🎹','🎨','🥋','⭐'];

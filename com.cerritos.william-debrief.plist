@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- USS Cerritos — William Daily Debrief Generator -->
+  <!-- Runs at 18:30 AEST every day, after school data has synced -->
+  <!-- Install: cp com.cerritos.william-debrief.plist ~/Library/LaunchAgents/ -->
+  <!--           launchctl load ~/Library/LaunchAgents/com.cerritos.william-debrief.plist -->
+  <!-- Manual:  launchctl start com.cerritos.william-debrief -->
+
+  <key>Label</key>
+  <string>com.cerritos.william-debrief</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/Users/williamreinhard/.openclaw/workspace/projects/william-hq/debrief-generator.sh</string>
+  </array>
+
+  <!-- Run daily at 18:30 local time (AEST) — school ends 15:30, sync by 18:00 -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>18</integer>
+    <key>Minute</key>
+    <integer>30</integer>
+  </dict>
+
+  <key>StandardOutPath</key>
+  <string>/Users/williamreinhard/.openclaw/workspace/projects/william-hq/debriefs/debrief-generator.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/williamreinhard/.openclaw/workspace/projects/william-hq/debriefs/debrief-generator.err.log</string>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>HOME</key>
+    <string>/Users/williamreinhard</string>
+    <key>PATH</key>
+    <string>/usr/local/bin:/usr/bin:/bin:/opt/homebrew/bin</string>
+  </dict>
+
+  <key>ThrottleInterval</key>
+  <integer>3600</integer>
+
+  <key>RunAtLoad</key>
+  <false/>
+</dict>
+</plist>
