@@ -15,7 +15,8 @@ const server = http.createServer((req, res) => {
   // CORS headers for browser upload
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Filename, X-Meta');
+  res.setHeader('Access-Control-Expose-Headers', 'Content-Type');
   
   if (req.method === 'OPTIONS') { res.writeHead(200); res.end(); return; }
   
@@ -28,8 +29,20 @@ const server = http.createServer((req, res) => {
   
   // Upload recording
   if (req.method === 'POST' && req.url === '/upload') {
-    const filename = req.headers['x-filename'] || `recording-${Date.now()}.webm`;
-    const filepath = path.join(SAVE_DIR, filename);
+    const filename = (req.headers['x-filename'] || `recording-${Date.now()}.webm`).replace(/[^a-zA-Z0-9._-]/g, '_');
+    // Organise by date subfolder when filename has YYYY-MM-DD prefix
+    const dateMatch = filename.match(/^(\d{4}-\d{2}-\d{2})/);
+    const subdir = dateMatch ? path.join(SAVE_DIR, dateMatch[1]) : SAVE_DIR;
+    if (!fs.existsSync(subdir)) fs.mkdirSync(subdir, { recursive: true });
+    const filepath = path.join(subdir, filename);
+    // Stash metadata if provided
+    const metaHeader = req.headers['x-meta'];
+    if (metaHeader) {
+      try {
+        const meta = JSON.parse(decodeURIComponent(metaHeader));
+        fs.writeFileSync(filepath + '.meta.json', JSON.stringify(meta, null, 2));
+      } catch {}
+    }
     const writeStream = fs.createWriteStream(filepath);
     
     req.pipe(writeStream);

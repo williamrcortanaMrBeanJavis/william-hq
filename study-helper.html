@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Helper</title>
+<link rel="icon" type="image/png" href="apple-touch-icon.png">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #ffffff; color: #333; }
+  body { display: flex; align-items: center; justify-content: center; padding: 20px; }
+  .card {
+    max-width: 520px; width: 100%;
+    background: #fff; border: 1px solid #e5e5e5; border-radius: 12px;
+    padding: 32px 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  }
+  h1 { font-size: 20px; font-weight: 600; margin-bottom: 8px; color: #222; }
+  .subtitle { font-size: 13px; color: #888; margin-bottom: 24px; }
+  .status-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 12px; background: #f8f8f8; border-radius: 8px;
+    font-size: 13px; color: #555; margin-bottom: 12px;
+  }
+  .dot {
+    width: 6px; height: 6px; border-radius: 50%; background: #bbb;
+  }
+  .dot.active { background: #4a9; animation: pulse 2s infinite; }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .tip {
+    font-size: 12px; color: #aaa; margin-top: 18px; line-height: 1.5;
+  }
+  .links {
+    margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap;
+  }
+  .links a {
+    font-size: 12px; color: #4a9; text-decoration: none;
+  }
+  .links a:hover { text-decoration: underline; }
+  .debug {
+    display: none;
+    margin-top: 16px; padding: 10px; background: #f4f4f4;
+    border-radius: 6px; font-family: Menlo, monospace; font-size: 11px;
+    color: #666; white-space: pre-wrap; max-height: 200px; overflow-y: auto;
+  }
+  body.debug-on .debug { display: block; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Study Helper</h1>
+  <div class="subtitle" id="greeting">Loading today's schedule...</div>
+
+  <div class="status-row">
+    <div class="dot" id="statusDot"></div>
+    <div id="statusText">Idle</div>
+  </div>
+  <div class="status-row">
+    <div class="dot" id="queueDot"></div>
+    <div id="queueText">No pending uploads</div>
+  </div>
+
+  <div class="tip">
+    Keep this tab open during school. It helps you study later by keeping track of what was covered in class.
+  </div>
+
+  <div class="links">
+    <a href="index.html">🏠 Home</a>
+    <a href="#" onclick="document.body.classList.toggle('debug-on');return false;">ⓘ</a>
+  </div>
+
+  <div class="debug" id="debug"></div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// CERRITOS STUDY HELPER — discreet auto-recorder
+// Runs on William's laptop during school.
+// Reads timetable → auto-records per period → uploads when home.
+// No buttons. No banners. No red dots. Just a quiet tab.
+// ═══════════════════════════════════════════════════════════════════
+
+const CONFIG = {
+  // Cerritos upload endpoint. Home Wi-Fi only (port 3400 not exposed externally).
+  // Will attempt these in order; first one that responds wins.
+  uploadEndpoints: [
+    'http://williams-mac-mini.local:3400/upload',
+    'http://192.168.50.9:3400/upload',
+  ],
+  healthEndpoints: [
+    'http://williams-mac-mini.local:3400/health',
+    'http://192.168.50.9:3400/health',
+  ],
+  // Home Wi-Fi SSID detection is not possible from browser — we detect by
+  // trying the endpoints periodically (every 5 min when we have a queue).
+  uploadCheckIntervalMs: 5 * 60 * 1000,
+  // Chunk size — we save every 60s so nothing is lost on crash/close
+  chunkMs: 60 * 1000,
+  // Mime preference
+  mimeCandidates: [
+    'audio/webm;codecs=opus',
+    'audio/webm',
+    'audio/mp4',
+    'audio/ogg;codecs=opus',
+  ],
+};
+
+// ═══ TIMETABLE (mirrors index.html TIMETABLE) ═══
+const TIMETABLE = {
+  A: {
+    Mon: [{p:'P1',sub:'Art',room:'P1'},{p:'P2',sub:'Technology',room:'K12'},{p:'P3',sub:'Computing',room:'N29'},{p:'P4',sub:'Science',room:'J36'},{p:'P5',sub:'Maths',room:'J7'},{p:'P6',sub:'English',room:'H21'}],
+    Tue: [{p:'P1',sub:'English',room:'H21'},{p:'P2',sub:'English',room:'H21'},{p:'P3',sub:'PE',room:'N40'},{p:'P4',sub:'PE',room:'N40'},{p:'P5',sub:'Sport',room:''},{p:'P6',sub:'Sport',room:''}],
+    Wed: [{p:'P1',sub:'English',room:'H21'},{p:'P2',sub:'Computing',room:'N29'},{p:'P3',sub:'Science',room:'J34'},{p:'P4',sub:'Science',room:'J34'},{p:'P5',sub:'History',room:'N36'},{p:'P6',sub:'Technology',room:'J36'}],
+    Thu: [{p:'P1',sub:'PE',room:'N40'},{p:'P2',sub:'Technology',room:'K12'},{p:'P3',sub:'Maths',room:'J7'},{p:'P4',sub:'Art',room:'P1'},{p:'P5',sub:'Music',room:'N27'},{p:'P6',sub:'History',room:'N36'}],
+    Fri: [{p:'P1',sub:'Maths',room:'J7'},{p:'P2',sub:'Maths',room:'J7'},{p:'P3',sub:'Pastoral Care',room:'P1'},{p:'P4',sub:'Science',room:'J34'},{p:'P5',sub:'English',room:'H21'},{p:'P6',sub:'Computing',room:'N29'}]
+  },
+  B: {
+    Mon: [{p:'P1',sub:'Maths',room:'J7'},{p:'P2',sub:'History',room:'N36'},{p:'P3',sub:'Technology',room:'J36'},{p:'P4',sub:'Computing',room:'N27'},{p:'P5',sub:'Music',room:'P7'},{p:'P6',sub:'Science',room:'J34'}],
+    Tue: [{p:'P1',sub:'PE',room:'PEC22'},{p:'P2',sub:'Science',room:'J34'},{p:'P3',sub:'English',room:'H21'},{p:'P4',sub:'',room:''},{p:'P5',sub:'Sport',room:''},{p:'P6',sub:'Sport',room:''}],
+    Wed: [{p:'P1',sub:'History',room:'N36'},{p:'P2',sub:'History',room:'N36'},{p:'P3',sub:'Technology',room:'J36'},{p:'P4',sub:'Maths',room:'J7'},{p:'P5',sub:'English',room:'H21'},{p:'P6',sub:'Music',room:'M28'}],
+    Thu: [{p:'P1',sub:'Art',room:'P1'},{p:'P2',sub:'Music',room:'M28'},{p:'P3',sub:'Maths',room:'J7'},{p:'P4',sub:'Technology',room:'J36'},{p:'P5',sub:'Art',room:'P1'},{p:'P6',sub:'PE',room:'PEC22'}],
+    Fri: [{p:'P1',sub:'PE',room:'N40'},{p:'P2',sub:'Maths',room:'J7'},{p:'P3',sub:'Pastoral Care',room:'P1'},{p:'P4',sub:'English',room:'N29'},{p:'P5',sub:'History',room:'N27'},{p:'P6',sub:'Science',room:'J25'}]
+  }
+};
+
+// Bell times (standard M/T/Th/F). Wednesday is different.
+// [startHH, startMM, endHH, endMM]
+const BELLS = {
+  standard: {
+    P1: [8,10,9,5],   P2: [9,5,9,55],
+    P3: [10,20,11,15], P4: [11,15,12,5],
+    P5: [12,50,13,45], P6: [13,45,14,35],
+  },
+  wed: {
+    P1: [8,35,9,25],  P2: [9,25,10,10],
+    P3: [10,35,11,25], P4: [11,25,12,10],
+    P5: [12,55,13,45], P6: [13,45,14,35],
+  },
+};
+
+// ═══ WEEK A/B DETECTION ═══
+// Term 2 starts Tue 21 Apr 2026 = Week A (assumed — Simon to confirm)
+// OR: read from localStorage if user set it
+function currentWeek() {
+  const override = localStorage.getItem('williamWeek');
+  if (override === 'A' || override === 'B') return override;
+  // Default: fortnight toggle based on ISO week number
+  const d = new Date();
+  const jan1 = new Date(d.getFullYear(), 0, 1);
+  const week = Math.floor(((d - jan1) / 86400000 + jan1.getDay() + 1) / 7);
+  return (week % 2 === 0) ? 'A' : 'B';
+}
+
+function dayKey(d=new Date()) {
+  return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
+}
+
+function isSchoolDay(d=new Date()) {
+  const k = dayKey(d);
+  return ['Mon','Tue','Wed','Thu','Fri'].includes(k);
+}
+
+function bellsFor(d=new Date()) {
+  return dayKey(d) === 'Wed' ? BELLS.wed : BELLS.standard;
+}
+
+function currentPeriod(d=new Date()) {
+  if (!isSchoolDay(d)) return null;
+  const bells = bellsFor(d);
+  const nowMin = d.getHours()*60 + d.getMinutes();
+  for (const [p, [sh,sm,eh,em]] of Object.entries(bells)) {
+    const startMin = sh*60+sm;
+    const endMin = eh*60+em;
+    if (nowMin >= startMin && nowMin < endMin) {
+      return { period: p, startMin, endMin, secsRemaining: (endMin-nowMin)*60 - d.getSeconds() };
+    }
+  }
+  return null;
+}
+
+function subjectFor(period, d=new Date()) {
+  const week = currentWeek();
+  const day = dayKey(d);
+  const schedule = TIMETABLE[week]?.[day];
+  if (!schedule) return null;
+  const entry = schedule.find(e => e.p === period);
+  return entry ? { subject: entry.sub || 'Class', room: entry.room || '' } : null;
+}
+
+// ═══ LOGGING ═══
+function log(msg) {
+  const t = new Date().toLocaleTimeString('en-AU', { hour12: false });
+  const line = `[${t}] ${msg}`;
+  console.log(line);
+  const dbg = document.getElementById('debug');
+  if (dbg) {
+    dbg.textContent = (line + '\n' + dbg.textContent).slice(0, 4000);
+  }
+}
+
+function setStatus(text, active=false) {
+  document.getElementById('statusText').textContent = text;
+  document.getElementById('statusDot').classList.toggle('active', active);
+}
+function setQueue(text, active=false) {
+  document.getElementById('queueText').textContent = text;
+  document.getElementById('queueDot').classList.toggle('active', active);
+}
+
+// ═══ INDEXEDDB QUEUE ═══
+// Chunks are stored until they upload successfully.
+const DB_NAME = 'williamRecorder';
+const STORE = 'chunks';
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, 1);
+    req.onupgradeneeded = () => {
+      const db = req.result;
+      if (!db.objectStoreNames.contains(STORE)) {
+        const os = db.createObjectStore(STORE, { keyPath: 'id', autoIncrement: true });
+        os.createIndex('date', 'date');
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function saveChunk(blob, meta) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE, 'readwrite');
+    tx.objectStore(STORE).add({
+      blob,
+      date: meta.date,
+      period: meta.period,
+      subject: meta.subject,
+      room: meta.room,
+      seq: meta.seq,
+      createdAt: Date.now(),
+      mime: meta.mime,
+    });
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+async function listChunks() {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE, 'readonly');
+    const req = tx.objectStore(STORE).getAll();
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function deleteChunk(id) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE, 'readwrite');
+    tx.objectStore(STORE).delete(id);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+// ═══ RECORDER ═══
+let mediaStream = null;
+let mediaRecorder = null;
+let currentMeta = null;
+let chunkSeq = 0;
+
+function pickMime() {
+  for (const m of CONFIG.mimeCandidates) {
+    if (MediaRecorder.isTypeSupported(m)) return m;
+  }
+  return '';
+}
+
+async function ensureStream() {
+  if (mediaStream && mediaStream.active) return mediaStream;
+  try {
+    mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    log('Microphone ready.');
+    return mediaStream;
+  } catch (err) {
+    log('Microphone unavailable: ' + err.message);
+    setStatus('Microphone blocked — click 🔒 in address bar to allow');
+    return null;
+  }
+}
+
+async function startPeriod(period, subject, room) {
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+    log('Already recording — skipping start.');
+    return;
+  }
+  const stream = await ensureStream();
+  if (!stream) return;
+
+  const mime = pickMime();
+  chunkSeq = 0;
+  currentMeta = {
+    date: new Date().toISOString().slice(0,10),
+    period,
+    subject,
+    room,
+    mime,
+  };
+
+  try {
+    mediaRecorder = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined);
+  } catch (err) {
+    log('MediaRecorder error: ' + err.message);
+    return;
+  }
+
+  mediaRecorder.ondataavailable = async (ev) => {
+    if (!ev.data || ev.data.size === 0) return;
+    chunkSeq += 1;
+    const meta = { ...currentMeta, seq: chunkSeq };
+    try {
+      await saveChunk(ev.data, meta);
+      log(`Saved chunk ${chunkSeq} (${Math.round(ev.data.size/1024)}KB) for ${meta.period} ${meta.subject}`);
+      refreshQueue();
+    } catch (err) {
+      log('Save failed: ' + err.message);
+    }
+  };
+
+  mediaRecorder.onstop = () => {
+    log(`Stopped recording ${period} ${subject}.`);
+    setStatus('Idle', false);
+  };
+
+  mediaRecorder.start(CONFIG.chunkMs);
+  log(`Recording ${period} ${subject}${room?' ('+room+')':''}`);
+  setStatus(`Recording ${period} · ${subject}`, true);
+}
+
+function stopCurrent() {
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+    mediaRecorder.stop();
+  }
+  currentMeta = null;
+}
+
+// ═══ SCHEDULE LOOP ═══
+let lastPeriodKey = null;
+
+function schedulerTick() {
+  const now = new Date();
+  const cur = currentPeriod(now);
+
+  if (!cur) {
+    // Not in a class period
+    if (mediaRecorder && mediaRecorder.state === 'recording') stopCurrent();
+    lastPeriodKey = null;
+    const week = currentWeek();
+    const day = dayKey(now);
+    if (isSchoolDay(now)) {
+      setStatus(`Between classes · Week ${week} ${day}`, false);
+    } else {
+      setStatus(`Weekend — recorder off`, false);
+    }
+    return;
+  }
+
+  const subj = subjectFor(cur.period, now);
+  const key = `${now.toISOString().slice(0,10)}|${cur.period}`;
+
+  if (key !== lastPeriodKey) {
+    // New period started
+    if (mediaRecorder && mediaRecorder.state === 'recording') stopCurrent();
+    lastPeriodKey = key;
+    // Skip Sport (outside, no value to record)
+    if (subj && subj.subject && subj.subject !== 'Sport' && subj.subject !== 'PE') {
+      startPeriod(cur.period, subj.subject, subj.room);
+    } else {
+      log(`Skipping ${cur.period} ${subj?.subject||'free'} (no recording).`);
+      setStatus(`${cur.period} · ${subj?.subject||'Free'} — not recorded`, false);
+    }
+  }
+}
+
+// ═══ UPLOAD LOOP ═══
+async function tryUploadOne(chunk) {
+  const filename = `${chunk.date}_${chunk.period}_${chunk.subject}_seq${String(chunk.seq).padStart(3,'0')}.webm`;
+  for (const endpoint of CONFIG.uploadEndpoints) {
+    try {
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': chunk.mime || 'audio/webm',
+          'X-Filename': filename,
+          'X-Meta': encodeURIComponent(JSON.stringify({
+            date: chunk.date, period: chunk.period, subject: chunk.subject,
+            room: chunk.room, seq: chunk.seq, mime: chunk.mime,
+          })),
+        },
+        body: chunk.blob,
+        mode: 'cors',
+        signal: AbortSignal.timeout(10000),
+      });
+      if (res.ok) {
+        log(`Uploaded ${filename} (${Math.round(chunk.blob.size/1024)}KB) → ${endpoint}`);
+        return true;
+      }
+    } catch (err) {
+      // endpoint unreachable — try next
+    }
+  }
+  return false;
+}
+
+async function uploadLoop() {
+  const chunks = await listChunks();
+  if (chunks.length === 0) {
+    setQueue('No pending uploads', false);
+    return;
+  }
+  setQueue(`Uploading ${chunks.length} chunk(s)...`, true);
+  let uploaded = 0;
+  for (const c of chunks) {
+    const ok = await tryUploadOne(c);
+    if (ok) {
+      await deleteChunk(c.id);
+      uploaded += 1;
+    } else {
+      // Home Wi-Fi not available — stop trying this round
+      setQueue(`${chunks.length} chunk(s) waiting for home Wi-Fi`, false);
+      return;
+    }
+  }
+  log(`Uploaded ${uploaded} chunk(s).`);
+  setQueue('All caught up', false);
+}
+
+async function refreshQueue() {
+  const chunks = await listChunks();
+  if (chunks.length === 0) {
+    setQueue('No pending uploads', false);
+  } else {
+    setQueue(`${chunks.length} chunk(s) pending upload`, false);
+  }
+}
+
+// ═══ GREETING ═══
+function updateGreeting() {
+  const d = new Date();
+  const week = currentWeek();
+  const day = dayKey(d);
+  const greeting = isSchoolDay(d)
+    ? `Week ${week} · ${day} · ${d.toLocaleDateString('en-AU', { day:'numeric', month:'long' })}`
+    : `${day} · ${d.toLocaleDateString('en-AU', { day:'numeric', month:'long' })}`;
+  document.getElementById('greeting').textContent = greeting;
+}
+
+// ═══ BOOT ═══
+(async function init() {
+  log('Study Helper starting...');
+  updateGreeting();
+  // Ask for mic permission up-front so it's cached for the session
+  await ensureStream();
+  // Scheduler — every 10s
+  schedulerTick();
+  setInterval(schedulerTick, 10 * 1000);
+  // Greeting refresh — every minute
+  setInterval(updateGreeting, 60 * 1000);
+  // Upload loop — every 5 min
+  refreshQueue();
+  setInterval(uploadLoop, CONFIG.uploadCheckIntervalMs);
+  // Immediate upload attempt on load (in case we just got home)
+  setTimeout(uploadLoop, 15 * 1000);
+  log('Ready.');
+})();
+</script>
+</body>
+</html>
