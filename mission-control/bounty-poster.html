@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WANTED — Captain William</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Pirata+One&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --parchment: #F5EDD0;
+      --parchment-dark: #D4B84A;
+      --wood: #8B6914;
+      --wood-dark: #5C4410;
+      --text: #2a1a00;
+      --red: #CC2200;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #1a1a2e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      font-family: 'Pirata One', Georgia, serif;
+    }
+
+    .poster {
+      background: linear-gradient(160deg, #F5EDD0 0%, #E8D890 40%, #D4B84A 70%, #C0A030 100%);
+      border: 8px solid var(--wood-dark);
+      border-radius: 8px;
+      padding: 24px 20px;
+      width: min(320px, 90vw);
+      text-align: center;
+      box-shadow:
+        0 0 0 4px #8B6914,
+        0 0 0 6px #5C4410,
+        0 8px 32px rgba(0,0,0,0.8),
+        inset 0 0 60px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Aged paper texture lines */
+    .poster::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(0,0,0,0.02) 4px
+      );
+      pointer-events: none;
+    }
+
+    /* Corner decorations */
+    .poster::after {
+      content: '✦ ✦ ✦';
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 12px;
+      color: rgba(90, 50, 0, 0.5);
+      letter-spacing: 8px;
+    }
+
+    .wanted-header {
+      font-size: 52px;
+      color: var(--text);
+      line-height: 1;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+      letter-spacing: 4px;
+    }
+
+    .dead-or-alive {
+      font-size: 18px;
+      color: var(--text);
+      letter-spacing: 3px;
+      margin: 4px 0 12px;
+      padding: 4px 0;
+      border-top: 2px solid var(--wood);
+      border-bottom: 2px solid var(--wood);
+    }
+
+    .avatar-frame {
+      width: 180px;
+      height: 180px;
+      border: 6px solid var(--wood-dark);
+      border-radius: 4px;
+      margin: 0 auto 12px;
+      background: linear-gradient(145deg, #8B5E3C, #5C4410);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 80px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .pirate-name {
+      font-size: 18px;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+
+    .bounty-divider {
+      border: none;
+      border-top: 2px solid var(--wood);
+      margin: 8px 0;
+    }
+
+    .bounty-amount {
+      font-size: 40px;
+      color: var(--text);
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+      line-height: 1;
+    }
+
+    .bounty-sub {
+      font-size: 11px;
+      color: rgba(90, 50, 0, 0.7);
+      font-family: monospace;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin: 2px 0 12px;
+    }
+
+    .level-display {
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .marine-stamp {
+      display: inline-block;
+      border: 3px solid rgba(204, 34, 0, 0.5);
+      border-radius: 50%;
+      padding: 8px 16px;
+      color: rgba(204, 34, 0, 0.7);
+      font-size: 11px;
+      letter-spacing: 2px;
+      transform: rotate(-12deg);
+      position: relative;
+      margin: 8px 0;
+      background: rgba(204, 34, 0, 0.05);
+    }
+
+    .xp-section {
+      margin: 8px 0;
+    }
+
+    .xp-bar-bg {
+      width: 100%;
+      height: 10px;
+      background: rgba(0,0,0,0.15);
+      border-radius: 5px;
+      border: 1px solid var(--wood);
+      overflow: hidden;
+      margin-top: 4px;
+    }
+
+    .xp-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--wood), #FFD700);
+      border-radius: 5px;
+      transition: width 1s ease;
+    }
+
+    .action-btns {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn {
+      background: var(--wood-dark);
+      color: #FFD700;
+      border: 2px solid #5C4410;
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-family: 'Pirata One', Georgia, serif;
+      font-size: 13px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      background: #8B6914;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .devils-section {
+      margin: 12px 0;
+      padding: 8px;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 4px;
+      background: rgba(0,0,0,0.05);
+    }
+
+    .devils-title {
+      font-size: 12px;
+      color: rgba(90, 50, 0, 0.8);
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .devils-row {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .devil-badge {
+      font-size: 20px;
+      opacity: 0.3;
+      filter: grayscale(1);
+      transition: all 0.3s;
+    }
+
+    .devil-badge.unlocked {
+      opacity: 1;
+      filter: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="poster" id="poster">
+  <div class="wanted-header">WANTED</div>
+  <div class="dead-or-alive">DEAD OR ALIVE</div>
+
+  <div class="avatar-frame" id="poster-avatar">
+    <span id="avatar-emoji">☠️</span>
+  </div>
+
+  <div class="pirate-name" id="poster-name">"STRAW HAT" WILLIAM</div>
+
+  <hr class="bounty-divider">
+
+  <div class="bounty-amount" id="poster-bounty">฿4,200,000</div>
+  <div class="bounty-sub">World Government Bounty</div>
+
+  <div class="level-display" id="poster-level">🌊 East Blue Navigator</div>
+
+  <div class="xp-section">
+    <div style="font-size:10px;color:rgba(90,50,0,0.6);font-family:monospace;" id="poster-xp">420 XP</div>
+    <div class="xp-bar-bg">
+      <div class="xp-bar-fill" id="poster-xp-bar" style="width:42%"></div>
+    </div>
+  </div>
+
+  <div class="devils-section">
+    <div class="devils-title">DEVIL FRUITS CONSUMED</div>
+    <div class="devils-row" id="devils-row">
+      <span class="devil-badge unlocked" title="Yami Yami no Mi">🌑</span>
+      <span class="devil-badge" title="Gomu Gomu no Mi">🟡</span>
+      <span class="devil-badge" title="Mera Mera no Mi">🔥</span>
+      <span class="devil-badge" title="Ope Ope no Mi">🔵</span>
+      <span class="devil-badge" title="Hana Hana no Mi">🌸</span>
+      <span class="devil-badge" title="Gura Gura no Mi">⚡</span>
+    </div>
+  </div>
+
+  <div class="marine-stamp">MARINE INTELLIGENCE</div>
+</div>
+
+<div class="action-btns">
+  <button class="btn" onclick="downloadPoster()">⬇ Download PNG</button>
+  <a class="btn" href="index.html">⚓ Back to Ship</a>
+</div>
+
+<script src="bounty-system.js"></script>
+<script>
+async function initPoster() {
+  let state;
+  try {
+    state = await BountySystem.loadState();
+  } catch (e) {
+    state = { captain: { name: 'William', xp: 420, streak: 3 }, devil_fruits: {} };
+  }
+
+  const captain = state.captain || {};
+  const xp = captain.xp || 420;
+  const level = BountySystem.getLevel(xp);
+  const progress = BountySystem.getLevelProgress(xp);
+  const bounty = BountySystem.xpToBounty(xp);
+  const jollyRoger = localStorage.getItem('mc_jolly_roger') || captain.jolly_roger || 'skull-crossbones';
+
+  document.getElementById('poster-name').textContent = `"STRAW HAT" ${(captain.name || 'WILLIAM').toUpperCase()}`;
+  document.getElementById('poster-bounty').textContent = BountySystem.formatBounty(bounty);
+  document.getElementById('poster-level').textContent = `${level.emoji} ${level.name}`;
+  document.getElementById('poster-xp').textContent = xp + ' XP';
+  document.getElementById('poster-xp-bar').style.width = progress + '%';
+  document.getElementById('avatar-emoji').textContent = BountySystem.getJollyRogerEmoji(jollyRoger).split('')[0] || '☠️';
+
+  // Devil fruits
+  const df = state.devil_fruits || {};
+  const badges = document.querySelectorAll('.devil-badge');
+  const fruitMap = [
+    ['yami_yami', '🌑'],
+    ['gomu_gomu', '🟡'],
+    ['mera_mera', '🔥'],
+    ['ope_ope', '🔵'],
+    ['hana_hana', '🌸'],
+    ['gura_gura', '⚡']
+  ];
+  fruitMap.forEach(([id, emoji], i) => {
+    if (badges[i]) {
+      badges[i].classList.toggle('unlocked', df[id]?.unlocked === true);
+    }
+  });
+}
+
+function downloadPoster() {
+  BountySystem.downloadPoster();
+}
+
+document.addEventListener('DOMContentLoaded', initPoster);
+</script>
+
+</body>
+</html>

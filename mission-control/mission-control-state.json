@@ -1,0 +1,54 @@
+{
+  "captain": {
+    "name": "William",
+    "title": "Straw Hat",
+    "xp": 420,
+    "streak": 3,
+    "level": "East Blue",
+    "jolly_roger": "skull-crossbones"
+  },
+  "crew": [
+    { "id": "luffy", "name": "Captain William", "role": "Captain", "status": "active", "location": "centre-deck" },
+    { "id": "zoro", "name": "Jarvis", "role": "Combat & Focus", "status": "active", "location": "crows-nest" },
+    { "id": "nami", "name": "Study Helper", "role": "Navigator", "status": "active", "location": "nav-table" },
+    { "id": "chopper", "name": "Mr Bean", "role": "Emotional Support", "status": "active", "location": "infirmary" },
+    { "id": "usopp", "name": "Focus Cam", "role": "Sniper", "status": "active", "location": "sniper-perch" }
+  ],
+  "events": [
+    {
+      "id": "evt_001",
+      "type": "sync_complete",
+      "timestamp": "2026-04-21T00:30:00+10:00",
+      "crew_id": "nami",
+      "message": "Canvas sync complete — 2 assignments charted!",
+      "read": false
+    },
+    {
+      "id": "evt_002",
+      "type": "new_assignment",
+      "timestamp": "2026-04-21T00:31:00+10:00",
+      "crew_id": "nami",
+      "message": "New assignment: Persuasive Writing Draft due in 3 suns!",
+      "read": false
+    }
+  ],
+  "devil_fruits": {
+    "gomu_gomu": { "name": "Gomu Gomu no Mi", "unlocked": false, "progress": 3, "target": 5 },
+    "ope_ope": { "name": "Ope Ope no Mi", "unlocked": false, "progress": 0, "target": 1 },
+    "mera_mera": { "name": "Mera Mera no Mi", "unlocked": false, "progress": 7, "target": 10 },
+    "hana_hana": { "name": "Hana Hana no Mi", "unlocked": false, "progress": 0, "target": 1 },
+    "yami_yami": { "name": "Yami Yami no Mi", "unlocked": true, "progress": 1, "target": 1 },
+    "gura_gura": { "name": "Gura Gura no Mi", "unlocked": false, "progress": 3, "target": 30 }
+  },
+  "haki": {
+    "observation": 25,
+    "armament": 15,
+    "conquerors": 5
+  },
+  "settings": {
+    "sounds_enabled": true,
+    "animations_enabled": true,
+    "jolly_roger_selected": true,
+    "jolly_roger_design": "skull-crossbones"
+  }
+}
