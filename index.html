@@ -379,6 +379,55 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
 </script>
 <!-- ═════ END CANVAS FEED ═════ -->
 
+<!-- ═════ PRE-TEACH — TOMORROW'S SUBJECTS (generated overnight) ═════ -->
+<div id="preteach-live" style="margin:12px;padding:14px 16px;background:linear-gradient(135deg,#2a1a5e,#40288a);border:2px solid #33DDDD;border-radius:14px;box-shadow:0 0 20px rgba(51,221,221,0.25);display:none">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+    <div style="font-family:'Bangers',sans-serif;font-size:22px;color:#33DDDD;letter-spacing:1px">🧠 READY FOR TOMORROW</div>
+    <div id="preteach-date" style="font-size:11px;color:#aaccff"></div>
+  </div>
+  <div id="preteach-cards" style="display:flex;flex-direction:column;gap:10px"></div>
+</div>
+<script>
+(async () => {
+  try {
+    const r = await fetch('pre-teach-tomorrow.json?t=' + Date.now());
+    if (!r.ok) return;
+    const d = await r.json();
+    if (!d.cards || d.cards.length === 0) return;
+    document.getElementById('preteach-live').style.display = 'block';
+    document.getElementById('preteach-date').textContent = 'Week ' + d.week + ' • ' + d.day + ' • ' + d.date;
+    const container = document.getElementById('preteach-cards');
+    for (const c of d.cards) {
+      const hasAssignments = c.assignments && c.assignments.length > 0;
+      const card = document.createElement('div');
+      card.style.cssText = 'padding:10px 12px;background:rgba(0,0,0,0.25);border-left:3px solid ' + (hasAssignments ? '#FF9933' : '#33DDDD') + ';border-radius:8px;cursor:pointer';
+      card.onclick = () => {
+        const body = card.querySelector('.preteach-body');
+        body.style.display = body.style.display === 'none' ? 'block' : 'none';
+      };
+      const kpts = (c.three_key_things || []).map(k => '<li style="margin:2px 0">' + k + '</li>').join('');
+      const asg = hasAssignments ? '<div style="margin-top:6px;font-size:12px;color:#FFD580">📌 ' + c.assignments.length + ' Canvas assignment' + (c.assignments.length>1?'s':'') + '</div>' : '';
+      card.innerHTML =
+        '<div style="display:flex;justify-content:space-between;align-items:center">' +
+          '<div style="font-size:16px;font-weight:800;color:#fff">' + c.period + ' · ' + c.subject + '</div>' +
+          '<div style="font-size:11px;color:#8899cc">tap ▾</div>' +
+        '</div>' +
+        asg +
+        '<div class="preteach-body" style="display:none;margin-top:10px;font-size:13px;color:#ddeeff">' +
+          '<div style="margin-bottom:6px;padding:8px;background:rgba(255,153,51,0.08);border-radius:6px;font-style:italic">🔥 ' + (c.hook || '') + '</div>' +
+          '<ul style="padding-left:18px;margin:6px 0">' + kpts + '</ul>' +
+          (c.practice_question ? '<div style="margin-top:8px;padding:8px;background:rgba(51,221,221,0.08);border-radius:6px"><strong>Try this:</strong> ' + c.practice_question + '</div>' : '') +
+          (c.vocab && c.vocab.length ? '<div style="margin-top:8px;font-size:12px"><strong>Words:</strong> ' + c.vocab.join(', ') + '</div>' : '') +
+        '</div>';
+      container.appendChild(card);
+    }
+  } catch (e) {
+    // silent — pre-teach is additive, never blocks home screen
+  }
+})();
+</script>
+<!-- ═════ END PRE-TEACH ═════ -->
+
   <!-- HEADER -->
   <div class="header">
     <div class="header-left">
