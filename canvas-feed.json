@@ -1,5 +1,5 @@
 {
-  "synced_at": "2026-04-21T20:07:00.904433+10:00",
+  "synced_at": "2026-04-21T21:07:00.907311+10:00",
   "todo": [
     {
       "id": 607896,
@@ -103,7 +103,7 @@
       "due_at": "2026-04-24T13:59:00Z",
       "points": 0.0,
       "html_url": "https://learn.sasc.nsw.edu.au/courses/60175/assignments/608464",
-      "submitted": false
+      "submitted": true
     }
   ]
 }
