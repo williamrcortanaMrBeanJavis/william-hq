@@ -1,54 +1,70 @@
 {
-  "date": "2026-04-21",
+  "date": "2026-04-22",
   "week": "B",
-  "day": "Tue",
+  "day": "Wed",
   "periods_schedule": [
-    "PE",
-    "Science",
+    "History",
+    "History",
+    "Technology",
+    "Maths",
     "English",
-    "",
-    "Sport",
-    "Sport"
+    "Music"
   ],
   "cards": [
     {
-      "subject": "PE",
+      "subject": "History",
       "period": "P1",
-      "hook": "Zoro trains every day. What's one thing you can do to build endurance?",
+      "hook": "The Void Century is 100 years of hidden history \u2014 why do empires hide things?",
       "three_key_things": [
-        "You have PE tomorrow.",
+        "You have History tomorrow.",
         "No Canvas assignment flagged for this subject right now \u2014 listen for today's lesson focus.",
         "Take ONE note or snap ONE photo of the whiteboard so tonight you can review what you did."
       ],
-      "practice_question": "What do you remember from your last PE class?",
+      "practice_question": "What do you remember from your last History class?",
       "vocab": [],
       "assignments": [],
       "textbook_excerpt": "",
-      "generated_at": "2026-04-20T23:58:44.880136+10:00",
+      "generated_at": "2026-04-21T23:00:03.631860+10:00",
       "generator": "stub"
     },
     {
-      "subject": "Science",
-      "period": "P2",
-      "hook": "Chopper is a reindeer who ate a Devil Fruit. What forces act on him when he runs?",
+      "subject": "Technology",
+      "period": "P3",
+      "hook": "Franky builds ships from scrap. What's the first step of the design process?",
       "three_key_things": [
-        "You have Science tomorrow.",
+        "You have Technology tomorrow.",
         "No Canvas assignment flagged for this subject right now \u2014 listen for today's lesson focus.",
         "Take ONE note or snap ONE photo of the whiteboard so tonight you can review what you did."
       ],
-      "practice_question": "What do you remember from your last Science class?",
+      "practice_question": "What do you remember from your last Technology class?",
       "vocab": [],
       "assignments": [],
       "textbook_excerpt": "",
-      "generated_at": "2026-04-20T23:58:44.880191+10:00",
+      "generated_at": "2026-04-21T23:00:03.631909+10:00",
+      "generator": "stub"
+    },
+    {
+      "subject": "Maths",
+      "period": "P4",
+      "hook": "If Luffy has 3/4 of a cooked fish and Zoro eats 1/8 of it, how much is left?",
+      "three_key_things": [
+        "You have Maths tomorrow.",
+        "No Canvas assignment flagged for this subject right now \u2014 listen for today's lesson focus.",
+        "Take ONE note or snap ONE photo of the whiteboard so tonight you can review what you did."
+      ],
+      "practice_question": "What do you remember from your last Maths class?",
+      "vocab": [],
+      "assignments": [],
+      "textbook_excerpt": "",
+      "generated_at": "2026-04-21T23:00:03.631942+10:00",
       "generator": "stub"
     },
     {
       "subject": "English",
-      "period": "P3",
+      "period": "P5",
       "hook": "Sanji writes a love letter to Nami. What persuasive words should he use?",
       "three_key_things": [
-        "Your active assignment: 7 Purple Persuasive Writing Draft \u2014 due in 3 days",
+        "Your active assignment: 7 Purple Persuasive Writing Draft \u2014 due in 2 days",
         "Due: Fri 24 Apr, 3:00 PM",
         "The teacher expects you to start or continue this in class \u2014 be ready."
       ],
@@ -62,7 +78,7 @@
           "name": "7 Purple Persuasive Writing Draft",
           "due_at": "2026-04-24T05:00:00Z",
           "due_friendly": "Fri 24 Apr, 3:00 PM",
-          "days_away": 3,
+          "days_away": 2,
           "url": "https://learn.sasc.nsw.edu.au/courses/60175/assignments/607896",
           "description": "The question: Why should we reduce, reuse and recycle what we use? &nbsp; Step 1: Let\u2019s brainstorm ideas in connection to this question Step 2: Write an introduction outlining your idea&nbsp; Step 3: Begin planning and writing your persuasive essay using the scaffo"
         },
@@ -70,31 +86,31 @@
           "name": "7 Yellow Creative Writing Portfolio Draft 2 - Persuasive Writing",
           "due_at": "2026-04-24T13:59:00Z",
           "due_friendly": "Fri 24 Apr, 11:59 PM",
-          "days_away": 3,
+          "days_away": 2,
           "url": "https://learn.sasc.nsw.edu.au/courses/60175/assignments/608464",
           "description": "Writing Task Compose a reply to President Ziya's letter below, arguing that it is unacceptable to allow children to live and work in such conditions. You should aim to write 400 words and use the rhetorical devices listed here: rhetorical question, statistics, emotive language &nbsp; <img sr"
         }
       ],
       "textbook_excerpt": "",
-      "generated_at": "2026-04-20T23:58:44.880423+10:00",
+      "generated_at": "2026-04-21T23:00:03.632154+10:00",
       "generator": "stub"
     },
     {
-      "subject": "Sport",
-      "period": "P5",
-      "hook": "Team games need communication. What's a signal you'd give a teammate?",
+      "subject": "Music",
+      "period": "P6",
+      "hook": "Brook plays the violin. What makes a song sound happy vs sad?",
       "three_key_things": [
-        "You have Sport tomorrow.",
+        "You have Music tomorrow.",
         "No Canvas assignment flagged for this subject right now \u2014 listen for today's lesson focus.",
         "Take ONE note or snap ONE photo of the whiteboard so tonight you can review what you did."
       ],
-      "practice_question": "What do you remember from your last Sport class?",
+      "practice_question": "What do you remember from your last Music class?",
       "vocab": [],
       "assignments": [],
       "textbook_excerpt": "",
-      "generated_at": "2026-04-20T23:58:44.880441+10:00",
+      "generated_at": "2026-04-21T23:00:03.632191+10:00",
       "generator": "stub"
     }
   ],
-  "generated_at": "2026-04-20T23:58:44.880444+10:00"
+  "generated_at": "2026-04-21T23:00:03.632193+10:00"
 }
