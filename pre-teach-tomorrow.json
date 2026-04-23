@@ -1,83 +1,19 @@
 {
-  "date": "2026-04-23",
+  "date": "2026-04-24",
   "week": "B",
-  "day": "Thu",
+  "day": "Fri",
   "periods_schedule": [
-    "Art",
-    "Music",
+    "PE",
     "Maths",
-    "Technology",
-    "Art",
-    "PE"
+    "Pastoral Care",
+    "English",
+    "History",
+    "Science"
   ],
   "cards": [
     {
-      "subject": "Art",
-      "period": "P1",
-      "hook": "Kid Luffy draws Shanks. What colours would you use for a pirate sunset?",
-      "three_key_things": [
-        "You have Art tomorrow.",
-        "No Canvas assignment flagged for this subject right now \u2014 listen for today's lesson focus.",
-        "Take ONE note or snap ONE photo of the whiteboard so tonight you can review what you did."
-      ],
-      "practice_question": "What do you remember from your last Art class?",
-      "vocab": [],
-      "assignments": [],
-      "textbook_excerpt": "",
-      "generated_at": "2026-04-22T23:00:01.930661+10:00",
-      "generator": "stub"
-    },
-    {
-      "subject": "Music",
-      "period": "P2",
-      "hook": "Brook plays the violin. What makes a song sound happy vs sad?",
-      "three_key_things": [
-        "You have Music tomorrow.",
-        "No Canvas assignment flagged for this subject right now \u2014 listen for today's lesson focus.",
-        "Take ONE note or snap ONE photo of the whiteboard so tonight you can review what you did."
-      ],
-      "practice_question": "What do you remember from your last Music class?",
-      "vocab": [],
-      "assignments": [],
-      "textbook_excerpt": "",
-      "generated_at": "2026-04-22T23:00:01.930704+10:00",
-      "generator": "stub"
-    },
-    {
-      "subject": "Maths",
-      "period": "P3",
-      "hook": "If Luffy has 3/4 of a cooked fish and Zoro eats 1/8 of it, how much is left?",
-      "three_key_things": [
-        "You have Maths tomorrow.",
-        "No Canvas assignment flagged for this subject right now \u2014 listen for today's lesson focus.",
-        "Take ONE note or snap ONE photo of the whiteboard so tonight you can review what you did."
-      ],
-      "practice_question": "What do you remember from your last Maths class?",
-      "vocab": [],
-      "assignments": [],
-      "textbook_excerpt": "",
-      "generated_at": "2026-04-22T23:00:01.930736+10:00",
-      "generator": "stub"
-    },
-    {
-      "subject": "Technology",
-      "period": "P4",
-      "hook": "Franky builds ships from scrap. What's the first step of the design process?",
-      "three_key_things": [
-        "You have Technology tomorrow.",
-        "No Canvas assignment flagged for this subject right now \u2014 listen for today's lesson focus.",
-        "Take ONE note or snap ONE photo of the whiteboard so tonight you can review what you did."
-      ],
-      "practice_question": "What do you remember from your last Technology class?",
-      "vocab": [],
-      "assignments": [],
-      "textbook_excerpt": "",
-      "generated_at": "2026-04-22T23:00:01.930766+10:00",
-      "generator": "stub"
-    },
-    {
       "subject": "PE",
-      "period": "P6",
+      "period": "P1",
       "hook": "Zoro trains every day. What's one thing you can do to build endurance?",
       "three_key_things": [
         "You have PE tomorrow.",
@@ -88,9 +24,109 @@
       "vocab": [],
       "assignments": [],
       "textbook_excerpt": "",
-      "generated_at": "2026-04-22T23:00:01.930874+10:00",
+      "generated_at": "2026-04-23T23:00:01.339944+10:00",
+      "generator": "stub"
+    },
+    {
+      "subject": "Maths",
+      "period": "P2",
+      "hook": "If Luffy has 3/4 of a cooked fish and Zoro eats 1/8 of it, how much is left?",
+      "three_key_things": [
+        "You have Maths tomorrow.",
+        "No Canvas assignment flagged for this subject right now \u2014 listen for today's lesson focus.",
+        "Take ONE note or snap ONE photo of the whiteboard so tonight you can review what you did."
+      ],
+      "practice_question": "What do you remember from your last Maths class?",
+      "vocab": [],
+      "assignments": [],
+      "textbook_excerpt": "",
+      "generated_at": "2026-04-23T23:00:01.340292+10:00",
+      "generator": "stub"
+    },
+    {
+      "subject": "Pastoral Care",
+      "period": "P3",
+      "hook": "Today's Pastoral Care class \u2014 you've got this.",
+      "three_key_things": [
+        "You have Pastoral Care tomorrow.",
+        "No Canvas assignment flagged for this subject right now \u2014 listen for today's lesson focus.",
+        "Take ONE note or snap ONE photo of the whiteboard so tonight you can review what you did."
+      ],
+      "practice_question": "What do you remember from your last Pastoral Care class?",
+      "vocab": [],
+      "assignments": [],
+      "textbook_excerpt": "",
+      "generated_at": "2026-04-23T23:00:01.340486+10:00",
+      "generator": "stub"
+    },
+    {
+      "subject": "English",
+      "period": "P4",
+      "hook": "Sanji writes a love letter to Nami. What persuasive words should he use?",
+      "three_key_things": [
+        "Your active assignment: 7 Purple Persuasive Writing Draft \u2014 DUE TOMORROW",
+        "Due: Fri 24 Apr, 3:00 PM",
+        "The teacher expects you to start or continue this in class \u2014 be ready."
+      ],
+      "practice_question": "Look at your English book or Canvas. What's ONE thing about '7 Purple Persuasive Writing Draft' you already know?",
+      "vocab": [
+        "Write",
+        "Begin"
+      ],
+      "assignments": [
+        {
+          "name": "7 Purple Persuasive Writing Draft",
+          "due_at": "2026-04-24T05:00:00Z",
+          "due_friendly": "Fri 24 Apr, 3:00 PM",
+          "days_away": 0,
+          "url": "https://learn.sasc.nsw.edu.au/courses/60175/assignments/607896",
+          "description": "The question: Why should we reduce, reuse and recycle what we use? &nbsp; Step 1: Let\u2019s brainstorm ideas in connection to this question Step 2: Write an introduction outlining your idea&nbsp; Step 3: Begin planning and writing your persuasive essay using the scaffo"
+        },
+        {
+          "name": "7 Yellow Creative Writing Portfolio Draft 2 - Persuasive Writing",
+          "due_at": "2026-04-24T13:59:00Z",
+          "due_friendly": "Fri 24 Apr, 11:59 PM",
+          "days_away": 0,
+          "url": "https://learn.sasc.nsw.edu.au/courses/60175/assignments/608464",
+          "description": "Writing Task Compose a reply to President Ziya's letter below, arguing that it is unacceptable to allow children to live and work in such conditions. You should aim to write 400 words and use the rhetorical devices listed here: rhetorical question, statistics, emotive language &nbsp; <img sr"
+        }
+      ],
+      "textbook_excerpt": "",
+      "generated_at": "2026-04-23T23:00:01.340909+10:00",
+      "generator": "stub"
+    },
+    {
+      "subject": "History",
+      "period": "P5",
+      "hook": "The Void Century is 100 years of hidden history \u2014 why do empires hide things?",
+      "three_key_things": [
+        "You have History tomorrow.",
+        "No Canvas assignment flagged for this subject right now \u2014 listen for today's lesson focus.",
+        "Take ONE note or snap ONE photo of the whiteboard so tonight you can review what you did."
+      ],
+      "practice_question": "What do you remember from your last History class?",
+      "vocab": [],
+      "assignments": [],
+      "textbook_excerpt": "",
+      "generated_at": "2026-04-23T23:00:01.340965+10:00",
+      "generator": "stub"
+    },
+    {
+      "subject": "Science",
+      "period": "P6",
+      "hook": "Chopper is a reindeer who ate a Devil Fruit. What forces act on him when he runs?",
+      "three_key_things": [
+        "You have Science tomorrow.",
+        "No Canvas assignment flagged for this subject right now \u2014 listen for today's lesson focus.",
+        "Take ONE note or snap ONE photo of the whiteboard so tonight you can review what you did."
+      ],
+      "practice_question": "What do you remember from your last Science class?",
+      "vocab": [],
+      "assignments": [],
+      "textbook_excerpt": "",
+      "generated_at": "2026-04-23T23:00:01.341014+10:00",
       "generator": "stub"
     }
   ],
-  "generated_at": "2026-04-22T23:00:01.930877+10:00"
+  "generated_at": "2026-04-23T23:00:01.341018+10:00"
 }
