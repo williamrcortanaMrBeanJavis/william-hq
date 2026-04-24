@@ -1,5 +1,5 @@
 {
-  "synced_at": "2026-04-24T22:07:00.387985+10:00",
+  "synced_at": "2026-04-25T07:07:04.861509+10:00",
   "todo": [
     {
       "id": 608464,
@@ -95,16 +95,6 @@
     }
   ],
   "assignments": [
-    {
-      "course_id": 60175,
-      "course_name": "English Year 7",
-      "id": 608464,
-      "name": "7 Yellow Creative Writing Portfolio Draft 2 - Persuasive Writing",
-      "due_at": "2026-04-24T13:59:00Z",
-      "points": 0.0,
-      "html_url": "https://learn.sasc.nsw.edu.au/courses/60175/assignments/608464",
-      "submitted": true
-    },
     {
       "course_id": 60195,
       "course_name": "Mathematics Year 7",
