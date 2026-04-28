@@ -1,14 +1,14 @@
 {
-  "date": "2026-04-28",
+  "date": "2026-04-29",
   "week": "A",
-  "day": "Tue",
+  "day": "Wed",
   "periods_schedule": [
     "English",
-    "English",
-    "PE",
-    "PE",
-    "Sport",
-    "Sport"
+    "Computing",
+    "Science",
+    "Science",
+    "History",
+    "Technology"
   ],
   "cards": [
     {
@@ -31,60 +31,79 @@
           "name": "7 Yellow Creative Writing Portfolio Draft 2 - Persuasive Writing",
           "due_at": "2026-04-24T13:59:00Z",
           "due_friendly": "Fri 24 Apr, 11:59 PM",
-          "days_away": -4,
+          "days_away": -5,
           "url": "https://learn.sasc.nsw.edu.au/courses/60175/assignments/608464",
           "description": "Writing Task Compose a reply to President Ziya's letter below, arguing that it is unacceptable to allow children to live and work in such conditions. You should aim to write 400 words and use the rhetorical devices listed here: rhetorical question, statistics, emotive language &nbsp; <img sr"
         }
       ],
       "textbook_excerpt": "",
-      "generated_at": "2026-04-27T23:00:03.561124+10:00",
+      "generated_at": "2026-04-28T23:00:01.877148+10:00",
       "generator": "stub"
     },
     {
-      "subject": "PE",
-      "period": "P3",
-      "hook": "Zoro trains every day. What's one thing you can do to build endurance?",
+      "subject": "Computing",
+      "period": "P2",
+      "hook": "Usopp codes traps \u2014 sequence matters. What happens if step 2 runs before step 1?",
       "three_key_things": [
-        "Your active assignment: Invasion Games Practical Movement Performance \u2014 due in 3 days",
-        "Due: Fri 1 May, 3:00 PM",
-        "The teacher expects you to start or continue this in class \u2014 be ready."
-      ],
-      "practice_question": "Look at your PE book or Canvas. What's ONE thing about 'Invasion Games Practical Movement Performance' you already know?",
-      "vocab": [
-        "Please",
-        "Basketball",
-        "Netball"
-      ],
-      "assignments": [
-        {
-          "name": "Invasion Games Practical Movement Performance",
-          "due_at": "2026-05-01T05:00:00Z",
-          "due_friendly": "Fri 1 May, 3:00 PM",
-          "days_away": 3,
-          "url": "https://learn.sasc.nsw.edu.au/courses/60206/assignments/605726",
-          "description": "Hi Year 7,&nbsp; &nbsp; Please access your first PDHPE assessment task via the document below.&nbsp; This will be your first practical assessment, where you will participate in two sports: Basketball and Netball. &nbsp;<a class=\"instructure_file_link instructure_scribd_file inline_disabled\""
-        }
-      ],
-      "textbook_excerpt": "",
-      "generated_at": "2026-04-27T23:00:03.561186+10:00",
-      "generator": "stub"
-    },
-    {
-      "subject": "Sport",
-      "period": "P5",
-      "hook": "Team games need communication. What's a signal you'd give a teammate?",
-      "three_key_things": [
-        "You have Sport tomorrow.",
+        "You have Computing tomorrow.",
         "No Canvas assignment flagged for this subject right now \u2014 listen for today's lesson focus.",
         "Take ONE note or snap ONE photo of the whiteboard so tonight you can review what you did."
       ],
-      "practice_question": "What do you remember from your last Sport class?",
+      "practice_question": "What do you remember from your last Computing class?",
       "vocab": [],
       "assignments": [],
       "textbook_excerpt": "",
-      "generated_at": "2026-04-27T23:00:03.561358+10:00",
+      "generated_at": "2026-04-28T23:00:01.877196+10:00",
+      "generator": "stub"
+    },
+    {
+      "subject": "Science",
+      "period": "P3",
+      "hook": "Chopper is a reindeer who ate a Devil Fruit. What forces act on him when he runs?",
+      "three_key_things": [
+        "You have Science tomorrow.",
+        "No Canvas assignment flagged for this subject right now \u2014 listen for today's lesson focus.",
+        "Take ONE note or snap ONE photo of the whiteboard so tonight you can review what you did."
+      ],
+      "practice_question": "What do you remember from your last Science class?",
+      "vocab": [],
+      "assignments": [],
+      "textbook_excerpt": "",
+      "generated_at": "2026-04-28T23:00:01.877228+10:00",
+      "generator": "stub"
+    },
+    {
+      "subject": "History",
+      "period": "P5",
+      "hook": "The Void Century is 100 years of hidden history \u2014 why do empires hide things?",
+      "three_key_things": [
+        "You have History tomorrow.",
+        "No Canvas assignment flagged for this subject right now \u2014 listen for today's lesson focus.",
+        "Take ONE note or snap ONE photo of the whiteboard so tonight you can review what you did."
+      ],
+      "practice_question": "What do you remember from your last History class?",
+      "vocab": [],
+      "assignments": [],
+      "textbook_excerpt": "",
+      "generated_at": "2026-04-28T23:00:01.877258+10:00",
+      "generator": "stub"
+    },
+    {
+      "subject": "Technology",
+      "period": "P6",
+      "hook": "Franky builds ships from scrap. What's the first step of the design process?",
+      "three_key_things": [
+        "You have Technology tomorrow.",
+        "No Canvas assignment flagged for this subject right now \u2014 listen for today's lesson focus.",
+        "Take ONE note or snap ONE photo of the whiteboard so tonight you can review what you did."
+      ],
+      "practice_question": "What do you remember from your last Technology class?",
+      "vocab": [],
+      "assignments": [],
+      "textbook_excerpt": "",
+      "generated_at": "2026-04-28T23:00:01.877290+10:00",
       "generator": "stub"
     }
   ],
-  "generated_at": "2026-04-27T23:00:03.561365+10:00"
+  "generated_at": "2026-04-28T23:00:01.877292+10:00"
 }
