@@ -1,67 +1,22 @@
 {
-  "date": "2026-04-30",
+  "date": "2026-05-01",
   "week": "A",
-  "day": "Thu",
+  "day": "Fri",
   "periods_schedule": [
-    "PE",
-    "Technology",
     "Maths",
-    "Art",
-    "Music",
-    "History"
+    "Maths",
+    "Pastoral Care",
+    "Science",
+    "English",
+    "Computing"
   ],
   "cards": [
     {
-      "subject": "PE",
-      "period": "P1",
-      "hook": "Zoro trains every day. What's one thing you can do to build endurance?",
-      "three_key_things": [
-        "Your active assignment: Invasion Games Practical Movement Performance \u2014 due day after tomorrow",
-        "Due: Fri 1 May, 3:00 PM",
-        "The teacher expects you to start or continue this in class \u2014 be ready."
-      ],
-      "practice_question": "Look at your PE book or Canvas. What's ONE thing about 'Invasion Games Practical Movement Performance' you already know?",
-      "vocab": [
-        "Please",
-        "Basketball",
-        "Netball"
-      ],
-      "assignments": [
-        {
-          "name": "Invasion Games Practical Movement Performance",
-          "due_at": "2026-05-01T05:00:00Z",
-          "due_friendly": "Fri 1 May, 3:00 PM",
-          "days_away": 1,
-          "url": "https://learn.sasc.nsw.edu.au/courses/60206/assignments/605726",
-          "description": "Hi Year 7,&nbsp; &nbsp; Please access your first PDHPE assessment task via the document below.&nbsp; This will be your first practical assessment, where you will participate in two sports: Basketball and Netball. &nbsp;<a class=\"instructure_file_link instructure_scribd_file inline_disabled\""
-        }
-      ],
-      "textbook_excerpt": "",
-      "generated_at": "2026-04-29T23:00:03.107059+10:00",
-      "generator": "stub"
-    },
-    {
-      "subject": "Technology",
-      "period": "P2",
-      "hook": "Franky builds ships from scrap. What's the first step of the design process?",
-      "three_key_things": [
-        "You have Technology tomorrow.",
-        "No Canvas assignment flagged for this subject right now \u2014 listen for today's lesson focus.",
-        "Take ONE note or snap ONE photo of the whiteboard so tonight you can review what you did."
-      ],
-      "practice_question": "What do you remember from your last Technology class?",
-      "vocab": [],
-      "assignments": [],
-      "textbook_excerpt": "",
-      "generated_at": "2026-04-29T23:00:03.107309+10:00",
-      "generator": "stub"
-    },
-    {
       "subject": "Maths",
-      "period": "P3",
+      "period": "P1",
       "hook": "If Luffy has 3/4 of a cooked fish and Zoro eats 1/8 of it, how much is left?",
       "three_key_things": [
-        "Your active assignment: Common Test 1 \u2014 due day after tomorrow",
+        "Your active assignment: Common Test 1 \u2014 DUE TOMORROW",
         "Due: Fri 1 May, 3:00 PM",
         "The teacher expects you to start or continue this in class \u2014 be ready."
       ],
@@ -74,63 +29,92 @@
           "name": "Common Test 1",
           "due_at": "2026-05-01T05:00:00Z",
           "due_friendly": "Fri 1 May, 3:00 PM",
-          "days_away": 1,
+          "days_away": 0,
           "url": "https://learn.sasc.nsw.edu.au/courses/60195/assignments/604083",
           "description": "<a class=\"instructure_file_link instructure_scribd_file inline_disabled\" title=\"2026 Year 7 Common test 1 notification.pdf\" href=\"https://learn.sasc.nsw.edu.au/courses/60195/files/8426244?verifier=lSE7m5RkRs5iETarqTCNG970aC67SKrks1tkzAPL&amp;wrap=1\" target=\"_blank\" data-canvas-previewable=\"false\" data-api-endpoint=\"https://learn.sasc.nsw.edu."
         }
       ],
       "textbook_excerpt": "",
-      "generated_at": "2026-04-29T23:00:03.107385+10:00",
+      "generated_at": "2026-04-30T23:00:01.254849+10:00",
       "generator": "stub"
     },
     {
-      "subject": "Art",
+      "subject": "Pastoral Care",
+      "period": "P3",
+      "hook": "Today's Pastoral Care class \u2014 you've got this.",
+      "three_key_things": [
+        "You have Pastoral Care tomorrow.",
+        "No Canvas assignment flagged for this subject right now \u2014 listen for today's lesson focus.",
+        "Take ONE note or snap ONE photo of the whiteboard so tonight you can review what you did."
+      ],
+      "practice_question": "What do you remember from your last Pastoral Care class?",
+      "vocab": [],
+      "assignments": [],
+      "textbook_excerpt": "",
+      "generated_at": "2026-04-30T23:00:01.254864+10:00",
+      "generator": "stub"
+    },
+    {
+      "subject": "Science",
       "period": "P4",
-      "hook": "Kid Luffy draws Shanks. What colours would you use for a pirate sunset?",
+      "hook": "Chopper is a reindeer who ate a Devil Fruit. What forces act on him when he runs?",
       "three_key_things": [
-        "You have Art tomorrow.",
+        "You have Science tomorrow.",
         "No Canvas assignment flagged for this subject right now \u2014 listen for today's lesson focus.",
         "Take ONE note or snap ONE photo of the whiteboard so tonight you can review what you did."
       ],
-      "practice_question": "What do you remember from your last Art class?",
+      "practice_question": "What do you remember from your last Science class?",
       "vocab": [],
       "assignments": [],
       "textbook_excerpt": "",
-      "generated_at": "2026-04-29T23:00:03.107427+10:00",
+      "generated_at": "2026-04-30T23:00:01.254896+10:00",
       "generator": "stub"
     },
     {
-      "subject": "Music",
+      "subject": "English",
       "period": "P5",
-      "hook": "Brook plays the violin. What makes a song sound happy vs sad?",
+      "hook": "Sanji writes a love letter to Nami. What persuasive words should he use?",
       "three_key_things": [
-        "You have Music tomorrow.",
-        "No Canvas assignment flagged for this subject right now \u2014 listen for today's lesson focus.",
-        "Take ONE note or snap ONE photo of the whiteboard so tonight you can review what you did."
+        "Your active assignment: 7 Yellow Creative Writing Portfolio Draft 2 - Persuasive Writing \u2014 DUE TOMORROW",
+        "Due: Fri 24 Apr, 11:59 PM",
+        "The teacher expects you to start or continue this in class \u2014 be ready."
       ],
-      "practice_question": "What do you remember from your last Music class?",
-      "vocab": [],
-      "assignments": [],
+      "practice_question": "Look at your English book or Canvas. What's ONE thing about '7 Yellow Creative Writing Portfolio Draft 2 - Persuasive Writing' you already know?",
+      "vocab": [
+        "Writing",
+        "Compose",
+        "President"
+      ],
+      "assignments": [
+        {
+          "name": "7 Yellow Creative Writing Portfolio Draft 2 - Persuasive Writing",
+          "due_at": "2026-04-24T13:59:00Z",
+          "due_friendly": "Fri 24 Apr, 11:59 PM",
+          "days_away": -7,
+          "url": "https://learn.sasc.nsw.edu.au/courses/60175/assignments/608464",
+          "description": "Writing Task Compose a reply to President Ziya's letter below, arguing that it is unacceptable to allow children to live and work in such conditions. You should aim to write 400 words and use the rhetorical devices listed here: rhetorical question, statistics, emotive language &nbsp; <img sr"
+        }
+      ],
       "textbook_excerpt": "",
-      "generated_at": "2026-04-29T23:00:03.107458+10:00",
+      "generated_at": "2026-04-30T23:00:01.254953+10:00",
       "generator": "stub"
     },
     {
-      "subject": "History",
+      "subject": "Computing",
       "period": "P6",
-      "hook": "The Void Century is 100 years of hidden history \u2014 why do empires hide things?",
+      "hook": "Usopp codes traps \u2014 sequence matters. What happens if step 2 runs before step 1?",
       "three_key_things": [
-        "You have History tomorrow.",
+        "You have Computing tomorrow.",
         "No Canvas assignment flagged for this subject right now \u2014 listen for today's lesson focus.",
         "Take ONE note or snap ONE photo of the whiteboard so tonight you can review what you did."
       ],
-      "practice_question": "What do you remember from your last History class?",
+      "practice_question": "What do you remember from your last Computing class?",
       "vocab": [],
       "assignments": [],
       "textbook_excerpt": "",
-      "generated_at": "2026-04-29T23:00:03.107488+10:00",
+      "generated_at": "2026-04-30T23:00:01.254983+10:00",
       "generator": "stub"
     }
   ],
-  "generated_at": "2026-04-29T23:00:03.107490+10:00"
+  "generated_at": "2026-04-30T23:00:01.254985+10:00"
 }
