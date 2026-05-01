@@ -1,5 +1,5 @@
 {
-  "synced_at": "2026-05-01T14:07:00.492891+10:00",
+  "synced_at": "2026-05-01T15:07:00.436170+10:00",
   "todo": [
     {
       "id": 608464,
@@ -20,16 +20,6 @@
       "points": 0.0,
       "html_url": "https://learn.sasc.nsw.edu.au/courses/60195/assignments/604083",
       "description": "<link rel=\"stylesheet\" href=\"https://instructure-uploads-apse2.s3.ap-southeast-2.amazonaws.com/account_46740000000000054/attachments/5227016/dp_app.css\"><p><a class=\"instructure_file_link instructure_scribd_file inline_disabled\" title=\"2026 Year 7 Common test 1 notification.pdf\" href=\"https://learn.sasc.nsw.edu.au/courses/60195/files/8426244?verifier=lSE7m5RkRs5iETarqTCNG970aC67SKrks1tkzAPL&amp;wrap=1\" target=\"_blank\" data-canvas-previewable=\"false\" data-api-endpoint=\"https://learn.sasc.nsw.edu."
-    },
-    {
-      "id": 605726,
-      "name": "Invasion Games Practical Movement Performance",
-      "course_id": 60206,
-      "course_name": "PDHPE  Year 7",
-      "due_at": "2026-05-01T05:00:00Z",
-      "points": 30.0,
-      "html_url": "https://learn.sasc.nsw.edu.au/courses/60206/assignments/605726",
-      "description": "<link rel=\"stylesheet\" href=\"https://instructure-uploads-apse2.s3.ap-southeast-2.amazonaws.com/account_46740000000000054/attachments/5227016/dp_app.css\"><p>Hi Year 7,&nbsp;</p>\n<p>&nbsp;</p>\n<p data-start=\"122\" data-end=\"196\">Please access your first PDHPE assessment task via the document below.&nbsp; This will be your first practical assessment, where you will participate in two sports: Basketball and Netball.</p>\n<p>&nbsp;<a class=\"instructure_file_link instructure_scribd_file inline_disabled\""
     }
   ],
   "courses": [
@@ -94,26 +84,5 @@
       "code": "7ART"
     }
   ],
-  "assignments": [
-    {
-      "course_id": 60195,
-      "course_name": "Mathematics Year 7",
-      "id": 604083,
-      "name": "Common Test 1",
-      "due_at": "2026-05-01T05:00:00Z",
-      "points": 0.0,
-      "html_url": "https://learn.sasc.nsw.edu.au/courses/60195/assignments/604083",
-      "submitted": false
-    },
-    {
-      "course_id": 60206,
-      "course_name": "PDHPE  Year 7",
-      "id": 605726,
-      "name": "Invasion Games Practical Movement Performance",
-      "due_at": "2026-05-01T05:00:00Z",
-      "points": 30.0,
-      "html_url": "https://learn.sasc.nsw.edu.au/courses/60206/assignments/605726",
-      "submitted": false
-    }
-  ]
+  "assignments": []
 }
