@@ -1,5 +1,5 @@
 {
-  "synced_at": "2026-05-04T14:07:01.104165+10:00",
+  "synced_at": "2026-05-04T15:07:03.132138+10:00",
   "todo": [
     {
       "id": 608464,
@@ -20,6 +20,16 @@
       "points": 0.0,
       "html_url": "https://learn.sasc.nsw.edu.au/courses/60195/assignments/604083",
       "description": "<link rel=\"stylesheet\" href=\"https://instructure-uploads-apse2.s3.ap-southeast-2.amazonaws.com/account_46740000000000054/attachments/5227016/dp_app.css\"><p><a class=\"instructure_file_link instructure_scribd_file inline_disabled\" title=\"2026 Year 7 Common test 1 notification.pdf\" href=\"https://learn.sasc.nsw.edu.au/courses/60195/files/8426244?verifier=lSE7m5RkRs5iETarqTCNG970aC67SKrks1tkzAPL&amp;wrap=1\" target=\"_blank\" data-canvas-previewable=\"false\" data-api-endpoint=\"https://learn.sasc.nsw.edu."
+    },
+    {
+      "id": 606017,
+      "name": "Practical Skills Task",
+      "course_id": 60214,
+      "course_name": "Science Year 7",
+      "due_at": "2026-05-11T05:00:00Z",
+      "points": 50.0,
+      "html_url": "https://learn.sasc.nsw.edu.au/courses/60214/assignments/606017",
+      "description": "<link rel=\"stylesheet\" href=\"https://instructure-uploads-apse2.s3.ap-southeast-2.amazonaws.com/account_46740000000000054/attachments/5227016/dp_app.css\"><p data-path-to-node=\"1\">Dear Year 7 Students,</p>\n<p data-path-to-node=\"2\">Please find below the official notification for your first Science assessment task of the year.</p>\n<p data-path-to-node=\"2\"><a class=\"instructure_file_link instructure_scribd_file inline_disabled\" title=\"Year 7 AT1 Practical Skills Task Assessment Notification.docx\" hre"
     }
   ],
   "courses": [
@@ -84,5 +94,16 @@
       "code": "7ART"
     }
   ],
-  "assignments": []
+  "assignments": [
+    {
+      "course_id": 60214,
+      "course_name": "Science Year 7",
+      "id": 606017,
+      "name": "Practical Skills Task",
+      "due_at": "2026-05-11T05:00:00Z",
+      "points": 50.0,
+      "html_url": "https://learn.sasc.nsw.edu.au/courses/60214/assignments/606017",
+      "submitted": false
+    }
+  ]
 }
