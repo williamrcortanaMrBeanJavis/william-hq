@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0D2260">
+<title>🏴☠️ Mission Control — Golden Ratio (Static) — Captain William</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pirata+One&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════════════
+   MISSION CONTROL — GOLDEN RATIO STATIC VARIANT
+   Every dimension derived from φ = 1.6180339887...
+   Side-by-side comparison build (no JS, no logic, no state).
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* φ scale (base = 16px) */
+  --phi: 1.618;
+  --s0: 16px;        /* base                         */
+  --s1: 25.888px;    /* 16 × φ¹                      */
+  --s2: 41.886px;    /* 16 × φ²                      */
+  --s3: 67.770px;    /* 16 × φ³                      */
+  --s4: 109.658px;   /* 16 × φ⁴                      */
+  --sm1: 9.888px;    /* 16 / φ¹                      */
+  --sm2: 6.111px;    /* 16 / φ²                      */
+  --sm3: 3.777px;    /* 16 / φ³                      */
+
+  /* Type scale on φ */
+  --t-xs: 10px;
+  --t-sm: 13px;
+  --t-md: 16px;
+  --t-lg: 26px;       /* 16 × φ */
+  --t-xl: 42px;       /* 16 × φ² */
+  --t-xxl: 68px;      /* 16 × φ³ */
+
+  /* Colours — same palette as William's existing MC, no theme drift */
+  --parchment: #F5EDD0;
+  --parchment-dark: #E8D9A0;
+  --parchment-border: #C4A84A;
+  --navy: #1A3B8A;
+  --navy-dark: #0D2260;
+  --navy-deep: #081847;
+  --red-accent: #CC2200;
+  --gold: #FFD700;
+  --gold-dark: #B8960A;
+  --sunset-orange: #E8762A;
+  --wood: #8B6914;
+  --text-dark: #2a1a00;
+  --text-medium: #5a3a10;
+  --font-pirate: 'Pirata One', 'Palatino Linotype', cursive;
+  --font-mono: 'Courier New', Courier, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  min-height: 100vh;
+  font-family: var(--font-pirate);
+  color: var(--parchment);
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(26,58,138,0.8) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(200,80,0,0.3) 0%, transparent 50%),
+    linear-gradient(180deg, #0a1a3a 0%, #1a3b8a 40%, #0d2260 100%);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   GOLDEN-RATIO GRID
+   Page splits 1 : φ horizontally, then each pane splits 1 : φ
+   vertically. Headline is φ³ tall, body is φ⁴ tall.
+   ═══════════════════════════════════════════════════════════════ */
+
+#app {
+  /* Ratio columns:  1 : φ  →  small col 38.2%, big col 61.8% */
+  display: grid;
+  grid-template-columns: 38.2fr 61.8fr;
+  grid-template-rows: var(--s3) 1fr;            /* topbar = φ³ tall */
+  grid-template-areas:
+    "topbar  topbar"
+    "left    right";
+  gap: var(--s1);
+  padding: var(--s1);
+  min-height: 100vh;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+/* ─── TOP BAR ─── */
+#topbar {
+  grid-area: topbar;
+  display: grid;
+  grid-template-columns: var(--s3) 1fr auto auto;
+  align-items: center;
+  gap: var(--s1);
+  padding: 0 var(--s1);
+  background: linear-gradient(135deg, var(--navy-deep), var(--navy-dark));
+  border: 2px solid var(--gold-dark);
+  border-radius: var(--sm1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+.jolly-roger-badge {
+  width: var(--s3); height: var(--s3);
+  display: grid; place-items: center;
+  font-size: var(--t-xl);
+  background: radial-gradient(circle at 30% 30%, #2a2a2a, #000);
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  box-shadow: 0 0 16px rgba(255,215,0,0.4);
+}
+.captain-info { display: flex; flex-direction: column; gap: var(--sm3); }
+.captain-title {
+  font-family: var(--font-pirate);
+  font-size: var(--t-lg);
+  color: var(--gold);
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.6);
+  letter-spacing: 1px;
+}
+.captain-subtitle {
+  font-family: var(--font-pirate);
+  font-size: var(--t-sm);
+  color: var(--parchment-dark);
+  opacity: 0.85;
+}
+.bounty-display { text-align: right; }
+.bounty-label {
+  font-size: var(--t-xs);
+  color: var(--parchment-dark);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.bounty-amount {
+  font-family: var(--font-pirate);
+  font-size: var(--t-lg);
+  color: var(--gold);
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+.level-stack { display: flex; flex-direction: column; align-items: center; gap: var(--sm3); }
+.level-badge {
+  background: linear-gradient(135deg, var(--red-accent), #8B0000);
+  border: 2px solid var(--gold);
+  border-radius: var(--s2);
+  padding: var(--sm3) var(--sm1);
+  font-family: var(--font-pirate);
+  font-size: var(--t-sm);
+  color: var(--gold);
+}
+.xp-bar { width: calc(var(--s2) * 1.618); height: var(--sm1); background: rgba(0,0,0,0.4); border: 1px solid var(--gold-dark); border-radius: var(--sm3); overflow: hidden; }
+.xp-fill { width: 42%; height: 100%; background: linear-gradient(90deg, var(--sunset-orange), var(--gold)); }
+.xp-text { font-family: var(--font-mono); font-size: var(--t-xs); color: rgba(255,215,0,0.6); }
+
+/* ─── LEFT PANE (38.2%) — split 1:φ vertically ─── */
+#left {
+  grid-area: left;
+  display: grid;
+  grid-template-rows: 38.2fr 61.8fr;   /* small on top, big on bottom */
+  gap: var(--s1);
+}
+
+/* ─── RIGHT PANE (61.8%) — split 1:φ vertically ─── */
+#right {
+  grid-area: right;
+  display: grid;
+  grid-template-rows: 61.8fr 38.2fr;   /* big on top, small on bottom */
+  gap: var(--s1);
+}
+
+/* ─── Generic panel (parchment card) ─── */
+.panel {
+  background:
+    linear-gradient(145deg, var(--parchment) 0%, var(--parchment-dark) 100%);
+  color: var(--text-dark);
+  border: 2px solid var(--parchment-border);
+  border-radius: var(--sm1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5), inset 0 0 var(--s1) rgba(139,105,20,0.1);
+  padding: var(--s1);
+  position: relative;
+  overflow: hidden;
+}
+.panel::before {
+  /* φ-scaled accent strip */
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: var(--sm1);
+  background: linear-gradient(90deg, var(--gold), var(--sunset-orange), var(--red-accent));
+}
+.panel h2 {
+  font-family: var(--font-pirate);
+  font-size: var(--t-lg);
+  color: var(--text-dark);
+  margin-bottom: var(--sm1);
+  letter-spacing: 1px;
+  border-bottom: 1px dashed var(--wood);
+  padding-bottom: var(--sm2);
+}
+.panel p, .panel li { font-size: var(--t-md); line-height: var(--phi); color: var(--text-medium); }
+.panel ul { list-style: none; }
+.panel ul li {
+  padding: var(--sm2) 0;
+  border-bottom: 1px dotted rgba(139,105,20,0.25);
+  display: flex; align-items: center; gap: var(--sm1);
+}
+.panel ul li:last-child { border-bottom: none; }
+
+/* ─── KANBAN (right-top, the φ² focal block) ─── */
+#kanban {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s1);
+}
+.col {
+  background: rgba(13,34,96,0.55);
+  border: 1px solid var(--gold-dark);
+  border-radius: var(--sm1);
+  padding: var(--sm1);
+  display: flex; flex-direction: column; gap: var(--sm1);
+}
+.col-head {
+  font-family: var(--font-pirate);
+  font-size: var(--t-md);
+  color: var(--gold);
+  text-align: center;
+  border-bottom: 1px solid rgba(255,215,0,0.3);
+  padding-bottom: var(--sm2);
+  letter-spacing: 1px;
+}
+.task {
+  background: linear-gradient(145deg, var(--parchment), var(--parchment-dark));
+  color: var(--text-dark);
+  border: 1px solid var(--parchment-border);
+  border-radius: var(--sm2);
+  padding: var(--sm1);
+  font-family: var(--font-pirate);
+  font-size: var(--t-sm);
+  line-height: 1.4;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+.task .meta { font-family: var(--font-mono); font-size: var(--t-xs); color: var(--text-medium); margin-top: var(--sm3); }
+.task.gold-frame { border: 2px solid var(--gold); }
+
+/* ─── Sidebar items ─── */
+.streak {
+  text-align: center;
+}
+.streak-count {
+  font-family: var(--font-pirate);
+  font-size: var(--t-xxl);
+  color: var(--red-accent);
+  line-height: 1;
+}
+.streak-flames { font-size: var(--t-lg); }
+
+.haki-row { margin-bottom: var(--sm1); }
+.haki-row:last-child { margin-bottom: 0; }
+.haki-label { display: flex; justify-content: space-between; font-size: var(--t-sm); margin-bottom: var(--sm3); }
+.haki-bar { height: var(--sm1); background: rgba(0,0,0,0.15); border-radius: var(--sm3); overflow: hidden; border: 1px solid var(--wood); }
+.haki-fill { height: 100%; background: linear-gradient(90deg, var(--red-accent), var(--gold)); }
+
+/* ─── Activity log (right-bottom, 38.2% block) ─── */
+#activity ul li { font-family: var(--font-mono); font-size: var(--t-sm); }
+#activity ul li .time { color: var(--wood-dark, #5C4410); margin-right: var(--sm1); font-weight: bold; }
+
+/* ─── Golden ratio diagram (visual reference, top-right corner) ─── */
+.phi-watermark {
+  position: fixed;
+  bottom: var(--s1);
+  right: var(--s1);
+  width: var(--s3);
+  height: calc(var(--s3) / 1.618);
+  border: 1px solid rgba(255,215,0,0.35);
+  display: grid;
+  grid-template-columns: 38.2fr 61.8fr;
+  pointer-events: none;
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  color: rgba(255,215,0,0.55);
+}
+.phi-watermark > div { display: grid; place-items: center; }
+.phi-watermark > div:first-child { border-right: 1px solid rgba(255,215,0,0.35); }
+
+/* ─── Footer note ─── */
+#footer-note {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  color: rgba(245,237,208,0.45);
+  padding-top: var(--sm1);
+  letter-spacing: 1px;
+}
+
+/* ─── Responsive: stack at narrow widths, keep φ vertically ─── */
+@media (max-width: 900px) {
+  #app {
+    grid-template-columns: 1fr;
+    grid-template-rows: var(--s3) auto auto;
+    grid-template-areas:
+      "topbar"
+      "right"
+      "left";
+  }
+  #left, #right { grid-template-rows: auto; }
+  #kanban { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<main id="app">
+
+  <!-- TOP BAR (φ³ tall) -->
+  <header id="topbar">
+    <div class="jolly-roger-badge">☠️</div>
+    <div class="captain-info">
+      <div class="captain-title">⚓ Captain William</div>
+      <div class="captain-subtitle">Straw Hat Pirates · Thousand Sunny · φ-Build</div>
+    </div>
+    <div class="bounty-display">
+      <div class="bounty-label">Bounty</div>
+      <div class="bounty-amount">฿4,200,000</div>
+    </div>
+    <div class="level-stack">
+      <div class="level-badge">🌊 East Blue</div>
+      <div class="xp-bar"><div class="xp-fill"></div></div>
+      <div class="xp-text">420 XP</div>
+    </div>
+  </header>
+
+  <!-- LEFT PANE: 38.2% — split 1:φ (small Streak on top, big Haki/Fruits below) -->
+  <aside id="left">
+
+    <section class="panel streak" aria-label="Study streak">
+      <h2>⚡ Study Streak</h2>
+      <div class="streak-count">3</div>
+      <div>days sailing strong</div>
+      <div class="streak-flames">🔥🔥🔥</div>
+    </section>
+
+    <section class="panel" aria-label="Haki and Devil Fruits">
+      <h2>💪 Haki Training</h2>
+
+      <div class="haki-row">
+        <div class="haki-label"><span>👁️ Observation</span><span>25%</span></div>
+        <div class="haki-bar"><div class="haki-fill" style="width:25%;"></div></div>
+      </div>
+
+      <div class="haki-row">
+        <div class="haki-label"><span>⚫ Armament</span><span>15%</span></div>
+        <div class="haki-bar"><div class="haki-fill" style="width:15%;"></div></div>
+      </div>
+
+      <div class="haki-row">
+        <div class="haki-label"><span>👑 Conqueror's</span><span>5%</span></div>
+        <div class="haki-bar"><div class="haki-fill" style="width:5%;"></div></div>
+      </div>
+
+      <h2 style="margin-top: var(--s1);">🍎 Devil Fruits</h2>
+      <ul>
+        <li>🔥 Mera Mera — Maths fluency</li>
+        <li>⚡ Goro Goro — Quick recall</li>
+        <li>🌀 Gomu Gomu — Stretchy focus</li>
+        <li>🧊 Hie Hie — Calm under pressure (locked)</li>
+      </ul>
+    </section>
+
+  </aside>
+
+  <!-- RIGHT PANE: 61.8% — split φ:1 (big Kanban on top, small Activity below) -->
+  <section id="right">
+
+    <section class="panel" aria-label="Grand Line task board">
+      <h2>🗺️ The Grand Line — Today's Voyage</h2>
+      <div id="kanban">
+
+        <div class="col">
+          <div class="col-head">🏔️ To Sail</div>
+          <div class="task">Maths — fractions worksheet, p.42<div class="meta">Pd 1 · 25 min</div></div>
+          <div class="task">English — read Ch. 4 of novel<div class="meta">Pd 3 · 20 min</div></div>
+          <div class="task">PDHPE — kit packed for Jiu-Jitsu<div class="meta">After school · 5 min</div></div>
+        </div>
+
+        <div class="col">
+          <div class="col-head">⛵ Sailing</div>
+          <div class="task gold-frame">Science — labelled diagram of cell<div class="meta">Pd 2 · in progress</div></div>
+        </div>
+
+        <div class="col">
+          <div class="col-head">🏝️ Conquered</div>
+          <div class="task">Morning brief read ✅<div class="meta">07:15</div></div>
+          <div class="task">Locker organised ✅<div class="meta">08:42</div></div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="panel" id="activity" aria-label="Ship's log">
+      <h2>🐌 Ship's Log — Den Den Mushi</h2>
+      <ul>
+        <li><span class="time">10:34</span>Bounty rose ฿200,000 — fractions sheet smashed</li>
+        <li><span class="time">09:50</span>Observation Haki +2% — caught a focus drift early</li>
+        <li><span class="time">08:15</span>Boarded the Sunny — daily voyage begins</li>
+      </ul>
+    </section>
+
+  </section>
+
+  <div id="footer-note">
+    Static comparison build · all spacing, type, and panel ratios derived from φ = 1.6180339887…
+    · base 16px · scale ×φⁿ
+  </div>
+
+</main>
+
+<!-- φ visual watermark (proves the rectangle ratio) -->
+<div class="phi-watermark" aria-hidden="true">
+  <div>1</div><div>φ</div>
+</div>
+
+</body>
+</html>
