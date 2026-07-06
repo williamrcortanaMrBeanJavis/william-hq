@@ -1,93 +1,19 @@
 {
-  "date": "2026-05-29",
+  "date": "2026-07-07",
   "week": "A",
-  "day": "Fri",
+  "day": "Tue",
   "periods_schedule": [
-    "Maths",
-    "Maths",
-    "Pastoral Care",
-    "Science",
     "English",
-    "Computing"
+    "English",
+    "PE",
+    "PE",
+    "Sport",
+    "Sport"
   ],
   "cards": [
     {
-      "subject": "Maths",
-      "period": "P1",
-      "hook": "If Luffy has 3/4 of a cooked fish and Zoro eats 1/8 of it, how much is left?",
-      "three_key_things": [
-        "Your active assignment: Common Test 1 \u2014 DUE TOMORROW",
-        "Due: Fri 1 May, 3:00 PM",
-        "The teacher expects you to start or continue this in class \u2014 be ready."
-      ],
-      "practice_question": "Look at your Maths book or Canvas. What's ONE thing about 'Common Test 1' you already know?",
-      "vocab": [
-        "Common"
-      ],
-      "assignments": [
-        {
-          "name": "Common Test 1",
-          "due_at": "2026-05-01T05:00:00Z",
-          "due_friendly": "Fri 1 May, 3:00 PM",
-          "days_away": -28,
-          "url": "https://learn.sasc.nsw.edu.au/courses/60195/assignments/604083",
-          "description": "<a class=\"instructure_file_link instructure_scribd_file inline_disabled\" title=\"2026 Year 7 Common test 1 notification.pdf\" href=\"https://learn.sasc.nsw.edu.au/courses/60195/files/8426244?verifier=lSE7m5RkRs5iETarqTCNG970aC67SKrks1tkzAPL&amp;wrap=1\" target=\"_blank\" data-canvas-previewable=\"false\" data-api-endpoint=\"https://learn.sasc.nsw.edu."
-        }
-      ],
-      "textbook_excerpt": "",
-      "generated_at": "2026-05-28T23:00:05.073409+10:00",
-      "generator": "stub"
-    },
-    {
-      "subject": "Pastoral Care",
-      "period": "P3",
-      "hook": "Today's Pastoral Care class \u2014 you've got this.",
-      "three_key_things": [
-        "You have Pastoral Care tomorrow.",
-        "No Canvas assignment flagged for this subject right now \u2014 listen for today's lesson focus.",
-        "Take ONE note or snap ONE photo of the whiteboard so tonight you can review what you did."
-      ],
-      "practice_question": "What do you remember from your last Pastoral Care class?",
-      "vocab": [],
-      "assignments": [],
-      "textbook_excerpt": "",
-      "generated_at": "2026-05-28T23:00:05.073597+10:00",
-      "generator": "stub"
-    },
-    {
-      "subject": "Science",
-      "period": "P4",
-      "hook": "Chopper is a reindeer who ate a Devil Fruit. What forces act on him when he runs?",
-      "three_key_things": [
-        "Your active assignment: Practical Skills Task \u2014 DUE TOMORROW",
-        "Due: Mon 11 May, 3:00 PM",
-        "The teacher expects you to start or continue this in class \u2014 be ready."
-      ],
-      "practice_question": "Look at your Science book or Canvas. What's ONE thing about 'Practical Skills Task' you already know?",
-      "vocab": [
-        "Students",
-        "Please",
-        "Science",
-        "Practical",
-        "Skills"
-      ],
-      "assignments": [
-        {
-          "name": "Practical Skills Task",
-          "due_at": "2026-05-11T05:00:00Z",
-          "due_friendly": "Mon 11 May, 3:00 PM",
-          "days_away": -18,
-          "url": "https://learn.sasc.nsw.edu.au/courses/60214/assignments/606017",
-          "description": "Dear Year 7 Students, Please find below the official notification for your first Science assessment task of the year. <a class=\"instructure_file_link instructure_scribd_file inline_disabled\" title=\"Year 7 AT1 Practical Skills Task Assessment Notification.docx\" hre"
-        }
-      ],
-      "textbook_excerpt": "",
-      "generated_at": "2026-05-28T23:00:05.073708+10:00",
-      "generator": "stub"
-    },
-    {
       "subject": "English",
-      "period": "P5",
+      "period": "P1",
       "hook": "Sanji writes a love letter to Nami. What persuasive words should he use?",
       "three_key_things": [
         "Your active assignment: 7 Yellow Creative Writing Portfolio Draft 2 - Persuasive Writing \u2014 DUE TOMORROW",
@@ -105,31 +31,47 @@
           "name": "7 Yellow Creative Writing Portfolio Draft 2 - Persuasive Writing",
           "due_at": "2026-04-24T13:59:00Z",
           "due_friendly": "Fri 24 Apr, 11:59 PM",
-          "days_away": -35,
+          "days_away": -74,
           "url": "https://learn.sasc.nsw.edu.au/courses/60175/assignments/608464",
           "description": "Writing Task Compose a reply to President Ziya's letter below, arguing that it is unacceptable to allow children to live and work in such conditions. You should aim to write 400 words and use the rhetorical devices listed here: rhetorical question, statistics, emotive language &nbsp; <img sr"
         }
       ],
       "textbook_excerpt": "",
-      "generated_at": "2026-05-28T23:00:05.073803+10:00",
+      "generated_at": "2026-07-06T23:00:01.853455+10:00",
       "generator": "stub"
     },
     {
-      "subject": "Computing",
-      "period": "P6",
-      "hook": "Usopp codes traps \u2014 sequence matters. What happens if step 2 runs before step 1?",
+      "subject": "PE",
+      "period": "P3",
+      "hook": "Zoro trains every day. What's one thing you can do to build endurance?",
       "three_key_things": [
-        "You have Computing tomorrow.",
+        "You have PE tomorrow.",
         "No Canvas assignment flagged for this subject right now \u2014 listen for today's lesson focus.",
         "Take ONE note or snap ONE photo of the whiteboard so tonight you can review what you did."
       ],
-      "practice_question": "What do you remember from your last Computing class?",
+      "practice_question": "What do you remember from your last PE class?",
       "vocab": [],
       "assignments": [],
       "textbook_excerpt": "",
-      "generated_at": "2026-05-28T23:00:05.073856+10:00",
+      "generated_at": "2026-07-06T23:00:01.853484+10:00",
+      "generator": "stub"
+    },
+    {
+      "subject": "Sport",
+      "period": "P5",
+      "hook": "Team games need communication. What's a signal you'd give a teammate?",
+      "three_key_things": [
+        "You have Sport tomorrow.",
+        "No Canvas assignment flagged for this subject right now \u2014 listen for today's lesson focus.",
+        "Take ONE note or snap ONE photo of the whiteboard so tonight you can review what you did."
+      ],
+      "practice_question": "What do you remember from your last Sport class?",
+      "vocab": [],
+      "assignments": [],
+      "textbook_excerpt": "",
+      "generated_at": "2026-07-06T23:00:01.853501+10:00",
       "generator": "stub"
     }
   ],
-  "generated_at": "2026-05-28T23:00:05.073860+10:00"
+  "generated_at": "2026-07-06T23:00:01.853505+10:00"
 }
