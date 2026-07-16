@@ -522,6 +522,7 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
       <div class="grid-btn" onclick="goView('brain');logEvent('interaction',{button_id:'brain'})"><div class="ico">🧠</div><div class="lbl">Brain</div></div>
       <div class="grid-btn" onclick="goView('dump');logEvent('interaction',{button_id:'dump'})"><div class="ico">💭</div><div class="lbl">Dump</div></div>
       <div class="grid-btn" onclick="goView('xp');logEvent('interaction',{button_id:'xp'})"><div class="ico">🎮</div><div class="lbl">Level</div></div>
+    <div class="grid-btn" onclick="goView('journey');logEvent&&logEvent('interaction',{button_id:'journey'})"><div class="ico">🗺️</div><div class="lbl">My Map</div></div>
     <div class="grid-btn" onclick="goView('timetable')"><div class="ico">📆</div><div class="lbl">Timetable</div></div>
     <div class="grid-btn" onclick="goView('bag')"><div class="ico">🎒</div><div class="lbl">Bag</div></div>
     <div class="grid-btn" onclick="goView('exams')"><div class="ico">🧪</div><div class="lbl">Exams</div></div>
@@ -1198,6 +1199,20 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
     <div style="padding:14px;background:rgba(255,215,0,0.08);border:1px solid #FFD700;border-radius:14px;font-size:16px;color:#8899cc;">Rewards are real. Earn XP by doing tasks, brain games, journaling, reading, and showing up every day. No shortcuts — just consistency.</div>
   </div>
 
+  <!-- ═══ MY MAP / TODAY'S JOURNEY ═══ -->
+  <div class="view" id="view-journey">
+    <button class="back" onclick="goHome()">← Home</button>
+    <div style="padding:8px 0 12px;">
+      <h2 style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:2px;color:#33DDDD;text-shadow:0 0 25px rgba(51,221,221,0.8);">🗺️ MY MAP TODAY</h2>
+      <div id="journeyDay" style="font-size:18px;color:#8899cc;"></div>
+    </div>
+    <div style="position:relative;border-radius:20px;overflow:hidden;border:2px solid #2d4488;background:#0f1d42;">
+      <img src="assets/school-map.jpg" style="width:100%;display:block;" alt="School map">
+      <div id="mapMarkers" style="position:absolute;inset:0;pointer-events:none;"></div>
+    </div>
+    <div id="journeyList" style="margin-top:16px;"></div>
+  </div>
+
   <!-- ═══ TIMETABLE ═══ -->
   <div class="view" id="view-timetable">
     <button class="back" onclick="goHome()">← Home</button>
@@ -1673,7 +1688,8 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
   <div class="view" id="view-dump">
     <button class="back" onclick="goHome()">← Home</button>
     <div class="view-header"><img src="assets/mrbean-comic-artist.jpg"><div class="vh-overlay"><h2>💭 BRAIN DUMP</h2></div></div>
-    <div class="dump-in"><input type="text" id="dumpIn" placeholder="What's on your mind?" onkeydown="if(event.key==='Enter')addDump()"><button onclick="addDump()">💭</button></div>
+    <div class="dump-in"><input type="text" id="dumpIn" placeholder="What's on your mind?" onkeydown="if(event.key==='Enter')addDump()"><button onclick="addDump()">💭</button><button id="dumpMic" style="background:#44DD55;">🎤</button></div>
+    <div style="text-align:center;color:#8899cc;font-size:13px;padding:4px;">or HOLD 🎤 and just talk — no typing</div>
     <div id="dumpList"></div>
   </div>
 
@@ -1725,7 +1741,61 @@ body.discreet .cb { background: #f5f5f5; border-color: #ddd; color: #333; }
 if(!localStorage.getItem('welcomeSeen'))window.location.href='welcome.html';
 
 // NAV
-function goView(v){document.getElementById('home').style.display='none';document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');window.scrollTo(0,0);}
+function goView(v){document.getElementById('home').style.display='none';document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');window.scrollTo(0,0);if(v==='journey')renderJourney();}
+
+/* ═══ MY MAP — TODAY'S JOURNEY (Hermes 2026-07-16) ═══
+   William is 93rd-percentile visual-spatial: a highlighted map beats a room
+   code every time. Reads his real timetable, marks today's blocks in order
+   on the campus map, and lists the numbered journey below. Block positions
+   are fractional (x,y of image) — eyeball-tunable on the real screen.
+   Stage 2 (Higgsfield illustrated One Piece map) staged via DS9. */
+const BLOCK_POS = {  // fraction of map image {x,y}, from the campus layout
+  'P':{x:0.30,y:0.30}, 'PEC':{x:0.16,y:0.16}, 'N':{x:0.40,y:0.24},
+  'K':{x:0.30,y:0.42}, 'L':{x:0.44,y:0.40}, 'J':{x:0.55,y:0.55},
+  'M':{x:0.44,y:0.60}, 'H':{x:0.62,y:0.70}, 'G':{x:0.52,y:0.72},
+  'F':{x:0.44,y:0.78}, 'A':{x:0.30,y:0.86}, 'B':{x:0.40,y:0.86}, 'C':{x:0.50,y:0.86}
+};
+function roomToBlock(room){
+  if(!room) return null;
+  const m = room.match(/^(PEC|[A-Z])/);
+  return m ? m[1] : null;
+}
+function renderJourney(){
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const dayShort=days[new Date().getDay()];
+  const dayFull={Mon:'Monday',Tue:'Tuesday',Wed:'Wednesday',Thu:'Thursday',Fri:'Friday',Sat:'Saturday',Sun:'Sunday'}[dayShort];
+  const info=document.getElementById('journeyDay');
+  const markers=document.getElementById('mapMarkers');
+  const list=document.getElementById('journeyList');
+  markers.innerHTML=''; 
+  if(dayShort==='Sat'||dayShort==='Sun'){
+    info.textContent='No school today — enjoy the weekend! 🎉';
+    list.innerHTML='<div style="text-align:center;color:#8899cc;padding:20px;">Your map lights up on school days.</div>';
+    return;
+  }
+  const periods=(TIMETABLE[currentWeek]||{})[dayShort]||[];
+  info.textContent=`${dayFull} — Week ${currentWeek} · here's where you'll be`;
+  let step=0, listHTML='';
+  periods.forEach(p=>{
+    if(!p.sub||['RECESS','LUNCH',''].includes(p.sub))return;
+    step++;
+    const col=SUBJ_COLOURS[p.sub]||'#33DDDD';
+    const block=roomToBlock(p.room);
+    // marker on map
+    if(block&&BLOCK_POS[block]){
+      const pos=BLOCK_POS[block];
+      const dot=document.createElement('div');
+      dot.style.cssText=`position:absolute;left:${pos.x*100}%;top:${pos.y*100}%;transform:translate(-50%,-50%);width:30px;height:30px;border-radius:50%;background:${col};border:2px solid #fff;box-shadow:0 0 12px ${col};display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;color:#0f1d42;`;
+      dot.textContent=step;
+      markers.appendChild(dot);
+    }
+    listHTML+=`<div style="display:flex;align-items:center;gap:12px;background:#1e3068;border-left:5px solid ${col};border-radius:12px;padding:12px;margin-bottom:8px;">
+      <div style="width:32px;height:32px;border-radius:50%;background:${col};color:#0f1d42;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${step}</div>
+      <div><div style="font-size:19px;font-weight:800;color:${col};">${p.sub}</div>
+      <div style="font-size:15px;color:#8899cc;">${p.room?('📍 '+p.room+' — '+(block?block+' block':'')):'📍 check with teacher'}</div></div></div>`;
+  });
+  list.innerHTML=listHTML||'<div style="text-align:center;color:#8899cc;padding:20px;">No classes mapped for today.</div>';
+}
 function goHome(){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('home').style.display='block';window.scrollTo(0,0);}
 function goChat(c){selectChar(c);goView('chat');}
 
@@ -1734,7 +1804,25 @@ let currentChar='bean';
 function selectChar(c){currentChar=c;document.getElementById('topAv').src=c==='bean'?'assets/mrbean-avatar.jpg':'assets/jarvis-avatar.jpg';document.getElementById('sendBtn').className=c==='bean'?'send-bean':'send-jarvis';document.getElementById('msgIn').placeholder=c==='bean'?'Ask Mr Bean...':'Talk to Jarvis...';}
 
 // CHAT
-function sendMsg(){const i=document.getElementById('msgIn'),t=i.value.trim();if(!t)return;const m=document.getElementById('chatMsgs');const r=document.createElement('div');r.className='chat-row user';r.innerHTML='<div class="cb user-msg">'+t+'</div>';m.appendChild(r);i.value='';m.scrollTop=m.scrollHeight;setTimeout(()=>{const d=document.createElement('div');d.className='chat-row';const av=currentChar==='bean'?'assets/mrbean-avatar.jpg':'assets/jarvis-avatar.jpg';const bc=currentChar==='bean'?'#FF9933':'#55AAFF';const cls=currentChar;const nm=currentChar==='bean'?'🐻 Mr Bean':'🤖 Jarvis';const rp=currentChar==='bean'?"Good question! Real Mr Bean coming soon via OpenClaw 🐻":"Noted. Real Jarvis connecting soon.";d.innerHTML='<img src="'+av+'" class="chat-av" style="border:2px solid '+bc+';"><div class="cb '+cls+'"><div class="chat-sender">'+nm+'</div>'+rp+'</div>';m.appendChild(d);m.scrollTop=m.scrollHeight;},600);}
+function sendMsg(){const i=document.getElementById('msgIn'),t=i.value.trim();if(!t)return;const m=document.getElementById('chatMsgs');const r=document.createElement('div');r.className='chat-row user';r.innerHTML='<div class="cb user-msg">'+t+'</div>';m.appendChild(r);i.value='';m.scrollTop=m.scrollHeight;
+/* REAL CHAT BRIDGE (Hermes 2026-07-16). Home devices carry a token in
+   localStorage('hq-token') -> real Bean/Jarvis via the Mini bridge.
+   School laptop has NO token -> canned decoy stays (Admiral's safety gate). */
+const _q=new URLSearchParams(location.search).get('setup');if(_q){localStorage.setItem('hq-token',_q);history.replaceState(null,'',location.pathname);}
+const HQTOK=localStorage.getItem('hq-token');
+const av=currentChar==='bean'?'assets/mrbean-avatar.jpg':'assets/jarvis-avatar.jpg';
+const bc=currentChar==='bean'?'#FF9933':'#55AAFF';
+const cls=currentChar;
+const nm=currentChar==='bean'?'🐻 Mr Bean':'🤖 Jarvis';
+const bubble=txt=>{const d=document.createElement('div');d.className='chat-row';d.innerHTML='<img src="'+av+'" class="chat-av" style="border:2px solid '+bc+';"><div class="cb '+cls+'"><div class="chat-sender">'+nm+'</div>'+txt+'</div>';m.appendChild(d);m.scrollTop=m.scrollHeight;};
+if(HQTOK){
+  const think=document.createElement('div');think.className='chat-row';think.innerHTML='<img src="'+av+'" class="chat-av" style="border:2px solid '+bc+';"><div class="cb '+cls+'"><div class="chat-sender">'+nm+'</div>…</div>';m.appendChild(think);m.scrollTop=m.scrollHeight;
+  fetch('http://192.168.50.9:11500/chat',{method:'POST',headers:{'Content-Type':'application/json','X-Kids-Token':HQTOK},body:JSON.stringify({kid:'william',message:t})})
+    .then(r=>r.json()).then(j=>{think.remove();bubble(j.reply.replace(/\n/g,'<br>'));logEvent&&logEvent('interaction',{button_id:'chat_real_reply'});})
+    .catch(()=>{think.remove();bubble("Hmm, signal's playing up 🐻 Try again in a tick.");});
+}else{
+  setTimeout(()=>{const rp=currentChar==='bean'?"Good question! Real Mr Bean coming soon via OpenClaw 🐻":"Noted. Real Jarvis connecting soon.";bubble(rp);},600);
+}}
 
 // TASKS
 function toggleTask(el){const c=el.querySelector('.tc');if(c.classList.contains('done')){c.classList.remove('done');c.textContent='⬜';el.style.opacity='1';}else{c.classList.add('done');c.textContent='✅';el.style.opacity='0.5';addXP(15,'✅ Task');}}
@@ -2751,6 +2839,106 @@ try { initTelemetry(); } catch(e) {}
 const FL=['🐻','🧸','👒','🍖','🦌','🏴‍☠️','⚓','🌊','🍳','🎵','🐕','🎹','🎨','🥋','⭐'];
 function sF(){const e=document.createElement('div');e.className='floater';e.textContent=FL[Math.floor(Math.random()*FL.length)];e.style.left=(5+Math.random()*85)+'vw';e.style.fontSize=(20+Math.random()*16)+'px';const d=18+Math.random()*12;e.style.animationDuration=d+'s';document.body.appendChild(e);setTimeout(()=>e.remove(),d*1000);}
 setInterval(sF,7000);setTimeout(sF,3000);
+</script>
+<script>
+/* ═══ HOLIDAY MODE (Hermes, 2026-07-16) ═══
+   Reads holiday-config.json. When holiday_mode true AND today <= ends:
+   replaces schedule cards with the holiday plan + banner. Term cards
+   untouched underneath — flipping the flag (or the end date passing)
+   restores them automatically. */
+(async function(){
+  try{
+    const r = await fetch('holiday-config.json?'+Date.now());
+    if(!r.ok) return;
+    const hc = await r.json();
+    if(!hc.holiday_mode) return;
+    if(hc.ends && new Date() > new Date(hc.ends+'T23:59:59')) return;
+    const view = document.getElementById('view-schedule');
+    if(!view) return;
+    const card = it => `
+      <div style="display:flex;background:#1e3068;border:2px solid #2d4488;border-radius:20px;overflow:hidden;margin-bottom:12px;">
+        <img src="${it.img}" style="width:378px;flex-shrink:0;object-fit:cover;object-position:top;">
+        <div style="flex:1;padding:28px;display:flex;flex-direction:column;justify-content:center;gap:8px;">
+          <div style="font-family:'Bangers',cursive;font-size:42px;letter-spacing:1px;color:${it.color};text-shadow:0 0 25px ${it.color};">${it.emoji} ${it.time?it.time+' — ':''}${it.title}</div>
+          <div style="font-size:20px;color:#8899cc;">${it.detail||it.day||''}</div>
+        </div>
+      </div>`;
+    view.innerHTML = `
+      <button class="back" onclick="goHome()">← Home</button>
+      <div style="padding:10px;margin-bottom:14px;background:linear-gradient(135deg,#FF9933,#FFD700);border-radius:16px;text-align:center;">
+        <span style="font-family:'Bangers',cursive;font-size:30px;letter-spacing:2px;color:#0f1d42;">🏖️ ${hc.holiday_name.toUpperCase()} 🏖️</span>
+        <div style="color:#1a2d5e;font-weight:700;">No school! Holiday plan below.</div>
+      </div>
+      ${hc.schedule.map(card).join('')}
+      ${hc.weekly_extras&&hc.weekly_extras.length?`<div style="padding:12px 0 8px;"><div style="font-family:'Bangers',cursive;font-size:28px;color:#33DDDD;">📅 THIS WEEK</div></div>`+hc.weekly_extras.map(card).join(''):''}`;
+  }catch(e){/* config missing/offline: term schedule stays */}
+})();
+
+/* ═══ VOICE BRAIN DUMP (Hermes 2026-07-16) ═══
+   William's reading/writing is the impairment — speaking removes the barrier.
+   Hold the 🎤 button, talk, release: words land as a Brain Dump entry. */
+(function(){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const mic = document.getElementById('dumpMic');
+  if(!mic) return;
+  if(!SR){ mic.style.opacity=.4; mic.title='Voice needs Safari/Chrome'; return; }
+  let rec=null;
+  const start=()=>{ mic.textContent='👂'; mic.style.background='#FF9933';
+    rec=new SR(); rec.lang='en-AU'; rec.interimResults=false;
+    rec.onresult=ev=>{ const t=ev.results[0][0].transcript.trim();
+      if(t){ document.getElementById('dumpIn').value=t; addDump(); } };
+    try{rec.start();}catch(e){} };
+  const stop=()=>{ mic.textContent='🎤'; mic.style.background='#44DD55';
+    if(rec){try{rec.stop();}catch(e){} rec=null;} };
+  mic.addEventListener('pointerdown',start);
+  mic.addEventListener('pointerup',stop);
+  mic.addEventListener('pointerleave',stop);
+})();
+
+/* ═══ WEEKLY QUESTS — process-over-outcome rewards (Hermes 2026-07-16) ═══
+   ADHD dopamine horizon is days, not terms. These are 100% inside William's
+   control, land weekly, and stack streaks toward the Admiral's big goals.
+   Injected as a card at the top of the XP view. */
+(function(){
+  const QUESTS=[
+    {id:'hw8pm',   label:'📚 Homework done by 8pm',        xp:20},
+    {id:'appuse',  label:'📱 Used HQ today',               xp:10},
+    {id:'askbean', label:'🐻 Asked Bean instead of giving up', xp:15},
+    {id:'audio',   label:'🎧 20 min audiobook/comic',      xp:15},
+    {id:'cook',    label:'👨‍🍳 Kitchen quest (helped cook)', xp:20},
+    {id:'teach',   label:'🤖 Taught Lucas something',      xp:25},
+  ];
+  const wk=(d=>{const o=new Date(d.getFullYear(),0,1);return d.getFullYear()+'-w'+Math.ceil(((d-o)/864e5+o.getDay()+1)/7);})(new Date());
+  let q=JSON.parse(localStorage.getItem('quests')||'{}');
+  if(q.week!==wk) q={week:wk,done:{},streak:(q.week&&Object.keys(q.done||{}).length>=4)?(q.streak||0)+1:(q.streak||0)};
+  const save=()=>localStorage.setItem('quests',JSON.stringify(q));
+  save();
+  const xpView=document.getElementById('view-xp');
+  if(!xpView) return;
+  const box=document.createElement('div');
+  box.style.cssText='background:#1e3068;border:2px solid #44DD55;border-radius:20px;padding:18px;margin-bottom:14px;';
+  const render=()=>{
+    const doneCount=Object.keys(q.done).length;
+    box.innerHTML='<div style="font-family:Bangers,cursive;font-size:30px;letter-spacing:1px;color:#44DD55;">⚔️ THIS WEEK\'S QUESTS</div>'
+      +'<div style="color:#8899cc;font-size:14px;margin-bottom:10px;">Do the work, win the week. '+doneCount+'/'+QUESTS.length+' done'
+      +(q.streak?' · 🔥 '+q.streak+'-week streak':'')+'</div>'
+      +QUESTS.map(it=>'<div data-q="'+it.id+'" style="display:flex;align-items:center;gap:10px;padding:12px;background:#0f1d42;border-radius:12px;margin-bottom:8px;cursor:pointer;'+(q.done[it.id]?'opacity:.55;':'')+'">'
+        +'<span style="font-size:18px;">'+(q.done[it.id]?'✅':'⬜')+'</span>'
+        +'<span style="flex:1;font-size:16px;font-weight:600;">'+it.label+'</span>'
+        +'<span style="color:#FF9933;font-weight:800;">+'+it.xp+'</span></div>').join('');
+    box.querySelectorAll('[data-q]').forEach(el=>el.onclick=()=>{
+      const id=el.getAttribute('data-q');
+      if(q.done[id]) return;
+      q.done[id]=new Date().toISOString(); save();
+      const it=QUESTS.find(x=>x.id===id);
+      if(typeof addXP==='function') addXP(it.xp,'⚔️ Quest');
+      render();
+    });
+  };
+  render();
+  const header=xpView.querySelector('.view-header');
+  if(header) header.insertAdjacentElement('afterend',box); else xpView.appendChild(box);
+})();
 </script>
 </body>
 </html>
